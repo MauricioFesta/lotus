@@ -12,6 +12,7 @@ export default class Cadastro extends React.Component {
       
       let email = $("#email").val();
       let senha = $("#senha").val();
+      let nome = $("#nome").val();
       
       axios.post('/cadastro_login', {
         nome: 'teste',
@@ -33,6 +34,11 @@ export default class Cadastro extends React.Component {
         <div className='container mt-4 main'>
 
           <Form>
+                <Form.Group>
+                 <Form.Label>Nome</Form.Label>
+                <Form.Control id="nome" type="text" placeholder="Entre com seu nome" />
+                   
+                </Form.Group>
               <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control id="email" type="email" placeholder="Entre com seu email" />
