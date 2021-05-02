@@ -18,6 +18,7 @@ defmodule LotusWeb.Router do
 
     get "/", PageController, :index
     get "/login_valida", LoginController, :login_valida
+    post "/cadastro_login", LoginController, :cadastro_login
   end
 
   # Other scopes may use custom stacks.

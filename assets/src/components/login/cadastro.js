@@ -4,27 +4,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import axios from 'axios'
 import $ from "jquery";
-import {Link} from 'react-router-dom';
 
 
-export default class Login extends React.Component {
+export default class Cadastro extends React.Component {
 
-  async validaLogin(){
-
-    debugger
+  async cadastrar(){
       
       let email = $("#email").val();
       let senha = $("#senha").val();
       
-      axios.get('/login_valida')
+      axios.post('/cadastro_login', {
+        nome: 'teste',
+        email: 'Fred',
+        senha: 'Flintstone'
+      })
       .then(function (response) {
-        debugger
         console.log(response);
       })
-    
-
-      //alert(result);
-
+      .catch(function (error) {
+        console.log(error);
+      });
 
     }
 
@@ -33,12 +32,12 @@ export default class Login extends React.Component {
 
         <div className='container mt-4 main'>
 
-          <Form onSubmit={this.validaLogin} action="/home">
+          <Form>
               <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control id="email" type="email" placeholder="Entre com seu email" />
                 <Form.Text className="text-muted">
-                  Forneça a o email cadastrado
+                  Forneça a o email para cadastro
                 </Form.Text>
               </Form.Group>
 
@@ -49,12 +48,10 @@ export default class Login extends React.Component {
             <Form.Group controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
-              <Button onClick={this.validaLogin} variant="primary" type="button">
-                Logar
+              <Button onClick={this.cadastrar} variant="primary" type="button">
+                Cadastrar
               </Button>
-              <Form.Text className="text-muted">
-                 Não tem cadastro ainda? <Link to="/cadastro">Cadastrar</Link>
-                </Form.Text>
+             
         </Form>
 
         </div>

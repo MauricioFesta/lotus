@@ -3,8 +3,17 @@ defmodule LotusWeb.LoginController do
   
     def login_valida(conn, _params) do
         
-        #json(conn, %{:logado, "Truuu"})
+        json(conn, "Testeeee")
+     
+    end
+
+    def cadastro_login(conn, _params)do
+
+    
+        %Friends.User{id: 12,nome: "teste", email: "teste", senha: "teste"} |> IO.inspect
 
     end
+
+
   end
   
