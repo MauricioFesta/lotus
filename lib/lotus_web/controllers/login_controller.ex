@@ -3,7 +3,7 @@ defmodule LotusWeb.LoginController do
   
     def login_valida(conn, _params) do
         
-        json(conn, %{:logado, "Truuu"})
+        #json(conn, %{:logado, "Truuu"})
 
     end
   end
