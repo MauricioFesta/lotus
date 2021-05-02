@@ -17,6 +17,7 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/login_valida", LoginController, :login_valida
   end
 
   # Other scopes may use custom stacks.
