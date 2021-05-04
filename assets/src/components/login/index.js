@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import axios from 'axios'
@@ -9,22 +9,37 @@ import {Link} from 'react-router-dom';
 
 export default class Login extends React.Component {
 
-  async validaLogin(){
+  constructor(props){
+    super(props);
 
-    debugger
-      
-      let email = $("#email").val();
-      let senha = $("#senha").val();
-      
-      axios.get('/login_valida')
-      .then(function (response) {
-        debugger
-        console.log(response);
+    this.state = {msg: true,variant: "warning", text: "null"};
+    this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
+
+  }
+
+  validaLogin(){
+
+      axios.post('/login_valida', {
+       
+        email: $("#email").val(),
+        senha: $("#senha").val()
+
       })
-    
+      .then(function (response) {
 
-      //alert(result);
+        console.log(response);
+        debugger
+        
+      })
+      .catch(function(error){
 
+        this.setState({
+          msg: false, 
+          text:  "Usuário ou senha inválidos"
+
+        })
+
+      }.bind(this))
 
     }
 
@@ -32,6 +47,11 @@ export default class Login extends React.Component {
       return (
 
         <div className='container mt-4 main'>
+
+
+          <Alert id="msg_retorno" hidden={this.state.msg}  variant={this.state.variant}>
+                    {this.state.text}
+          </Alert>
 
           <Form onSubmit={this.validaLogin} action="/home">
               <Form.Group>

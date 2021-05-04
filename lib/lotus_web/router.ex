@@ -17,7 +17,7 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/login_valida", LoginController, :login_valida
+    post "/login_valida", LoginController, :login_valida
     post "/cadastro_login", LoginController, :cadastro_login
   end
 

@@ -32,6 +32,7 @@ export default class Cadastro extends React.Component {
 
   
       }.bind(this))
+      
       .catch(function (error) {
 
         this.setState({
@@ -40,7 +41,7 @@ export default class Cadastro extends React.Component {
           msg: false
         });
 
-      });
+      }.bind(this));
 
     }
 
