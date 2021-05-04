@@ -1,5 +1,6 @@
 defmodule LotusWeb.LoginController do
     use LotusWeb, :controller
+    alias Lotus.{Repo, User}
   
     def login_valida(conn, _params) do
         
@@ -7,11 +8,16 @@ defmodule LotusWeb.LoginController do
      
     end
 
-    def cadastro_login(conn, _params)do
+    def cadastro_login(conn, %{"nome" => nome, "email" => email, "senha" => senha})do
 
-    
-        %Friends.User{id: 12,nome: "teste", email: "teste", senha: "teste"} |> IO.inspect
+        case Repo.insert(%User{email: email, senha: senha, nome: nome}) do
+         {:ok, result} -> json(conn, "OK")
+         _ -> IO.puts json(conn, "Error")
 
+        end 
+
+        
+       
     end
 
 

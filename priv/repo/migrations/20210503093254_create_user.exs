@@ -3,9 +3,11 @@ defmodule Lotus.Repo.Migrations.CreateUser do
 
   def change do
     create table(:user) do
-      add :nome, :string, null: false
-      add :email, :string, null: false
-      add :senha, :string, null: false
+      add :nome, :string
+      add :email, :string
+      add :senha, :string
+
+      timestamps()
     end
 
   end
