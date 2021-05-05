@@ -27,8 +27,7 @@ export default class Login extends React.Component {
       })
       .then(function (response) {
 
-        console.log(response);
-        debugger
+        window.location.href = "/home";
         
       })
       .catch(function(error){
@@ -65,9 +64,6 @@ export default class Login extends React.Component {
             <Form.Group>
                 <Form.Label>Senha</Form.Label>
                 <Form.Control id="senha" type="password" placeholder="Senha" />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
               <Button onClick={this.validaLogin} variant="primary" type="button">
                 Logar
