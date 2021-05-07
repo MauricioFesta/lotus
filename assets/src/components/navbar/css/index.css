@@ -1,0 +1,7 @@
+.linkDefault {
+    color: #FFF !important;
+}
+
+.linkDefault:hover {
+    color: #FFF !important
+}
