@@ -26,7 +26,7 @@ config :lotus, LotusWeb.Endpoint,
       "start",
       cd: Path.expand("../assets", __DIR__)
     ]
-    
+
   ]
 
 # ## SSL Support
