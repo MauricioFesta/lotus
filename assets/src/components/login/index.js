@@ -19,7 +19,7 @@ export default class Login extends React.Component {
 
   validaLogin(){
 
-      axios.post('/login_valida', {
+      axios.post("/login/login_valida", {
        
         email: $("#email").val(),
         senha: $("#senha").val()

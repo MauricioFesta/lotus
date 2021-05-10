@@ -17,7 +17,7 @@ export default class Cadastro extends React.Component {
     
   cadastrar(){
 
-      axios.post('/cadastro_login', {
+      axios.post('/login/cadastro', {
         nome: $("#nome").val(),
         email: $("#email").val(),
         senha: $("#senha").val()

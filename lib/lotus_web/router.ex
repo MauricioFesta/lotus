@@ -17,8 +17,23 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    
+    
+  end
+
+  scope "/login", LotusWeb do
+    pipe_through :browser
+
+    post "/cadastro", LoginController, :cadastro_login
     post "/login_valida", LoginController, :login_valida
-    post "/cadastro_login", LoginController, :cadastro_login
+  
+  end
+
+  scope "/curriculo", LotusWeb do
+    pipe_through :browser
+
+    post "/cadastro", CurriculoController, :cadastro_curriculo
+  
   end
 
   # Other scopes may use custom stacks.

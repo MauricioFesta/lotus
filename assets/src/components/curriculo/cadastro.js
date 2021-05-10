@@ -21,7 +21,19 @@ export class Cadastro extends React.Component {
     this.setState({ close_msg: false });
   }
 
-  cadastrar() {
+  async cadastrar() {
+
+    let params = {
+      desc: $("#curriculotext").val(),
+      file: $("#file").file
+    }
+
+    let config = {
+      headers: { "Content-Type": "multipart/form-data" }
+    }
+
+ 
+    let result = await axios.post("/curriculo/cadastro", params,config);
 
 
   }
@@ -45,7 +57,7 @@ export class Cadastro extends React.Component {
         <div className='container mt-4 main'>
 
           <Col xs={6}>
-            <Toast  onClose={() => this.closeToasts()} show={this.state.close_msg} delay={4000} autohide>
+            <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={4000} autohide>
               <Toast.Header>
                 <img
                   src="holder.js/20x20?text=%20"
@@ -59,16 +71,15 @@ export class Cadastro extends React.Component {
             </Toast>
           </Col>
 
-
-          <Form className="mt-4">
+          <Form id="form-curriculo" className="mt-4">
 
             <Form.Group>
-              <Form.File id="exampleFormControlFile1" label="Curriculo" />
+              <Form.File id="file" label="Curriculo" />
             </Form.Group>
 
-            <Form.Group controlId="exampleForm.ControlTextarea1">
+            <Form.Group>
               <Form.Label>Descrição</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control id="curriculotext" as="textarea" rows={3} />
             </Form.Group>
             <Button onClick={this.cadastrar} variant="primary" type="button">
               Cadastrar
