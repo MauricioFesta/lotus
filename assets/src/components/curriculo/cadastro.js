@@ -1,61 +1,85 @@
 import React from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Toast, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/index.css';
+import Navbar from "../navbar/index"
 import axios from 'axios'
 import $ from "jquery";
 
 
 
-export default class Cadastro extends React.Component {
 
-    constructor(props){
-      super(props);
-      this.state = {msg: true,variant: "primary", text: "null"};
-      this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
+export class Cadastro extends React.Component {
 
-    }
-    
-  cadastrar(){
+  constructor(props) {
+    super(props);
+    this.state = { close_msg: true, variant: "primary", text: "null" };
+    this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
 
-     
-    }
+  }
 
-    render() {
-      return (
+  closeToasts() {
+    this.setState({ close_msg: false });
+  }
+
+  cadastrar() {
+
+
+  }
+
+  getMin() {
+
+    let date = new Date();
+
+    return date.getMinutes()
+
+  }
+
+  render() {
+
+    return (
+
+      <div>
+
+        <Navbar />
 
         <div className='container mt-4 main'>
 
-          <Form>
-                <Alert id="msg_retorno" hidden={this.state.msg}  variant={this.state.variant}>
-                    {this.state.text}
-                </Alert>
-                  
-                <Form.Group>
-                 <Form.Label>Nome</Form.Label>
-                <Form.Control id="nome" type="text" placeholder="Entre com seu nome" />
-                   
-                </Form.Group>
-              <Form.Group>
-                <Form.Label>Email</Form.Label>
-                <Form.Control id="email" type="email" placeholder="Entre com seu email" />
-                <Form.Text className="text-muted">
-                  Forneça a o email para cadastro
-                </Form.Text>
-              </Form.Group>
+          <Col xs={6}>
+            <Toast  onClose={() => this.closeToasts()} show={this.state.close_msg} delay={4000} autohide>
+              <Toast.Header>
+                <img
+                  src="holder.js/20x20?text=%20"
+                  className="rounded mr-2"
+                  alt=""
+                />
+                <strong className="mr-auto">Parabéns</strong>
+                <small>{this.getMin()} mins ago</small>
+              </Toast.Header>
+              <Toast.Body>Curriculo cadastrado com sucesso!</Toast.Body>
+            </Toast>
+          </Col>
+
+
+          <Form className="mt-4">
 
             <Form.Group>
-                <Form.Label>Senha</Form.Label>
-                <Form.Control id="senha" type="password" placeholder="Senha" />
+              <Form.File id="exampleFormControlFile1" label="Curriculo" />
             </Form.Group>
-              <Button onClick={this.cadastrar} variant="primary" type="button">
-                Cadastrar
+
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Descrição</Form.Label>
+              <Form.Control as="textarea" rows={3} />
+            </Form.Group>
+            <Button onClick={this.cadastrar} variant="primary" type="button">
+              Cadastrar
               </Button>
-             
-        </Form>
+
+          </Form>
 
         </div>
 
-      );
-    }
+      </div>
+
+    );
+  }
 }
