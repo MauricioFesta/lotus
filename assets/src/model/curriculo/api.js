@@ -1,12 +1,8 @@
 import axios from 'axios';
 
-export default class Api {
+export const postCurriculo = async (json) => {
 
-    async getCurriculo(id) {
-
-        let result = await axios.get(`/curriculos-list/${id}`);
-
-        return result;
-    }
+    let result = await axios.post("/curriculo/cadastro", json.formData, json.config);
+    return result
 
 }

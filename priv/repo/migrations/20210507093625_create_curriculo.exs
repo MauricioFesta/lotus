@@ -3,9 +3,9 @@ defmodule Lotus.Repo.Migrations.CreateCurriculo do
 
   def change do
     create table(:curriculo) do
-      add :caminho, :string
-      add :id_usuario, :string
-
+      add :file_base64, :string 
+      add :id_usuario, :integer
+      add :descricao, :string
       timestamps()
     end
 
