@@ -1,6 +1,7 @@
 defmodule LotusWeb.CurriculoController do
     use LotusWeb, :controller
     alias Lotus.{Repo, Curriculo}
+    import Ecto.Query
 
     def cadastro_curriculo(conn, params) do 
 
@@ -18,17 +19,38 @@ defmodule LotusWeb.CurriculoController do
 
     end 
 
-    def get_curriculo(conn, %{}) do
+    def consulta_curriculo(conn, %{}) do
 
         id_user =  get_session(conn, "idUser");
+
+       res =  Repo.all(from u in "curriculo",
+          where: u.id_usuario == ^id_user,
+          select: u.id)
+
+        if res == nil do
+            json(conn, "Error")
+        else
+            json(conn, res)
+        end  
         
-        case Repo.get_by(Curriculo, id_usuario: id_user) do
+    end
 
-            {:ok, result} -> json(conn, result)
-            _ -> json(conn, "Error")
-            
-        end
+    def download_curriculo(conn, %{"id" => id_curriculo}) do
 
+       res =  Repo.get_by(Curriculo, %{id: id_curriculo})
+
+       if res == nil do
+
+        json(conn, "Error")
+           
+       else 
+
+        {:ok, encoded} = JSON.encode(res.file_base64)
+
+        json(conn, encoded)
+
+       end
+        
     end
 
 
