@@ -13,7 +13,7 @@ export class Cadastro extends React.Component {
   constructor(props) {
     super(props);
     this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
-    this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
+    this.cadastrar = this.cadastrar.bind(this);
 
   }
 

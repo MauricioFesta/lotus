@@ -33,6 +33,7 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     post "/cadastro", CurriculoController, :cadastro_curriculo
+    delete "/excluir/:id", CurriculoController, :excluir_curriculo
     get "/consulta", CurriculoController, :consulta_curriculo
     get "/download/:id", CurriculoController, :download_curriculo
  

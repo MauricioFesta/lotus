@@ -16,3 +16,9 @@ export const getDownload = async (id) => {
 
     return await axios.get(`/curriculo/download/${id}`)
 }
+
+export const postExcluir = async (id) => {
+
+    return await axios.delete(`/curriculo/excluir/${id}`)
+
+}

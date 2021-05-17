@@ -54,4 +54,16 @@ defmodule LotusWeb.CurriculoController do
     end
 
 
+    def excluir_curriculo(conn, %{"id" => id_curriculo}) do
+
+        res =  Repo.get_by(Curriculo, %{id: id_curriculo})
+
+        case Repo.delete res do
+            {:ok, struct}       -> json(conn, "Ok")
+            {:error, changeset} -> json(conn, "Error")
+        end
+        
+    end
+
+
   end

@@ -1,8 +1,8 @@
 import React from 'react';
+import { Form, Button, Alert, Toast, Col } from 'react-bootstrap';
 import Navbar from "../navbar/index"
-import { getCurriculo, getDownload } from "../../model/curriculo/api";
+import { getCurriculo, getDownload, postExcluir } from "../../model/curriculo/api";
 import { Link } from 'react-router-dom';
-import base64 from 'base-64';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
@@ -13,10 +13,18 @@ export default class Curriculo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { dataTable: [] };
+    this.state = { dataTable: [], variant: "primary", msg_text: "", msg_title:"", close_msg: false };
 
     //this.state = {msg: true,variant: "warning", text: "null"};
     // this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
+
+  }
+
+  getMin() {
+
+    let date = new Date();
+
+    return date.getMinutes()
 
   }
 
@@ -24,13 +32,33 @@ export default class Curriculo extends React.Component {
 
     let res = await getDownload(el)
 
-    debugger
 
-    var bytes = base64.decode(res);
+    debugger
 
 
 
   }
+
+  async excluir_Pdf(el) {
+
+    let res = await postExcluir(el)
+
+    if(res.data === "Ok"){
+
+      this.setState({ close_msg: true, msg_text:"Currículo deletado com sucesso!", msg_title: "Parabéns" });
+      this.componentDidMount()
+
+    }else{
+      this.setState({ close_msg: true, msg_text:"Não foi possível deletar o currículo!", msg_title: "Error" });
+
+    }
+
+  }
+
+  closeToasts() {
+    this.setState({ close_msg: false });
+  }
+
 
   async componentDidMount() {
 
@@ -62,7 +90,7 @@ export default class Curriculo extends React.Component {
           <td>
             <button onClick={() => { this.download_Pdf(el) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
           <td>
-            <button className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
+            <button onClick={() => { this.excluir_Pdf(el) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
           </td>
         </tr>
 
@@ -80,6 +108,22 @@ export default class Curriculo extends React.Component {
         <Navbar />
 
         <div className="container table-responsive mt-4">
+
+          <Col xs={6}>
+            <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
+              <Toast.Header>
+                <img
+                  src="holder.js/20x20?text=%20"
+                  className="rounded mr-2"
+                  alt=""
+                />
+                <strong className="mr-auto">{this.state.msg_title}</strong>
+                <small>{this.getMin()} mins ago</small>
+              </Toast.Header>
+              <Toast.Body>{this.state.msg_text}</Toast.Body>
+            </Toast>
+          </Col>
+
 
           <Link to="curriculo/cadastro" >Cadastrar Currículo</Link>
 
