@@ -44,10 +44,14 @@ defmodule LotusWeb.CurriculoController do
         json(conn, "Error")
            
        else 
+            file_name = "123.pdf"
+            case Base.decode64(res.file_base64) do
+                {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
+                    json(conn, file_name)
+                end
+                _-> json(conn, "Error")
 
-        {:ok, encoded} = JSON.encode(res.file_base64)
-
-        json(conn, encoded)
+            end
 
        end
         

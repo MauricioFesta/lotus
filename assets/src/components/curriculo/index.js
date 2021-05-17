@@ -32,10 +32,8 @@ export default class Curriculo extends React.Component {
 
     let res = await getDownload(el)
 
-
-    debugger
-
-
+   window.open(`file:///tmp/${res.data}`, false)
+   
 
   }
 
