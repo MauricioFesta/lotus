@@ -10,6 +10,16 @@ use Mix.Config
 config :lotus,
   ecto_repos: [Lotus.Repo]
 
+# Tarefas agendadas
+config :lotus, Lotus.Scheduler,
+  global: true,
+  overlap: false,
+  jobs: [
+
+    {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_pdf_tmp, []}}
+
+  ]
+
 # Configures the endpoint
 config :lotus, LotusWeb.Endpoint,
   url: [host: "localhost"],

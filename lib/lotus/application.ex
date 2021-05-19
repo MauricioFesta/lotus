@@ -14,7 +14,9 @@ defmodule Lotus.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Lotus.PubSub},
       # Start the Endpoint (http/https)
-      LotusWeb.Endpoint
+      LotusWeb.Endpoint,
+      
+      Lotus.Scheduler
       # Start a worker by calling: Lotus.Worker.start_link(arg)
       # {Lotus.Worker, arg}
     ]

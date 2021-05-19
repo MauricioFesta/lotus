@@ -44,9 +44,9 @@ defmodule LotusWeb.CurriculoController do
         json(conn, "Error")
            
        else 
-            file_name = "123.pdf"
+            file_name = UUID.uuid1() <> ".pdf"
             case Base.decode64(res.file_base64) do
-                {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
+                {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
                     json(conn, file_name)
                 end
                 _-> json(conn, "Error")
@@ -68,6 +68,5 @@ defmodule LotusWeb.CurriculoController do
         end
         
     end
-
 
   end

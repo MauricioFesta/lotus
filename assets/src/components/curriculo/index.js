@@ -4,6 +4,7 @@ import Navbar from "../navbar/index"
 import { getCurriculo, getDownload, postExcluir } from "../../model/curriculo/api";
 import { Link } from 'react-router-dom';
 
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -13,12 +14,14 @@ export default class Curriculo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { dataTable: [], variant: "primary", msg_text: "", msg_title:"", close_msg: false };
+    this.state = { dataTable: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
 
     //this.state = {msg: true,variant: "warning", text: "null"};
     // this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
 
   }
+
+
 
   getMin() {
 
@@ -32,8 +35,8 @@ export default class Curriculo extends React.Component {
 
     let res = await getDownload(el)
 
-   window.open(`file:///tmp/${res.data}`, false)
-   
+    window.open(`/pdf_tmp/${res.data}`, false)
+
 
   }
 
@@ -41,13 +44,13 @@ export default class Curriculo extends React.Component {
 
     let res = await postExcluir(el)
 
-    if(res.data === "Ok"){
+    if (res.data === "Ok") {
 
-      this.setState({ close_msg: true, msg_text:"Currículo deletado com sucesso!", msg_title: "Parabéns" });
+      this.setState({ close_msg: true, msg_text: "Currículo deletado com sucesso!", msg_title: "Parabéns" });
       this.componentDidMount()
 
-    }else{
-      this.setState({ close_msg: true, msg_text:"Não foi possível deletar o currículo!", msg_title: "Error" });
+    } else {
+      this.setState({ close_msg: true, msg_text: "Não foi possível deletar o currículo!", msg_title: "Error" });
 
     }
 
@@ -99,12 +102,12 @@ export default class Curriculo extends React.Component {
 
   render() {
 
+
     return (
 
       <div>
 
         <Navbar />
-
         <div className="container table-responsive mt-4">
 
           <Col xs={6}>
