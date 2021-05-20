@@ -28,7 +28,7 @@ export default class Login extends React.Component {
 
     let res = await getUser(data)
 
-    if (res.data === "Ok") {
+    if (res.data == "Ok") {
       window.location.href = "/home";
     } else {
 
