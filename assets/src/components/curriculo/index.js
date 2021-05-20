@@ -3,6 +3,7 @@ import { Form, Button, Alert, Toast, Col } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { getCurriculo, getDownload, postExcluir } from "../../model/curriculo/api";
 import { Link } from 'react-router-dom';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';

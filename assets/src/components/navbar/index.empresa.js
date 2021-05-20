@@ -11,7 +11,7 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import { MINIMAL } from '@blueprintjs/core/lib/esm/common/classes';
 
-export default class Navbar extends React.Component {
+export default class NavbarEmpresa extends React.Component {
 
   constructor(props) {
     super(props);
@@ -25,13 +25,11 @@ export default class Navbar extends React.Component {
       <nav className="bp3-navbar bp3-dark">
         <div styles="margin: 0 auto; width: 480px;">
           <div className="bp3-navbar-group bp3-align-left">
-            <div className="bp3-navbar-heading">Lotus</div>
+            <div className="bp3-navbar-heading">Lotus Empresas</div>
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/curriculo">Meus Curriculos</Link></button>
-            <button className="bp3-button bp3-minimal bp3-icon-home">Vagas</button>
-            <button className="bp3-button bp3-minimal bp3-icon-document">Postagens de Empresas</button>
+            <button className="bp3-button bp3-minimal bp3-icon-home">Postar vaga</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

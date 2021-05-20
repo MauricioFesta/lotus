@@ -1,6 +1,6 @@
 defmodule Lotus.Py do
 
-    def teste do
+    def calculo do
 
         path =
             [:code.priv_dir(:lotus), "python"]
