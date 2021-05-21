@@ -3,20 +3,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import "./css/index.css"
-import { Classes, Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
-import { Example, IExampleProps } from "@blueprintjs/docs-theme";
+import { Classes, Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
+import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
 
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import { MINIMAL } from '@blueprintjs/core/lib/esm/common/classes';
+
 
 export default class Navbar extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-  }
 
   render() {
 
@@ -30,7 +26,7 @@ export default class Navbar extends React.Component {
           </div>
           <div className="bp3-navbar-group bp3-align-right">
             <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/curriculo">Meus Curriculos</Link></button>
-            <button className="bp3-button bp3-minimal bp3-icon-home">Vagas</button>
+            <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas">Vagas</Link></button>
             <button className="bp3-button bp3-minimal bp3-icon-document">Postagens de Empresas</button>
             <span className="bp3-navbar-divider"></span>
 

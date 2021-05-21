@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Alert, Toast, Col } from 'react-bootstrap';
+import { Form, Button, Toast, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../navbar/index"
 import {postCurriculo} from "../../model/curriculo/api"
