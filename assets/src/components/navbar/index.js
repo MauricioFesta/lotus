@@ -27,7 +27,7 @@ export default class Navbar extends React.Component {
           <div className="bp3-navbar-group bp3-align-right">
             <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/curriculo">Meus Curriculos</Link></button>
             <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas">Vagas</Link></button>
-            <button className="bp3-button bp3-minimal bp3-icon-document">Postagens de Empresas</button>
+            <button className="bp3-button bp3-minimal bp3-icon-document"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/postagens">Postagens</Link></button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

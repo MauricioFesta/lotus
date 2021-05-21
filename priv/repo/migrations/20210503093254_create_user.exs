@@ -6,7 +6,7 @@ defmodule Lotus.Repo.Migrations.CreateUser do
       add :nome, :string
       add :email, :string
       add :senha, :string
-      add :permissao, :string
+      add :is_empresa, :string
 
       timestamps()
     end

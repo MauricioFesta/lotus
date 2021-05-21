@@ -7,6 +7,7 @@ import Curriculo from "./components/curriculo/index";
 import {Cadastro as cadastro_curriculo} from "./components/curriculo/cadastro"
 import VagasEmpresa from "./components/vagas/index.empresa"
 import Vagas from "./components/vagas/index"
+import Postagens from "./components/postagens/index"
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/vagas/empresas" component={VagasEmpresa} />
         <Route path="/curriculo" component={Curriculo} exact/>
         <Route path="/curriculo/cadastro" component={cadastro_curriculo} />
+        <Route path="/postagens" component={Postagens} />
 
         
       

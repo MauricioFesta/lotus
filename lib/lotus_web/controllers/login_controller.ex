@@ -7,10 +7,10 @@ defmodule LotusWeb.LoginController do
         user =  Repo.get_by(User, email: email, senha: senha)
 
        if user == nil do
-        json(conn, "Error")
+        json(conn, %{"Ok": false})
        else
         conn = put_session(conn, :idUser, user.id)
-        json(conn, "Ok")
+        json(conn, %{"Ok": true, is_empresa: user.is_empresa})
        end  
 
     end

@@ -17,31 +17,33 @@ export default class Cadastro extends React.Component {
 
   async cadastrar() {
 
+
     let data = {
 
       nome: $("#nome").val(),
       email: $("#email").val(),
-      senha: $("#senha").val()
+      senha: $("#senha").val(),
+      is_empresa: $("#conta-corporativa").prop("checked")
     }
 
     let res = await postCadastroUser(data)
 
-    if(res.data == "Ok"){
+    if (res.data == "Ok") {
 
       this.setState({
         variant: "primary",
         text: "Usuário cadastrado com sucesso",
         msg: false
       });
-      
-    }else{
+
+    } else {
 
       this.setState({
         variant: "danger",
         text: "Não foi possível cadastrar o usuário Erro: ",
         msg: false
       });
-   
+
     }
 
   }
@@ -57,7 +59,7 @@ export default class Cadastro extends React.Component {
           </Alert>
 
           <Form.Group>
-            <Form.Label>Nome</Form.Label>
+            <Form.Label>Nome ou Razão Social</Form.Label>
             <Form.Control id="nome" type="text" placeholder="Entre com seu nome" />
 
           </Form.Group>
@@ -73,6 +75,14 @@ export default class Cadastro extends React.Component {
             <Form.Label>Senha</Form.Label>
             <Form.Control id="senha" type="password" placeholder="Senha" />
           </Form.Group>
+          <Form.Group>
+            <Form.Check
+              type="switch"
+              id="conta-corporativa"
+              label="Conta corporativa ?"
+            />
+          </Form.Group>
+
           <Button onClick={this.cadastrar} variant="primary" type="button">
             Cadastrar
               </Button>
