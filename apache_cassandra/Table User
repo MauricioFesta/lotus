@@ -1,0 +1,10 @@
+CREATE TABLE lotus_dev.user(
+   id uuid,
+   nome varchar,
+   email varchar,
+   senha varchar,
+   is_empresa varchar,
+   inserted_at date,
+   updated_at date,
+   PRIMARY KEY (id)
+   );

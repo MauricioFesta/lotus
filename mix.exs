@@ -49,6 +49,7 @@ defmodule Lotus.MixProject do
       {:quantum, "~> 3.0"}, 
       { :uuid, "~> 1.1" },
       {:erlport, "~> 0.9"},
+      {:xandra, "~> 0.13.1"}
       
     ]
   end
