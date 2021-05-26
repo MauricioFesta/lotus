@@ -15,9 +15,9 @@ defmodule LotusWeb.LoginController do
 
     end
 
-    def cadastro_login(conn, %{"nome" => nome, "email" => email, "senha" => senha})do
+    def cadastro_login(conn, %{"nome" => nome, "email" => email, "senha" => senha, "is_empresa" => is_empresa})do
 
-      case Repo.insert(%User{email: email, senha: senha, nome: nome}) do
+      case Repo.insert(%User{email: email, senha: senha, nome: nome, is_empresa:  is_empresa}) do
         {:ok, result} -> json(conn, "Ok")
          _ -> IO.puts json(conn, "Error")
 

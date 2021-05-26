@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import $ from "jquery";
 import { postCadastroUser } from "../../model/login/api"
+import {Store} from "../../store"
 
 
 export default class Cadastro extends React.Component {
@@ -17,13 +18,12 @@ export default class Cadastro extends React.Component {
 
   async cadastrar() {
 
-
     let data = {
 
       nome: $("#nome").val(),
       email: $("#email").val(),
       senha: $("#senha").val(),
-      is_empresa: $("#conta-corporativa").prop("checked")
+      is_empresa: $("#conta-corporativa").prop("checked").toString()
     }
 
     let res = await postCadastroUser(data)
@@ -49,6 +49,10 @@ export default class Cadastro extends React.Component {
   }
 
   render() {
+
+    let store = Store.getState().loginState.auth
+    console.log(store)
+
     return (
 
       <div className='container mt-4 main'>

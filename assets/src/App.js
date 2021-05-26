@@ -8,8 +8,22 @@ import {Cadastro as cadastro_curriculo} from "./components/curriculo/cadastro"
 import VagasEmpresa from "./components/vagas/index.empresa"
 import Vagas from "./components/vagas/index"
 import Postagens from "./components/postagens/index"
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import {isAuthenticated} from "./components/login/auth"
 
+const PrivateRoute = ({ component: Component, ...rest }) => (
+
+  <Route
+    {...rest}
+    render={props =>
+      isAuthenticated() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+      )
+    }
+  />
+);
 
 function App() {
   return (
@@ -17,16 +31,16 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" component={Login} exact  />
-        <Route path="/home" component={Home} />
-        <Route path="/cadastro" component={Cadastro} />
-        <Route path="/vagas" exact component={Vagas} />
-        <Route path="/vagas/empresas" component={VagasEmpresa} />
-        <Route path="/curriculo" component={Curriculo} exact/>
-        <Route path="/curriculo/cadastro" component={cadastro_curriculo} />
-        <Route path="/postagens" component={Postagens} />
-
-        
+        <Route path="/cadastro" component={Cadastro} exact  />
       
+        <PrivateRoute path="/home" component={Home} />
+        <PrivateRoute path="/vagas" exact component={Vagas} />
+        <PrivateRoute path="/vagas/empresas" component={VagasEmpresa} />
+        <PrivateRoute path="/curriculo" component={Curriculo} exact />
+        <PrivateRoute path="/curriculo/cadastro" component={cadastro_curriculo} />
+        <PrivateRoute path="/postagens" component={Postagens} />
+        
+
       </Switch>
         
     </BrowserRouter>

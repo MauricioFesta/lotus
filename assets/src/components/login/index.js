@@ -5,19 +5,28 @@ import './css/index.css';
 import $ from "jquery";
 import { Link } from 'react-router-dom';
 import { getUser } from "../../model/login/api"
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 
-export default class Login extends React.Component {
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { loginIsEmpresa, loginAuth } from '../../actions';
+
+class Login extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { msg: true, variant: "warning", text: "null" };
+    this.state = { msg: true, variant: "warning", text: "null", logged: false };
     this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
+
 
   }
 
   async validaLogin() {
+
+
 
     let data = {
 
@@ -27,9 +36,17 @@ export default class Login extends React.Component {
     }
 
     let res = await getUser(data)
-    debugger
+
     if (res.data.Ok) {
-      window.location.href = "/home";
+
+      if(res.data.is_empresa){
+        this.props.loginIsEmpresa(true)
+      }
+
+      this.props.loginAuth(true)
+
+      this.setState({ logged: true })
+
     } else {
 
       this.setState({
@@ -43,10 +60,14 @@ export default class Login extends React.Component {
   }
 
   render() {
+
     return (
 
       <div className='container mt-4 main'>
 
+        {this.state.logged &&
+          <Redirect to={{ pathname: "/home" }} />
+        }
 
         <Alert id="msg_retorno" hidden={this.state.msg} variant={this.state.variant}>
           {this.state.text}
@@ -78,3 +99,12 @@ export default class Login extends React.Component {
     );
   }
 }
+
+const mapStateToProps = store => ({
+  permissao: store.loginState.permissao
+});
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ loginIsEmpresa, loginAuth }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
