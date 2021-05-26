@@ -27,7 +27,6 @@ class Login extends React.Component {
   async validaLogin() {
 
 
-
     let data = {
 
       email: $("#email").val(),
@@ -39,7 +38,7 @@ class Login extends React.Component {
 
     if (res.data.Ok) {
 
-      if(res.data.is_empresa){
+      if(res.data.is_empresa ===  "true"){
         this.props.loginIsEmpresa(true)
       }
 

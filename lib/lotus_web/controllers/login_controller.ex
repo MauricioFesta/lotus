@@ -4,20 +4,31 @@ defmodule LotusWeb.LoginController do
 
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
-        user =  Repo.get_by(User, email: email, senha: senha)
+        statement = "SELECT id, is_empresa FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
+        %Xandra.Page{} = page = Xandra.execute!(Cassandra, statement, _params = [])
+      
+        if page |> Enum.at(0) != nil do
 
-       if user == nil do
-        json(conn, %{"Ok": false})
-       else
-        conn = put_session(conn, :idUser, user.id)
-        json(conn, %{"Ok": true, is_empresa: user.is_empresa})
-       end  
+          case page |> Enum.at(0) |> Map.fetch("id") do  
+            {:ok, _id}  -> 
+              put_session(conn, :idUser, _id)
+              {:ok, _empresa} =  page |> Enum.at(0) |> Map.fetch("is_empresa")
+              json(conn, %{"Ok": true, is_empresa: _empresa})
+  
+            _ -> json(conn, %{"Ok": false})
+          end
+          
+          else
 
+          json(conn, %{"Ok": false})
+
+        end 
+          
+    
     end
 
     def cadastro_login(conn, %{"nome" => nome, "email" => email, "senha" => senha, "is_empresa" => is_empresa})do
 
-     
       statement = "INSERT INTO lotus_dev.user (id,nome, email, senha, is_empresa) VALUES (uuid(),'#{nome}', '#{email}','#{senha}','#{is_empresa}')"
       
       case Xandra.execute(Cassandra, statement, _params = []) do
