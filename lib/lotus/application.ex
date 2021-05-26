@@ -16,7 +16,19 @@ defmodule Lotus.Application do
       # Start the Endpoint (http/https)
       LotusWeb.Endpoint,
       
-      Lotus.Scheduler
+      Lotus.Scheduler,
+
+      {Xandra, name: Cassandra, nodes: ["127.0.0.1:9042"],
+          # authentication: {Xandra.Authenticator.Password, 
+          #   [
+          #     username: "", 
+          #     password: ""
+          #   ]},
+          # my_keyspace: "lotus_dev",
+          pool: DBConnection.Poolboy,
+          pool_size: 10}
+         
+      
       # Start a worker by calling: Lotus.Worker.start_link(arg)
       # {Lotus.Worker, arg}
     ]

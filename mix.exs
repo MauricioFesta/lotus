@@ -47,10 +47,10 @@ defmodule Lotus.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:json, "~> 1.4"},
       {:quantum, "~> 3.0"}, 
-      { :uuid, "~> 1.1" },
+      {:uuid, "~> 1.1" },
       {:erlport, "~> 0.9"},
       {:xandra, "~> 0.13.1"}
-      
+    
     ]
   end
 
