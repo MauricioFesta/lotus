@@ -50,9 +50,6 @@ export default class Cadastro extends React.Component {
 
   render() {
 
-    let store = Store.getState().loginState.auth
-    console.log(store)
-
     return (
 
       <div className='container mt-4 main'>
