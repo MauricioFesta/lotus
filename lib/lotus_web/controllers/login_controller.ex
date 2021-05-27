@@ -6,7 +6,7 @@ defmodule LotusWeb.LoginController do
 
         statement = "SELECT id, is_empresa FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
         %Xandra.Page{} = page = Xandra.execute!(Cassandra, statement, _params = [])
-      
+       
         if page |> Enum.at(0) != nil do
 
           case page |> Enum.at(0) |> Map.fetch("id") do  

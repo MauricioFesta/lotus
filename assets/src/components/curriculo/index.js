@@ -86,11 +86,11 @@ export default class Curriculo extends React.Component {
               />
             </div>
           </th>
-          <td>{el}</td>
+          <td>{el.id}</td>
           <td>
-            <button onClick={() => { this.download_Pdf(el) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
+            <button onClick={() => { this.download_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
           <td>
-            <button onClick={() => { this.excluir_Pdf(el) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
+            <button onClick={() => { this.excluir_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
           </td>
         </tr>
 

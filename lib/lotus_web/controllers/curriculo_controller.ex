@@ -29,8 +29,7 @@ defmodule LotusWeb.CurriculoController do
         statement =  "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
         {:ok, %Xandra.Page{} = page} = Xandra.execute(Cassandra, statement, _params = [])
-         Enum.to_list(page)
-
+         
         if page |> Enum.at(0) != nil do
         
          json(conn, Enum.to_list(page))
@@ -45,24 +44,26 @@ defmodule LotusWeb.CurriculoController do
 
     def download_curriculo(conn, %{"id" => id_curriculo}) do
 
-       res =  Repo.get_by(Curriculo, %{id: id_curriculo})
+        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id = ?"
 
-       if res == nil do
+        {:ok, %Xandra.Page{} = page}  = Xandra.execute(Cassandra, statement, [{"uuid", id_curriculo}])
+        {:ok, _base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+     
+        if page |> Enum.at(0) != nil do
 
-        json(conn, "Error")
-           
-       else 
-            file_name = UUID.uuid1() <> ".pdf"
-            case Base.decode64(res.file_base64) do
+            file_name = UUID.uuid4() <> ".pdf"
+
+           case Base.decode64(_base) do
+
                 {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
-                    json(conn, file_name)
+                     json(conn, file_name)
                 end
                 _-> json(conn, "Error")
 
-            end
+           end
 
-       end
-        
+        end
+              
     end
 
 
