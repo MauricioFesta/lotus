@@ -9,10 +9,13 @@ defmodule LotusWeb.CurriculoController do
 
         if upload = params["file"] do
 
-            case Repo.insert(%Curriculo{file_base64: File.read!(upload.path) |> Base.encode64(), id_usuario: id_user}) do
-                {:ok, result} -> json(conn, "OK")
+            file64 =  File.read!(upload.path) |> Base.encode64();
+
+            statement = "INSERT INTO lotus_dev.curriculo (id, file_base64, id_usuario) VALUES (uuid(), '#{file64}', '#{id_user}')"
+            
+            case Xandra.execute!(Cassandra, statement, _params = []) do
+                {:ok, _res} -> json(conn, "OK")
                 _ -> json(conn, "Error")
-    
             end
          
         end
@@ -23,16 +26,21 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "idUser");
 
-       res =  Repo.all(from u in "curriculo",
-          where: u.id_usuario == ^id_user,
-          select: u.id)
-
-        if res == nil do
-            json(conn, "Error")
-        else
-            json(conn, res)
-        end  
+        statement =  "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(Cassandra, statement, _params = [])
+         Enum.to_list(page)
+
+        if page |> Enum.at(0) != nil do
+        
+         json(conn, Enum.to_list(page))
+
+        else
+
+            json(conn, "Nenhum curriculo encontrado")
+
+        end
+         
     end
 
     def download_curriculo(conn, %{"id" => id_curriculo}) do

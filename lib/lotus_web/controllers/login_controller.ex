@@ -10,7 +10,7 @@ defmodule LotusWeb.LoginController do
         if page |> Enum.at(0) != nil do
 
           case page |> Enum.at(0) |> Map.fetch("id") do  
-            {:ok, _id}  -> 
+            {:ok, _id} -> 
               put_session(conn, :idUser, _id)
               {:ok, _empresa} =  page |> Enum.at(0) |> Map.fetch("is_empresa")
               json(conn, %{"Ok": true, is_empresa: _empresa})

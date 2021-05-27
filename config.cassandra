@@ -11,3 +11,13 @@ CREATE TABLE lotus_dev.user(
    updated_at date,
    PRIMARY KEY (id)
    );
+
+CREATE TABLE curriculo(
+   id uuid PRIMARY KEY,
+   file_base64 text,
+   id_usuario varchar,
+   descricao text,
+   inserted_at timestamp,
+   updated_at timestamp
+  
+   );
