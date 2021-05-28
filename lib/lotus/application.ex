@@ -18,7 +18,7 @@ defmodule Lotus.Application do
       
       Lotus.Scheduler,
 
-      {Xandra, name: Cassandra, nodes: ["127.0.0.1:9042"],
+      {Xandra, name: CassPID, nodes: ["127.0.0.1:9042"],
           # authentication: {Xandra.Authenticator.Password, 
           #   [
           #     username: "", 

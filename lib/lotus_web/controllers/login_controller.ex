@@ -5,7 +5,7 @@ defmodule LotusWeb.LoginController do
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
         statement = "SELECT id, is_empresa FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
-        %Xandra.Page{} = page = Xandra.execute!(Cassandra, statement, _params = [])
+        %Xandra.Page{} = page = Xandra.execute!(CassPID, statement, _params = [])
        
         if page |> Enum.at(0) != nil do
 
@@ -31,7 +31,7 @@ defmodule LotusWeb.LoginController do
 
       statement = "INSERT INTO lotus_dev.user (id,nome, email, senha, is_empresa) VALUES (uuid(),'#{nome}', '#{email}','#{senha}','#{is_empresa}')"
       
-      case Xandra.execute(Cassandra, statement, _params = []) do
+      case Xandra.execute(CassPID, statement, _params = []) do
         {:ok, result} -> json(conn, "Ok")
         _ -> IO.puts json(conn, "Error")
 

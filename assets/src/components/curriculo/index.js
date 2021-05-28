@@ -1,5 +1,5 @@
 import React from 'react';
-import {Toast, Col } from 'react-bootstrap';
+import { Toast, Col, Alert } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { getCurriculo, getDownload, postExcluir } from "../../model/curriculo/api";
 import { Link } from 'react-router-dom';
@@ -64,38 +64,43 @@ export default class Curriculo extends React.Component {
   async componentDidMount() {
 
     let res = await getCurriculo()
-
     this.setState({ dataTable: res.data })
 
   }
 
   dataTable() {
+    if (Array.isArray(this.state.dataTable)) {
 
-    return this.state.dataTable.map((el, index) => {
+      return this.state.dataTable.map((el, index) => {
 
-      return (
+        return (
 
-        <tr key={index}>
-          <th scope="row">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="11"
-              />
-            </div>
-          </th>
-          <td>{el.id}</td>
-          <td>
-            <button onClick={() => { this.download_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
-          <td>
-            <button onClick={() => { this.excluir_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
-          </td>
-        </tr>
+          <tr key={index}>
+            <th scope="row">
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="11"
+                />
+              </div>
+            </th>
+            <td>{el.id}</td>
+            <td>
+              <button onClick={() => { this.download_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
+            <td>
+              <button onClick={() => { this.excluir_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
+            </td>
+          </tr>
 
-      );
-    })
+        );
+      })
+    } else {
+
+
+    }
+
 
   }
 
@@ -143,6 +148,13 @@ export default class Curriculo extends React.Component {
 
             </tbody>
           </table>
+
+          {!Array.isArray(this.state.dataTable) &&
+            <Alert variant="info" className="mt-4">
+              Não há curriculos cadastrados!
+           <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
+           </Alert>
+          }
 
         </div>
 
