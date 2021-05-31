@@ -9,9 +9,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 export default class Vagas extends React.Component {
 
-  
     render() {
-
 
         return (
 

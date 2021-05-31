@@ -18,7 +18,7 @@ defmodule LotusWeb.Router do
 
     get "/", PageController, :index
     
-    
+  
   end
 
   scope "/login", LotusWeb do

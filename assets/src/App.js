@@ -2,14 +2,15 @@ import React from 'react';
 
 import Login from "./components/login/index";
 import Cadastro from "./components/login/cadastro";
-import Home from  "./components/home/index";
+import Home from "./components/home/index";
 import Curriculo from "./components/curriculo/index";
-import {Cadastro as cadastro_curriculo} from "./components/curriculo/cadastro"
+import { Cadastro as cadastro_curriculo } from "./components/curriculo/cadastro"
 import VagasEmpresa from "./components/vagas/index.empresa"
 import Vagas from "./components/vagas/index"
 import Postagens from "./components/postagens/index"
-import {BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import {isAuthenticated} from "./components/login/auth"
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { isAuthenticated } from "./components/login/auth"
+
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
 
@@ -25,26 +26,28 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+
 function App() {
+
   return (
 
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Login} exact  />
-        <Route path="/cadastro" component={Cadastro} exact  />
-      
+        <Route path="/" component={Login} exact />
+        <Route path="/cadastro" component={Cadastro} exact />
+
         <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/vagas" exact component={Vagas} />
         <PrivateRoute path="/vagas/empresas" component={VagasEmpresa} />
         <PrivateRoute path="/curriculo" component={Curriculo} exact />
         <PrivateRoute path="/curriculo/cadastro" component={cadastro_curriculo} />
         <PrivateRoute path="/postagens" component={Postagens} />
-        
+
 
       </Switch>
-        
+
     </BrowserRouter>
-    
+
   );
 }
 
