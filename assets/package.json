@@ -15,6 +15,7 @@
     "react-bootstrap": "^1.5.2",
     "react-bootstrap-table": "^4.3.1",
     "react-dom": "^16.14.0",
+    "react-intl-currency-input": "^0.2.6",
     "react-redux": "^7.2.4",
     "react-redux-form": "^1.16.14",
     "react-router-dom": "^5.2.0",

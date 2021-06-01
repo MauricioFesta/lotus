@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 
 import "./css/index.css"
 import { Classes, Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
-import { Example, IExampleProps } from "@blueprintjs/docs-theme";
+import { Example} from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
 
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import { MINIMAL } from '@blueprintjs/core/lib/esm/common/classes';
+
 
 export default class NavbarEmpresa extends React.Component {
 
@@ -29,7 +29,7 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button className="bp3-button bp3-minimal bp3-icon-home">Postar vaga</button>
+            <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/cadastro">Cadastrar Vagas</Link></button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

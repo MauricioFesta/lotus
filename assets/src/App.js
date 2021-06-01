@@ -10,6 +10,8 @@ import Vagas from "./components/vagas/index"
 import Postagens from "./components/postagens/index"
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { isAuthenticated } from "./components/login/auth"
+import CreateEmpresa from "./components/vagas/create.empresa"
+
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -39,6 +41,7 @@ function App() {
         <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/vagas" exact component={Vagas} />
         <PrivateRoute path="/vagas/empresas" component={VagasEmpresa} />
+        <PrivateRoute path="/vagas/cadastro" component={CreateEmpresa } />
         <PrivateRoute path="/curriculo" component={Curriculo} exact />
         <PrivateRoute path="/curriculo/cadastro" component={cadastro_curriculo} />
         <PrivateRoute path="/postagens" component={Postagens} />

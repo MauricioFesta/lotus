@@ -20,4 +20,12 @@ CREATE TABLE curriculo(
    inserted_at timestamp,
    updated_at timestamp
   
+   
+   );
+
+CREATE TABLE lotus_dev.vagas(
+   id uuid,
+   descricao varchar,
+   empresa_id varchar,
+   PRIMARY KEY (id)
    );

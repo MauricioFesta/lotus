@@ -8,7 +8,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 export default class VagasEmpresa extends React.Component {
 
-   
+
     render() {
 
 
@@ -16,9 +16,15 @@ export default class VagasEmpresa extends React.Component {
 
             <div>
 
-                <NavbarEmpresa  />
+                <NavbarEmpresa />
+                <div className="container mt-4">
+
+
+
+                </div>
 
             </div>
+
 
         );
     }

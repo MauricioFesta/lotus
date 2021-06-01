@@ -5,7 +5,7 @@ import './css/index.css';
 import $ from "jquery";
 import { Link } from 'react-router-dom';
 import { getUser } from "../../model/login/api"
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import {Redirect } from 'react-router-dom';
 
 
 
