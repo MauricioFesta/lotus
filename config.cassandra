@@ -27,5 +27,12 @@ CREATE TABLE lotus_dev.vagas(
    id uuid,
    descricao varchar,
    empresa_id varchar,
+   valor int,
+   estado varchar,
+   cidade  varchar,
+   turno varchar,
+   imagem_base64 text,
+   disponibilidade_viajar boolean,
+   planejamento_futuro boolean,
    PRIMARY KEY (id)
    );

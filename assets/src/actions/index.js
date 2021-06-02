@@ -1,5 +1,4 @@
-import { IS_EMPRESA } from '../actions/actionTypes';
-import { AUTHENTICATED } from '../actions/actionTypes'
+import { AUTHENTICATED, IS_EMPRESA } from '../actions/actionTypes'
 
 export const loginIsEmpresa = value => ({
     type: IS_EMPRESA,
