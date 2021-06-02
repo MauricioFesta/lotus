@@ -46,7 +46,7 @@ export class Cadastro extends React.Component {
 
     if(res.status === 200){
 
-      this.setState({ close_msg: true, msg_text:"Currículo cadastrado com sucesso!", msg_title: "Parabéns" });
+      this.setState({ close_msg: true, msg_text:"Currículo cadastrada com sucesso!", msg_title: "Parabéns" });
 
       
     }else{

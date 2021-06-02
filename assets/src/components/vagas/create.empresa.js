@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button, Alert, Col } from 'react-bootstrap';
+import { Form, Button, Alert, Col , Toast} from 'react-bootstrap';
 import IntlCurrencyInput from "react-intl-currency-input"
 import $ from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,38 +27,57 @@ export default class CreateEmpresa extends React.Component {
     constructor(props) {
         super(props);
         this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
+        this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }
 
+    closeToasts() {
+        this.setState({ close_msg: false });
+    }
+
+    getMin() {
+
+        let date = new Date();
+
+        return date.getMinutes()
+
+    }
+
+
     async cadastrar() {
 
-        let valor = $("#valor-vaga").val().slice(3).replaceAll(".", "").replace(",", "");
-        let descricao = $("#descricao").val();
-        let cidade = $("#cidade").val()
-        let turno = $("#turno").val()
-        let estado = $("#estado").val()
-        let disponibilidade = $("#disponibilidade").prop("checked").toString()
-        let planejamento = $("#planejamento").prop("checked").toString()
+        let formData = new FormData();
 
-        let params = {
+        let file = document.querySelector('#file');
 
-            valor,
-            descricao,
-            cidade,
-            turno,
-            estado,
-            disponibilidade,
-            planejamento
-
-        }
+        formData.append("file", file.files[0]);
+        formData.append("valor", $("#valor-vaga").val().slice(3).replaceAll(".", "").replace(",", ""));
+        formData.append("descricao", $("#descricao").val());
+        formData.append("cidade", $("#cidade").val());
+        formData.append("turno", $("#turno").val());
+        formData.append("estado", $("#estado").val());
+        formData.append("disponibilidade", $("#disponibilidade").prop("checked").toString());
+        formData.append("planejamento", $("#planejamento").prop("checked").toString());
 
         let config = {
 
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+
         }
 
-        let res = await postCadastroVaga(params, config);
+        let res = await postCadastroVaga(formData, config);
 
-        debugger
+        if (res.data.Ok) {
+
+            this.setState({ close_msg: true, msg_text: "Vaga cadastrado com sucesso!", msg_title: "Parabéns" });
+
+
+        } else {
+            this.setState({ close_msg: true, msg_text: "Não foi possível cadastrar a vaga", msg_title: "Error!!" });
+
+        }
     }
 
 
@@ -70,6 +89,21 @@ export default class CreateEmpresa extends React.Component {
 
                 <NavbarEmpresa />
                 <div className="container mt-4">
+
+                    <Col xs={6}>
+                        <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
+                            <Toast.Header>
+                                <img
+                                    src="holder.js/20x20?text=%20"
+                                    className="rounded mr-2"
+                                    alt=""
+                                />
+                                <strong className="mr-auto">{this.state.msg_title}</strong>
+                                <small>{this.getMin()} mins ago</small>
+                            </Toast.Header>
+                            <Toast.Body>{this.state.msg_text}</Toast.Body>
+                        </Toast>
+                    </Col>
 
                     <Form>
                         <Form.Row>
