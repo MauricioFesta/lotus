@@ -36,3 +36,10 @@ CREATE TABLE lotus_dev.vagas(
    planejamento_futuro boolean,
    PRIMARY KEY (id)
    );
+
+CREATE TABLE lotus_dev.postagens(
+   id uuid,
+   descricao text,
+   PRIMARY KEY (id)
+
+);

@@ -71,7 +71,7 @@ export default class CreateEmpresa extends React.Component {
 
         if (res.data.Ok) {
 
-            this.setState({ close_msg: true, msg_text: "Vaga cadastrado com sucesso!", msg_title: "Parabéns" });
+            this.setState({ close_msg: true, msg_text: "Vaga cadastrada com sucesso!", msg_title: "Parabéns" });
 
 
         } else {

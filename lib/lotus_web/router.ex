@@ -44,7 +44,15 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     post "/cadastro", VagasController, :cadastro_vagas
+    get "/lista", VagasController, :list_vagas
   
+  end
+
+  scope "/postagens", LotusWeb do
+    pipe_through :browser
+
+    post "/cadastro", PostagensController, :cadastro_postagem
+
   end
 
   # Other scopes may use custom stacks.

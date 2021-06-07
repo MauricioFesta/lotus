@@ -11,6 +11,7 @@ import Postagens from "./components/postagens/index"
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { isAuthenticated } from "./components/login/auth"
 import CreateEmpresa from "./components/vagas/create.empresa"
+import PostCreateEmpresa from "./components/postagens/create.empresa"
 
 
 
@@ -44,7 +45,8 @@ function App() {
         <PrivateRoute path="/vagas/cadastro" component={CreateEmpresa } />
         <PrivateRoute path="/curriculo" component={Curriculo} exact />
         <PrivateRoute path="/curriculo/cadastro" component={cadastro_curriculo} />
-        <PrivateRoute path="/postagens" component={Postagens} />
+        <PrivateRoute path="/postagens" exact component={Postagens} />
+        <PrivateRoute path="/postagens/cadastro" component={PostCreateEmpresa} />
 
 
       </Switch>
