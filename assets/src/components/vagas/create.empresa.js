@@ -7,7 +7,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import { postCadastroVaga } from "../../model/vagas/api"
+import { AppToaster } from "../../others/toaster"
 
+import { ReactReduxContext } from 'react-redux';
 const currencyConfig = {
     locale: "pt-BR",
     formats: {
@@ -58,6 +60,11 @@ export default class CreateEmpresa extends React.Component {
         formData.append("estado", $("#estado").val());
         formData.append("disponibilidade", $("#disponibilidade").prop("checked").toString());
         formData.append("planejamento", $("#planejamento").prop("checked").toString());
+
+        if (!file.files[0]){
+            AppToaster.show({ message: "Precisa anexar a imagem para prosseguir" });
+            return;
+        }
 
         let config = {
 
@@ -149,7 +156,7 @@ export default class CreateEmpresa extends React.Component {
                             </Form.Group>
 
                             <Form.Group as={Col}>
-                                <Form.File id="file" label="Imagem da vaga (opcional)" />
+                                <Form.File  id="file" label="Imagem da vaga (obrigatório)" />
                             </Form.Group>
 
                         </Form.Row>
@@ -187,4 +194,6 @@ export default class CreateEmpresa extends React.Component {
 
         );
     }
+
+
 }

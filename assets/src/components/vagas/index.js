@@ -43,6 +43,8 @@ export default class Vagas extends React.Component {
 
         this.setState({ vagas: array2 })
 
+        console.log(array2)
+
     }
 
     render() {
@@ -66,7 +68,7 @@ export default class Vagas extends React.Component {
                                         return (
 
                                             <Card key={index}>
-                                                <Card.Img variant="top" src="/logo192.png" />
+                                                <Card.Img variant="top" src={"data:image/png;base64," + el2.imagem_base64} />
                                                 <Card.Body>
                                                     <Card.Title>{el2.cidade}</Card.Title>
                                                     <Card.Text>
