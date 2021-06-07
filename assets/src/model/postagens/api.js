@@ -7,3 +7,11 @@ export const postCreatePostagem = (data) => {
     return result
 
 }
+
+export const getPostagensAll = () => {
+
+    let result = axios.get("/postagens/listar")
+
+    return result
+
+}

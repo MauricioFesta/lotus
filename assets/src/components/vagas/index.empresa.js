@@ -19,8 +19,6 @@ export default class VagasEmpresa extends React.Component {
                 <NavbarEmpresa />
                 <div className="container mt-4">
 
-
-
                 </div>
 
             </div>

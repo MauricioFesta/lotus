@@ -12,6 +12,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { isAuthenticated } from "./components/login/auth"
 import CreateEmpresa from "./components/vagas/create.empresa"
 import PostCreateEmpresa from "./components/postagens/create.empresa"
+import Perfil from "./components/perfil/index"
 
 
 
@@ -47,6 +48,9 @@ function App() {
         <PrivateRoute path="/curriculo/cadastro" component={cadastro_curriculo} />
         <PrivateRoute path="/postagens" exact component={Postagens} />
         <PrivateRoute path="/postagens/cadastro" component={PostCreateEmpresa} />
+        <PrivateRoute path="/perfil" exact component={Perfil} />
+      
+        
 
 
       </Switch>

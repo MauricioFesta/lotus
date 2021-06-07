@@ -11,7 +11,7 @@ export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
+        this.cadastrar = this.cadastrar.bind(this);
         this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }

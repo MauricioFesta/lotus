@@ -6,6 +6,8 @@ import "./css/index.css"
 import { Classes, Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
+import { Redirect } from 'react-router-dom';
+
 
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -13,12 +15,26 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
 export default class Navbar extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state = { to_redirect: '', is_redirect: false }
+  }
+
 
   render() {
 
     return (
 
+
+
       <nav className="bp3-navbar bp3-dark">
+
+        {this.state.is_redirect &&
+
+          <Redirect to={{ pathname: this.state.to_redirect }} />
+
+        }
+
         <div styles="margin: 0 auto; width: 480px;">
           <div className="bp3-navbar-group bp3-align-left">
             <div className="bp3-navbar-heading">Lotus</div>
@@ -39,11 +55,11 @@ export default class Navbar extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Conta" />
-                    <MenuItem icon="align-left" text="Compartilhar" />
+                    <MenuItem onClick={() => this.setState({to_redirect: "perfil", is_redirect: true})} icon="align-left" text="Perfil" />
                     <MenuItem icon="align-left" text="Config">
                       <MenuItem icon="align-left" text="Bloquear" />
                       <MenuItem icon="align-center" text="Excluir" />
-                      <MenuItem icon="clipboard" text="Alaterar foto" />
+                      <MenuItem onClick={() => this.setState({to_redirect: "perfil", is_redirect: true})} icon="clipboard" text="Alaterar foto" />
                     </MenuItem>
                   </Menu>
                 </Example>
@@ -93,7 +109,7 @@ export default class Navbar extends React.Component {
                     <MenuDivider title="Configurações" />
                     <MenuItem icon="align-left" text="Sair" />
                     <MenuItem icon="align-left" text="Status">
-                    <MenuItem icon="align-left" text="Online" />
+                      <MenuItem icon="align-left" text="Online" />
                       <MenuItem icon="align-left" text="Offline" />
                       <MenuItem icon="align-left" text="Ausente" />
                     </MenuItem>

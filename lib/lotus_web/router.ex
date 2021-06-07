@@ -52,6 +52,7 @@ defmodule LotusWeb.Router do
     pipe_through :browser
 
     post "/cadastro", PostagensController, :cadastro_postagem
+    get "/listar", PostagensController, :list_postagens
 
   end
 

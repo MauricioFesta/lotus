@@ -15,6 +15,23 @@ defmodule LotusWeb.PostagensController do
 
     end
 
+    def list_postagens(conn, params) do
+
+        sql = "SELECT * FROM lotus_dev.postagens";
+
+        %Xandra.Page{} = page = Xandra.execute!(CassPID, sql, _params = [])
+
+        if page |> Enum.at(0) != nil do
+            
+            json(conn, Enum.to_list(page))
+        else
+
+            json(conn, "Nenhuma postagem cadastrada")
+        end
+
+
+    end
+
 
 
 
