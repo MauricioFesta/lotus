@@ -114,11 +114,11 @@ export default class Curriculo extends React.Component {
         <Navbar />
         <div className="container table-responsive mt-4">
 
-          <Col xs={6}>
+          <Col className="mb-4" xs={6}>
             <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
               <Toast.Header>
                 <img
-                  src="holder.js/20x20?text=%20"
+                  src="/bootstrap/alert.gif"
                   className="rounded mr-2"
                   alt=""
                 />
@@ -130,7 +130,7 @@ export default class Curriculo extends React.Component {
           </Col>
 
 
-          <Link to="curriculo/cadastro" >Cadastrar Currículo</Link>
+          <Link to="curriculo/cadastro">Cadastrar Currículo</Link>
 
 
           <table className="table align-middle mt-4">
