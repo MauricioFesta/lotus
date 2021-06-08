@@ -85,7 +85,7 @@ export default class Cadastro extends React.Component {
 
           <Button onClick={this.cadastrar} variant="primary" type="button">
             Cadastrar
-              </Button>
+            </Button>
 
         </Form>
 

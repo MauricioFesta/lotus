@@ -7,6 +7,7 @@ CREATE TABLE lotus_dev.user(
    email varchar,
    senha varchar,
    is_empresa varchar,
+   foto_base64 text,
    inserted_at date,
    updated_at date,
    PRIMARY KEY (id)
