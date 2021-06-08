@@ -28,7 +28,6 @@ export default class CreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
         this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }
@@ -46,7 +45,7 @@ export default class CreateEmpresa extends React.Component {
     }
 
 
-    async cadastrar() {
+    cadastrar = async  () => {
 
         let formData = new FormData();
 
@@ -62,7 +61,7 @@ export default class CreateEmpresa extends React.Component {
         formData.append("planejamento", $("#planejamento").prop("checked").toString());
 
         if (!file.files[0]){
-            AppToaster.show({ message: "Precisa anexar a imagem para prosseguir" });
+            AppToaster.show({ message: "Precisa anexar a imagem para prosseguir", intent: "warning" });
             return;
         }
 
@@ -101,7 +100,7 @@ export default class CreateEmpresa extends React.Component {
                         <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
                             <Toast.Header>
                                 <img
-                                    src="holder.js/20x20?text=%20"
+                                    src="/bootstrap/alert.gif"
                                     className="rounded mr-2"
                                     alt=""
                                 />
@@ -112,7 +111,7 @@ export default class CreateEmpresa extends React.Component {
                         </Toast>
                     </Col>
 
-                    <Form>
+                    <Form className="mt-4">
                         <Form.Row>
                             <Form.Group as={Col}>
                                 <Form.Label>Valor da vaga: (opcional)</Form.Label>

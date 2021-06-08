@@ -12,11 +12,10 @@ export default class Cadastro extends React.Component {
   constructor(props) {
     super(props);
     this.state = { msg: true, variant: "primary", text: "null" };
-    this.cadastrar = this.cadastrar = this.cadastrar.bind(this);
-
+  
   }
 
-  async cadastrar() {
+   cadastrar = async () => {
 
     let data = {
 

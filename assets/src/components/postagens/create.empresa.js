@@ -11,7 +11,6 @@ export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.cadastrar = this.cadastrar.bind(this);
         this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }
@@ -29,7 +28,7 @@ export default class PostCreateEmpresa extends React.Component {
     }
 
 
-    async cadastrar() {
+    cadastrar = async () => {
 
         let descricao = $("#descricao").val()
 
@@ -66,7 +65,7 @@ export default class PostCreateEmpresa extends React.Component {
                         <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
                             <Toast.Header>
                                 <img
-                                    src="holder.js/20x20?text=%20"
+                                    src="/bootstrap/alert.gif"
                                     className="rounded mr-2"
                                     alt=""
                                 />

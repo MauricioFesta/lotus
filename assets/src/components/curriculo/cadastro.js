@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Toast, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../navbar/index"
-import {postCurriculo} from "../../model/curriculo/api"
+import { postCurriculo } from "../../model/curriculo/api"
 import $ from "jquery";
 
 
@@ -13,7 +13,6 @@ export class Cadastro extends React.Component {
   constructor(props) {
     super(props);
     this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
-    this.cadastrar = this.cadastrar.bind(this);
 
   }
 
@@ -21,7 +20,7 @@ export class Cadastro extends React.Component {
     this.setState({ close_msg: false });
   }
 
-  async cadastrar() {
+  cadastrar = async () => {
 
     let formData = new FormData();
 
@@ -29,7 +28,7 @@ export class Cadastro extends React.Component {
 
     formData.append("file", file.files[0]);
     formData.append("desc", $("#curriculotext").val());
-  
+
 
     let config = {
       headers: {
@@ -42,15 +41,15 @@ export class Cadastro extends React.Component {
       config
     }
 
-     let res = await postCurriculo(json)
+    let res = await postCurriculo(json)
 
-    if(res.status === 200){
+    if (res.status === 200) {
 
-      this.setState({ close_msg: true, msg_text:"Currículo cadastrada com sucesso!", msg_title: "Parabéns" });
+      this.setState({ close_msg: true, msg_text: "Currículo cadastrada com sucesso!", msg_title: "Parabéns" });
 
-      
-    }else{
-      this.setState({ close_msg: true, msg_text:"Não foi possível cadastrar o currículo", msg_title: "Error!!" });
+
+    } else {
+      this.setState({ close_msg: true, msg_text: "Não foi possível cadastrar o currículo", msg_title: "Error!!" });
 
     }
   }
@@ -77,7 +76,7 @@ export class Cadastro extends React.Component {
             <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
               <Toast.Header>
                 <img
-                  src="holder.js/20x20?text=%20"
+                  src="/bootstrap/alert.gif"
                   className="rounded mr-2"
                   alt=""
                 />
