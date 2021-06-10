@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const postPerfil = async (data) => {
+export const putPerfil = async (data) => {
 
-  let result = await axios.post("perfil/alterar", data)
+  let result = await axios.put("perfil/alterar", data)
 
   return result
 }

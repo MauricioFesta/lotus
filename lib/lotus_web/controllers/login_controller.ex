@@ -1,14 +1,13 @@
 defmodule LotusWeb.LoginController do
     use LotusWeb, :controller
-    alias Lotus.{Repo, User}
-
+   
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
         statement = "SELECT id, is_empresa FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
         %Xandra.Page{} = page = Xandra.execute!(CassPID, statement, _params = [])
        
         if page |> Enum.at(0) != nil do
-
+          
           case page |> Enum.at(0) |> Map.fetch("id") do  
             {:ok, _id} -> 
               put_session(conn, :idUser, _id)

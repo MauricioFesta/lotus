@@ -23,7 +23,7 @@ defmodule LotusWeb.VagasController do
          '#{params["cidade"]}', '#{params["turno"]}', '#{file64}',#{convert!(params["disponibilidade"])},
          #{convert!(params["planejamento"])})"
 
-       case Xandra.execute(CassPID,cql, params = []) |> IO.inspect do
+       case Xandra.execute(CassPID,cql, params = [])  do
            {:ok, _} -> json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})
        end

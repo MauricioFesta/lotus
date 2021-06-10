@@ -1,8 +1,6 @@
 defmodule LotusWeb.CurriculoController do
     use LotusWeb, :controller
-    alias Lotus.{Repo, Curriculo}
-    import Ecto.Query
-
+ 
     def cadastro_curriculo(conn, params) do 
 
        id_user =  get_session(conn, "idUser");
@@ -77,13 +75,6 @@ defmodule LotusWeb.CurriculoController do
 
         end
 
-        # res =  Repo.get_by(Curriculo, %{id: id_curriculo})
-
-        # case Repo.delete res do
-        #     {:ok, struct}       -> json(conn, "Ok")
-        #     {:error, changeset} -> json(conn, "Error")
-        # end
-        
     end
 
   end

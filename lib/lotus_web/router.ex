@@ -16,7 +16,7 @@ defmodule LotusWeb.Router do
   scope "/", LotusWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # get "/", PageController, :index
     
   
   end
@@ -56,6 +56,15 @@ defmodule LotusWeb.Router do
 
   end
 
+  scope "/perfil", LotusWeb do
+    pipe_through :browser
+
+    put "/alterar", PerfilController, :alterar_perfil
+  
+  end
+
+  
+
   # Other scopes may use custom stacks.
   # scope "/api", LotusWeb do
   #   pipe_through :api
@@ -68,12 +77,12 @@ defmodule LotusWeb.Router do
   # If your application does not have an admins-only section yet,
   # you can use Plug.BasicAuth to set up some basic authentication
   # as long as you are also using SSL (which you should anyway).
-  if Mix.env() in [:dev, :test] do
-    import Phoenix.LiveDashboard.Router
+  # if Mix.env() in [:dev, :test] do
+  #   import Phoenix.LiveDashboard.Router
 
-    scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: LotusWeb.Telemetry
-    end
-  end
+  #   scope "/" do
+  #     pipe_through :browser
+  #     live_dashboard "/dashboard", metrics: LotusWeb.Telemetry
+  #   end
+  # end
 end

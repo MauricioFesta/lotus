@@ -36,7 +36,7 @@ class PerfilFoto extends React.Component {
                         src="https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg"
                     />
                     <Figure.Caption>
-                        <Form.File onChange={(e) =>  this.props.perfilForm(e.target.files)} id="file" on label="Alterar foto" />
+                        <Form.File onChange={(e) =>  this.props.perfilForm(e.target.files)} id="file" label="Alterar foto" />
                     </Figure.Caption>
 
                 </Figure>
