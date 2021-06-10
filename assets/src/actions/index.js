@@ -1,4 +1,4 @@
-import { AUTHENTICATED, IS_EMPRESA } from '../actions/actionTypes'
+import { AUTHENTICATED, IS_EMPRESA , FORM} from '../actions/actionTypes'
 
 export const loginIsEmpresa = value => ({
     type: IS_EMPRESA,
@@ -11,3 +11,8 @@ export const loginAuth = value => ({
   auth: value
 
 });
+
+export const perfilForm = value => ({
+  type: FORM,
+  form: value
+})

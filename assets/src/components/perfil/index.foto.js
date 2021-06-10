@@ -4,24 +4,22 @@ import Navbar from "../navbar/index"
 import { Form } from 'react-bootstrap';
 
 
-
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { perfilForm} from '../../actions';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
-export default class PerfilFoto extends React.Component {
+class PerfilFoto extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { data: [] }
+        this.state = { data: [], inputfile: '' }
 
     }
 
-    cadastrar = () => {
-
-    }
 
     render() {
 
@@ -38,7 +36,7 @@ export default class PerfilFoto extends React.Component {
                         src="https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-homem-no-icone-redondo_24640-14044.jpg"
                     />
                     <Figure.Caption>
-                        <Form.File id="file" label="Alterar foto" />
+                        <Form.File onChange={(e) =>  this.props.perfilForm(e.target.files)} id="file" on label="Alterar foto" />
                     </Figure.Caption>
 
                 </Figure>
@@ -49,3 +47,11 @@ export default class PerfilFoto extends React.Component {
         );
     }
 }
+
+const mapStateToProps = store => ({
+    form: store.perfilState.form
+  });
+  const mapDispatchToProps = dispatch =>
+    bindActionCreators({ perfilForm }, dispatch);
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(PerfilFoto);
