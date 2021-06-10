@@ -8,7 +8,7 @@ defmodule Lotus.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Lotus.Repo,
+      # Lotus.Repo,
       # Start the Telemetry supervisor
       LotusWeb.Telemetry,
       # Start the PubSub system

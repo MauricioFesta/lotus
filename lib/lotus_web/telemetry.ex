@@ -31,11 +31,11 @@ defmodule LotusWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("lotus.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("lotus.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("lotus.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("lotus.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("lotus.repo.query.idle_time", unit: {:native, :millisecond}),
+      # summary("lotus.repo.query.total_time", unit: {:native, :millisecond}),
+      # summary("lotus.repo.query.decode_time", unit: {:native, :millisecond}),
+      # summary("lotus.repo.query.query_time", unit: {:native, :millisecond}),
+      # summary("lotus.repo.query.queue_time", unit: {:native, :millisecond}),
+      # summary("lotus.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
