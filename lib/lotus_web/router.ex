@@ -1,74 +1,48 @@
 defmodule LotusWeb.Router do
   use LotusWeb, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    #plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
+   pipeline :browser do
+     plug :accepts, ["html"]
+     plug :fetch_session
+     plug :fetch_flash
+     #plug :protect_from_forgery
+     plug :put_secure_browser_headers
+   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug LotusWeb.Plugs.Auth
   end
 
-  scope "/", LotusWeb do
-    pipe_through :browser
+   scope "/", LotusWeb do
+     pipe_through :browser
 
-    # get "/", PageController, :index
+     post "/login-login_valida", LoginController, :login_valida
+     post "/login-cadastro", LoginController, :cadastro_login
+
+  #   get "/", PageController, :index
     
   
-  end
+    end
 
-  scope "/login", LotusWeb do
-    pipe_through :browser
-
-    post "/cadastro", LoginController, :cadastro_login
-    post "/login_valida", LoginController, :login_valida
-  
-  end
-
-  scope "/curriculo", LotusWeb do
-    pipe_through :browser
-
-    post "/cadastro", CurriculoController, :cadastro_curriculo
-    delete "/excluir/:id", CurriculoController, :excluir_curriculo
-    get "/consulta", CurriculoController, :consulta_curriculo
-    get "/download/:id", CurriculoController, :download_curriculo
- 
-  
-  end
-
-  scope "/vagas", LotusWeb do
-    pipe_through :browser
-
-    post "/cadastro", VagasController, :cadastro_vagas
-    get "/lista", VagasController, :list_vagas
-  
-  end
-
-  scope "/postagens", LotusWeb do
-    pipe_through :browser
-
-    post "/cadastro", PostagensController, :cadastro_postagem
-    get "/listar", PostagensController, :list_postagens
-
-  end
-
-  scope "/perfil", LotusWeb do
-    pipe_through :browser
-
-    put "/alterar", PerfilController, :alterar_perfil
-  
-  end
-
-  
 
   # Other scopes may use custom stacks.
-  # scope "/api", LotusWeb do
-  #   pipe_through :api
-  # end
+
+  scope "/api", LotusWeb do
+    pipe_through :api
+
+    put "/perfil-alterar", PerfilController, :alterar_perfil
+    post "/curriculo-cadastro", CurriculoController, :cadastro_curriculo
+    delete "/curriculo-excluir/:id", CurriculoController, :excluir_curriculo
+    get "/curriculo-consulta", CurriculoController, :consulta_curriculo
+    get "/curriculo-download/:id", CurriculoController, :download_curriculo
+    post "/postagens-cadastro", PostagensController, :cadastro_postagem
+    get "/postagens-listar", PostagensController, :list_postagens
+    post "/vagas-cadastro", VagasController, :cadastro_vagas
+    get "/vagas-lista", VagasController, :list_vagas
+
+  end
 
   # Enables LiveDashboard only for development
   #

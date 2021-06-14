@@ -15,18 +15,15 @@ export default class Home extends React.Component {
 
   render() {
 
-    let is_empresa = Store.getState().loginState.permissao
 
     return (
       <div>
 
-        {is_empresa ?
+  {/*       <NavbarEmpresa /> */}
 
-          <NavbarEmpresa />
 
-          :
-          <Navbar />
-        }
+        <Navbar />
+
 
       </div>
 

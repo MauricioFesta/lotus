@@ -1,24 +1,24 @@
-import axios from 'axios';
+import api from "../../others/api_default"
 
 export const postCurriculo = async (json) => {
 
-    return await axios.post("/curriculo/cadastro", json.formData, json.config);
+    return await api.post("/api/curriculo-cadastro", json.formData, json.config);
     
 }
 
 export const getCurriculo = async () => {
 
-    return await axios.get("/curriculo/consulta");
+    return await api.get("/api/curriculo-consulta");
     
 }
 
 export const getDownload = async (id) => {
 
-    return await axios.get(`/curriculo/download/${id}`)
+    return await api.get(`/api/curriculo-download/${id}`)
 }
 
 export const postExcluir = async (id) => {
 
-    return await axios.delete(`/curriculo/excluir/${id}`)
+    return await api.delete(`/api/curriculo-excluir/${id}`)
 
 }

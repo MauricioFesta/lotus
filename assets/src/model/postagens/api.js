@@ -1,8 +1,8 @@
-import axios from "axios";
+import api from "../../others/api_default"
 
 export const postCreatePostagem = (data) => {
 
-    let result = axios.post("/postagens/cadastro", data)
+    let result = api.post("api/postagens-cadastro", data)
 
     return result
 
@@ -10,7 +10,7 @@ export const postCreatePostagem = (data) => {
 
 export const getPostagensAll = () => {
 
-    let result = axios.get("/postagens/listar")
+    let result = api.get("api/postagens-listar")
 
     return result
 

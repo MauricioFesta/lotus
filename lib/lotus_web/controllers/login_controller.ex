@@ -1,5 +1,6 @@
 defmodule LotusWeb.LoginController do
     use LotusWeb, :controller
+    alias Phoenix.Token
    
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
@@ -11,10 +12,14 @@ defmodule LotusWeb.LoginController do
           case page |> Enum.at(0) |> Map.fetch("id") do  
             {:ok, _id} -> 
               put_session(conn, :idUser, _id)
+              
+              conn = assign(conn, :id, _id)
+             
               {:ok, _empresa} =  page |> Enum.at(0) |> Map.fetch("is_empresa")
-              json(conn, %{"Ok": true, is_empresa: _empresa})
+              token = Token.sign(conn, "va^4S^u!b%@RlTrb", _id)
+              json(conn, %{Ok: true, is_empresa: _empresa, token: token})
   
-            _ -> json(conn, %{"Ok": false})
+            _ -> json(conn, %{Ok: false})
           end
           
           else

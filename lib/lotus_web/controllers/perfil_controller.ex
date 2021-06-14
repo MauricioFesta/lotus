@@ -7,6 +7,8 @@ defmodule LotusWeb.PerfilController do
 
         id_user =  get_session(conn, "idUser");
 
+        id_user |> IO.inspect
+
         file64 = if params["file"] !=  "undefined" do
            
             File.read!(params["file"].path) |> Base.encode64();
@@ -16,6 +18,9 @@ defmodule LotusWeb.PerfilController do
             "false"
 
         end
+
+        conn.assigns[:id] |> IO.inspect
+        IO.puts "Assigns aqui"
 
         sql = "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE WHERE id = ?"
 

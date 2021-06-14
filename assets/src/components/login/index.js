@@ -5,20 +5,19 @@ import './css/index.css';
 import $ from "jquery";
 import { Link } from 'react-router-dom';
 import { getUser } from "../../model/login/api"
-import {Redirect } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+var jwt = require('jsonwebtoken');
 
 
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { loginIsEmpresa, loginAuth } from '../../actions';
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { msg: true, variant: "warning", text: "null", logged: false };
+    this.state = { msg: true, variant: "warning", text: "null" };
     this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
 
 
@@ -38,13 +37,15 @@ class Login extends React.Component {
 
     if (res.data.Ok) {
 
-      if(res.data.is_empresa ===  "true"){
-        this.props.loginIsEmpresa(true)
-      }
+      const secret = 'nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H';
 
-      this.props.loginAuth(true)
+      var token = jwt.sign({ logged: true }, secret)
 
-      this.setState({ logged: true })
+
+      cookies.set('lotus_auth', res.data.token);
+      cookies.set('lotus_auth_true', token);
+ 
+      window.location.href = "/home"
 
     } else {
 
@@ -64,9 +65,6 @@ class Login extends React.Component {
 
       <div className='container mt-4 main'>
 
-        {this.state.logged &&
-          <Redirect to={{ pathname: "/home" }} />
-        }
 
         <Alert id="msg_retorno" hidden={this.state.msg} variant={this.state.variant}>
           {this.state.text}
@@ -99,11 +97,5 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = store => ({
-  permissao: store.loginState.permissao
-});
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ loginIsEmpresa, loginAuth }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
 

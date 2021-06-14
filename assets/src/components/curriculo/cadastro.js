@@ -7,7 +7,6 @@ import $ from "jquery";
 
 
 
-
 export class Cadastro extends React.Component {
 
   constructor(props) {
