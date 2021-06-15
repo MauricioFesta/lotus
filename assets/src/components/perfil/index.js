@@ -9,13 +9,16 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import PerfilFoto from './index.foto';
 import { putPerfil, getPerfil } from "../../stores/perfil/api"
 import { perfilMODEL } from "../../model/perfil"
+import { perfilForm } from '../../actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-export default class Perfil extends React.Component {
+class Perfil extends React.Component {
 
-    
+
     constructor(props) {
         super(props)
-        this.state = {perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
+        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
 
     }
 
@@ -24,8 +27,13 @@ export default class Perfil extends React.Component {
 
         Object.assign(perfilMODEL, res.data[0])
 
-        this.setState({perfilMODEL: perfilMODEL})
+        this.setState({ perfilMODEL: perfilMODEL })
 
+        console.log(this.state.perfilMODEL)
+
+        this.props.perfilForm(this.state.perfilMODEL.foto_base64)
+
+    
     }
 
     getMin() {
@@ -56,10 +64,12 @@ export default class Perfil extends React.Component {
 
         let res = await putPerfil(formData)
 
+
+
         if (res.data.Ok) {
 
             this.setState({ close_msg: true, msg_text: "Perfil alterado com sucesso!", msg_title: "Parabéns" });
-
+            window.location.reload()
 
         } else {
             this.setState({ close_msg: true, msg_text: "Não foi possível alterar o perfil", msg_title: "Error!!" });
@@ -117,7 +127,7 @@ export default class Perfil extends React.Component {
                                 </Form.Group>
                                 <Form.Group controlId="formNome">
                                     <Form.Label>Nome</Form.Label>
-                                    <Form.Control defaultValue={this.state.perfilMODEL.nome}  onChange={(e) => this.setState({ nome: e.target.value })} type="text" placeholder="nome" />
+                                    <Form.Control defaultValue={this.state.perfilMODEL.nome} onChange={(e) => this.setState({ nome: e.target.value })} type="text" placeholder="nome" />
                                     <Form.Text className="text-muted">
                                         Preencha seu nome de acesso
                                     </Form.Text>
@@ -125,7 +135,7 @@ export default class Perfil extends React.Component {
 
                                 <Form.Group controlId="formSenha">
                                     <Form.Label>Senha</Form.Label>
-                                    <Form.Control defaultValue={this.state.perfilMODEL.senha}  onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
+                                    <Form.Control defaultValue={this.state.perfilMODEL.senha} onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
                                     <Form.Text className="text-muted">
                                         Preencha a senha de acesso
                                     </Form.Text>
@@ -147,3 +157,12 @@ export default class Perfil extends React.Component {
         );
     }
 }
+
+
+const mapStateToProps = store => ({
+    foto_base64: store.perfilState.foto_base64
+});
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ perfilForm }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Perfil);
