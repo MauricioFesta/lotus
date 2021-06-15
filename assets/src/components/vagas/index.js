@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardDeck } from 'react-bootstrap';
 import Navbar from "../navbar/index"
-import { listVagas } from "../../model/vagas/api"
+import { listVagas } from "../../stores/vagas/api"
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';

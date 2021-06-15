@@ -6,10 +6,8 @@ defmodule LotusWeb.PerfilController do
 
 
         id_user =  get_session(conn, "idUser");
-
-        id_user |> IO.inspect
-
-        file64 = if params["file"] !=  "undefined" do
+    
+        file64 = if params["file"] != nil do
            
             File.read!(params["file"].path) |> Base.encode64();
 
@@ -19,16 +17,35 @@ defmodule LotusWeb.PerfilController do
 
         end
 
-        conn.assigns[:id] |> IO.inspect
-        IO.puts "Assigns aqui"
-
-        sql = "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE WHERE id = ?"
+    
+        sql = "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = ?"
 
         case Xandra.execute(CassPID, sql, [{"uuid", id_user}]) do
-            {:ok, _} ->  json(conn, "Ok")
-            _ -> json(conn, "Error")
-
+            {:ok, _} -> json(conn, %{Ok: true})
+            _ -> json(conn, %{Ok: false})
+        
         end
+
+    end
+
+    def get_perfil(conn, _params) do
+
+        id_user =  get_session(conn, "idUser");
+
+        sql =  "SELECT email, nome, senha, foto_base64 FROM lotus_dev.user WHERE id = ?"
+
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, sql, [{"uuid", id_user}]) 
+
+        if page |> Enum.at(0) != nil do
+        
+            json(conn, Enum.to_list(page))
+   
+           else
+   
+               json(conn, %{Ok: false})
+   
+        end
+        
     end
     
 

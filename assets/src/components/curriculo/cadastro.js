@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, Toast, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../navbar/index"
-import { postCurriculo } from "../../model/curriculo/api"
+import { postCurriculo } from "../../stores/curriculo/api"
 import $ from "jquery";
 
 

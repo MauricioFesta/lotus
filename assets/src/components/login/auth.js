@@ -7,7 +7,7 @@ export const isAuthenticated = () => {
 
     try {
 
-        let ck_token = cookies.get('lotus_auth_true');
+        let ck_token = cookies.get('_A-T-T_L');
 
         var decoded = jwt.verify(ck_token, secret);
 

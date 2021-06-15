@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
  var api = axios.create({
-    headers: {'X-NZ-Token': cookies.get('lotus_auth')}
+    headers: {'X-NZ-Token': cookies.get('_A-T')}
 });
 export default api;
  

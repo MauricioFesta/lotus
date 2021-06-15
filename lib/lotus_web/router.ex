@@ -32,6 +32,7 @@ defmodule LotusWeb.Router do
   scope "/api", LotusWeb do
     pipe_through :api
 
+    get "/get-perfil", PerfilController, :get_perfil
     put "/perfil-alterar", PerfilController, :alterar_perfil
     post "/curriculo-cadastro", CurriculoController, :cadastro_curriculo
     delete "/curriculo-excluir/:id", CurriculoController, :excluir_curriculo
@@ -41,6 +42,7 @@ defmodule LotusWeb.Router do
     get "/postagens-listar", PostagensController, :list_postagens
     post "/vagas-cadastro", VagasController, :cadastro_vagas
     get "/vagas-lista", VagasController, :list_vagas
+   
 
   end
 

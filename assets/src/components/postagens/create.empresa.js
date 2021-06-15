@@ -1,7 +1,7 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Form, Button, Col , Toast} from 'react-bootstrap';
-import {postCreatePostagem} from "../../model/postagens/api"
+import {postCreatePostagem} from "../../stores/postagens/api"
 import $, { param } from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"

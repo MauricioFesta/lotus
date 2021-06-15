@@ -6,7 +6,7 @@ import $ from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import { postCadastroVaga } from "../../model/vagas/api"
+import { postCadastroVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 
 import { ReactReduxContext } from 'react-redux';

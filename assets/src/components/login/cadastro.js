@@ -3,8 +3,8 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import $ from "jquery";
-import { postCadastroUser } from "../../model/login/api"
-import {Store} from "../../store"
+import { postCadastroUser } from "../../stores/login/api"
+
 
 
 export default class Cadastro extends React.Component {

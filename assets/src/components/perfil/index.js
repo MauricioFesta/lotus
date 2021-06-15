@@ -7,14 +7,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import PerfilFoto from './index.foto';
-import { putPerfil } from "../../model/perfil/api"
+import { putPerfil, getPerfil } from "../../stores/perfil/api"
+import { perfilMODEL } from "../../model/perfil"
 
 export default class Perfil extends React.Component {
 
-
+    
     constructor(props) {
         super(props)
-        this.state = { nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
+        this.state = {perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
+
+    }
+
+    async componentDidMount() {
+        let res = await getPerfil()
+
+        Object.assign(perfilMODEL, res.data[0])
+
+        this.setState({perfilMODEL: perfilMODEL})
 
     }
 
@@ -40,8 +50,9 @@ export default class Perfil extends React.Component {
             formData.append("file", store.perfilState.form[0]);
         }
 
-        formData.append("nome", this.state.nome);
-        formData.append("senha", this.state.senha);
+        formData.append("nome", this.state.nome || this.state.perfilMODEL.nome);
+        formData.append("senha", this.state.senha || this.state.perfilMODEL.senha);
+        formData.append("email", this.state.email || this.state.perfilMODEL.email)
 
         let res = await putPerfil(formData)
 
@@ -54,7 +65,6 @@ export default class Perfil extends React.Component {
             this.setState({ close_msg: true, msg_text: "Não foi possível alterar o perfil", msg_title: "Error!!" });
 
         }
-
 
     }
 
@@ -97,21 +107,32 @@ export default class Perfil extends React.Component {
 
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <Form>
-                                <Form.Group controlId="formBasicEmail">
+
+                                <Form.Group controlId="formEmail">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control defaultValue={this.state.perfilMODEL.email} onChange={(e) => this.setState({ email: e.target.value })} type="email" placeholder="email" />
+                                    <Form.Text className="text-muted">
+                                        Preencha seu email de acesso
+                                    </Form.Text>
+                                </Form.Group>
+                                <Form.Group controlId="formNome">
                                     <Form.Label>Nome</Form.Label>
-                                    <Form.Control onChange={(e) => this.setState({ nome: e.target.value })} type="email" placeholder="Enter email" />
+                                    <Form.Control defaultValue={this.state.perfilMODEL.nome}  onChange={(e) => this.setState({ nome: e.target.value })} type="text" placeholder="nome" />
                                     <Form.Text className="text-muted">
                                         Preencha seu nome de acesso
                                     </Form.Text>
                                 </Form.Group>
 
-                                <Form.Group controlId="formBasicPassword">
+                                <Form.Group controlId="formSenha">
                                     <Form.Label>Senha</Form.Label>
-                                    <Form.Control onChange={(e) => this.setState({ senha: e.target.value })} type="password" placeholder="Password" />
+                                    <Form.Control defaultValue={this.state.perfilMODEL.senha}  onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
                                     <Form.Text className="text-muted">
                                         Preencha a senha de acesso
                                     </Form.Text>
                                 </Form.Group>
+
+
+
 
                             </Form>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Navbar from "../navbar/index"
-import { getPostagensAll } from "../../model/postagens/api"
+import { getPostagensAll } from "../../stores/postagens/api"
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';

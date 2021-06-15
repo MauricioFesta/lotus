@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.css';
 import $ from "jquery";
 import { Link } from 'react-router-dom';
-import { getUser } from "../../model/login/api"
+import { getUser } from "../../stores/login/api"
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 var jwt = require('jsonwebtoken');
@@ -39,11 +39,11 @@ export default class Login extends React.Component {
 
       const secret = 'nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H';
 
-      var token = jwt.sign({ logged: true }, secret)
+      var token = jwt.sign({ logged: true }, secret, { expiresIn: '1h' })
 
 
-      cookies.set('lotus_auth', res.data.token);
-      cookies.set('lotus_auth_true', token);
+      cookies.set('_A-T', res.data.token);
+      cookies.set('_A-T-T_L', token);
  
       window.location.href = "/home"
 
