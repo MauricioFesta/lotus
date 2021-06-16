@@ -13,7 +13,7 @@ import { isAuthenticated } from "./components/login/auth"
 import CreateEmpresa from "./components/vagas/create.empresa"
 import PostCreateEmpresa from "./components/postagens/create.empresa"
 import Perfil from "./components/perfil/index"
-
+require("./css/style.css")
 
 
 const PrivateRoute = ({ component: Component, ...rest }) => (

@@ -2,11 +2,12 @@ import React from 'react';
 import { Button, Card, CardDeck } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { listVagas } from "../../stores/vagas/api"
-
-
+import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+
+require("./css/index.css")
 
 export default class Vagas extends React.Component {
 
@@ -24,8 +25,6 @@ export default class Vagas extends React.Component {
 
         let res = await listVagas()
 
-        console.log(res.data)
-
         if(Array.isArray(res.data)){
 
             res.data.map(el => {
@@ -41,9 +40,8 @@ export default class Vagas extends React.Component {
                 tmp++
             })
     
-            if(tmp != 5){
-                array2.push(array)
-            }
+        
+            array2.push(array)
     
             this.setState({ vagas: array2 })
             
@@ -54,6 +52,10 @@ export default class Vagas extends React.Component {
 
     }
 
+    cadastroVaga(){
+        AppToaster.show({message: "Candidatura enviada com sucesso", intent: "success" });
+    }
+
     render() {
 
         return (
@@ -62,13 +64,13 @@ export default class Vagas extends React.Component {
 
                 <Navbar />
 
-                <div className="container mt-4">
+                <div  className="container mt-4 card">
 
                     {this.state.vagas.map((el, index) => {
 
                         return (
                             <>
-                                <CardDeck key={index}>
+                                <CardDeck className="mt-4" key={index}>
 
                                     {el.map((el2, index) => {
 
@@ -81,7 +83,7 @@ export default class Vagas extends React.Component {
                                                     <Card.Text>
                                                         {el2.descricao}
                                                     </Card.Text>
-                                                    <Button variant="primary" size="sm">
+                                                    <Button onClick={this.cadastroVaga} variant="primary" size="sm">
                                                         Candidatar-se
                                                 </Button>
                                                 </Card.Body>

@@ -11,7 +11,7 @@ export class Cadastro extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {image: "images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
+    this.state = {image: "/images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
   }
 
@@ -48,7 +48,7 @@ export class Cadastro extends React.Component {
 
 
     } else {
-      this.setState({image: "images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar o currículo", msg_title: "Error!!" });
+      this.setState({image: "/images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar o currículo", msg_title: "Error!!" });
 
     }
   }
