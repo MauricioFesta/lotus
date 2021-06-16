@@ -11,7 +11,7 @@ export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
+        this.state = {image: "images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }
 
@@ -39,14 +39,13 @@ export default class PostCreateEmpresa extends React.Component {
   
         let res = await postCreatePostagem(params);
 
-        debugger
         if (res.data.Ok) {
 
             this.setState({ close_msg: true, msg_text: "Postagem cadastrada com sucesso!", msg_title: "Parabéns" });
 
 
         } else {
-            this.setState({ close_msg: true, msg_text: "Não foi possível cadastrar a postagem", msg_title: "Error!!" });
+            this.setState({image: "images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar a postagem", msg_title: "Error!!" });
 
         }
     }
@@ -65,7 +64,7 @@ export default class PostCreateEmpresa extends React.Component {
                         <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
                             <Toast.Header>
                                 <img
-                                    src="/bootstrap/alert.gif"
+                                    src={this.state.image}
                                     className="rounded mr-2"
                                     alt=""
                                 />

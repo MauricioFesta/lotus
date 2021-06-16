@@ -9,7 +9,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import PerfilFoto from './index.foto';
 import { putPerfil, getPerfil } from "../../stores/perfil/api"
 import { perfilMODEL } from "../../model/perfil"
-import { perfilForm } from '../../actions';
+import { perfilForm, perfilQuery } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -18,7 +18,7 @@ class Perfil extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
+        this.state = { perfilMODEL,image: "images/alert-sucsses.gif", retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
 
     }
 
@@ -29,9 +29,11 @@ class Perfil extends React.Component {
 
         this.setState({ perfilMODEL: perfilMODEL })
 
-        console.log(this.state.perfilMODEL)
+     
 
-        this.props.perfilForm(this.state.perfilMODEL.foto_base64)
+        this.props.perfilQuery({foto_base64: this.state.perfilMODEL.foto_base64})
+
+       console.log(Store.getState().perfilState.query.foto_base64) 
 
     
     }
@@ -52,8 +54,8 @@ class Perfil extends React.Component {
 
         let store = Store.getState()
         let formData = new FormData();
-
-        if (store.perfilState.form[0]) {
+      
+        if (store.perfilState.form.length > 0) {
 
             formData.append("file", store.perfilState.form[0]);
         }
@@ -67,12 +69,11 @@ class Perfil extends React.Component {
 
 
         if (res.data.Ok) {
-
+            store.perfilState.form.length ? window.location.reload() :
             this.setState({ close_msg: true, msg_text: "Perfil alterado com sucesso!", msg_title: "Parabéns" });
-            window.location.reload()
-
+            
         } else {
-            this.setState({ close_msg: true, msg_text: "Não foi possível alterar o perfil", msg_title: "Error!!" });
+            this.setState({image: "images/alert-error.gif", close_msg: true, msg_text: "Não foi possível alterar o perfil", msg_title: "Error!!" });
 
         }
 
@@ -93,7 +94,7 @@ class Perfil extends React.Component {
                         <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
                             <Toast.Header>
                                 <img
-                                    src="/bootstrap/alert.gif"
+                                    src={this.state.image}
                                     className="rounded mr-2"
                                     alt=""
                                 />
@@ -104,7 +105,7 @@ class Perfil extends React.Component {
                         </Toast>
                     </Col>
 
-                    <Jumbotron >
+                    <Jumbotron className="mt-4" >
 
                         <Row>
 
@@ -160,9 +161,10 @@ class Perfil extends React.Component {
 
 
 const mapStateToProps = store => ({
-    foto_base64: store.perfilState.foto_base64
+    query: store.perfilState.query,
+    form: store.perfilState.form
 });
 const mapDispatchToProps = dispatch =>
-    bindActionCreators({ perfilForm }, dispatch);
+    bindActionCreators({ perfilForm, perfilQuery }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Perfil);

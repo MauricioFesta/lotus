@@ -13,7 +13,6 @@ class PerfilFoto extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { data: [], inputfile: '', foto: undefined }
 
     }
 
@@ -31,7 +30,8 @@ class PerfilFoto extends React.Component {
                         height={180}
                         alt="171x180"
 
-                        src={"data:image/png;base64," + Store.getState().perfilState.foto_base64}
+                        src={Store.getState().perfilState.query.foto_base64 ? "data:image/png;base64," + Store.getState().perfilState.query.foto_base64
+                            : "images/perfil-avatar.jpg"}
 
                     />
                     <Figure.Caption>
@@ -52,7 +52,8 @@ class PerfilFoto extends React.Component {
 }
 
 const mapStateToProps = store => ({
-    foto_base64: store.perfilState.foto_base64
+    form: store.perfilState.form,
+    query: store.perfilState.query
 });
 const mapDispatchToProps = dispatch =>
     bindActionCreators({ perfilForm }, dispatch);

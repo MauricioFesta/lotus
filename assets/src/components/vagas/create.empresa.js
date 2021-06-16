@@ -61,7 +61,7 @@ export default class CreateEmpresa extends React.Component {
         formData.append("planejamento", $("#planejamento").prop("checked").toString());
 
         if (!file.files[0]){
-            AppToaster.show({ message: "Precisa anexar a imagem para prosseguir", intent: "warning" });
+            AppToaster.show({image: "images/alert-sucsses.gif", message: "Precisa anexar a imagem para prosseguir", intent: "warning" });
             return;
         }
 
@@ -81,7 +81,7 @@ export default class CreateEmpresa extends React.Component {
 
 
         } else {
-            this.setState({ close_msg: true, msg_text: "Não foi possível cadastrar a vaga", msg_title: "Error!!" });
+            this.setState({image: "images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar a vaga", msg_title: "Error!!" });
 
         }
     }
@@ -100,7 +100,7 @@ export default class CreateEmpresa extends React.Component {
                         <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
                             <Toast.Header>
                                 <img
-                                    src="/bootstrap/alert.gif"
+                                    src={this.state.image}
                                     className="rounded mr-2"
                                     alt=""
                                 />
