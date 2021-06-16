@@ -18,8 +18,14 @@ export default class Postagens extends React.Component {
     async componentDidMount() {
 
         let res = await getPostagensAll()
+        
+        if(Array.isArray(res.data)){
 
-        this.setState({ data: res.data })
+            this.setState({ data: res.data })
+        }else{
+            this.setState({ data: [] })
+        }
+       
 
     }
 

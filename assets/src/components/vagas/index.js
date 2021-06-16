@@ -24,26 +24,33 @@ export default class Vagas extends React.Component {
 
         let res = await listVagas()
 
-        res.data.map(el => {
+        console.log(res.data)
 
-            if (tmp === 5) {
+        if(Array.isArray(res.data)){
 
+            res.data.map(el => {
+
+                if (tmp === 5) {
+    
+                    array2.push(array)
+                    array = []
+                    tmp = 0
+    
+                }
+                array.push(el) 
+                tmp++
+            })
+    
+            if(tmp != 5){
                 array2.push(array)
-                array = []
-                tmp = 0
-
             }
-            array.push(el) 
-            tmp++
-        })
-
-        if(tmp != 5){
-            array2.push(array)
+    
+            this.setState({ vagas: array2 })
+            
         }
+        
 
-        this.setState({ vagas: array2 })
-
-        console.log(array2)
+        
 
     }
 

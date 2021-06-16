@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const perfilReducer = (state = initialState, action) => {
-  debugger
+
   switch (action.type) {
     
     case FORM:
