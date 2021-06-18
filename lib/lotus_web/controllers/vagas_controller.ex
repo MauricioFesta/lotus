@@ -15,14 +15,26 @@ defmodule LotusWeb.VagasController do
 
         id_user =  get_session(conn, "idUser");
 
-         {_valor, _} = Integer.parse(params["valor"])
-        
-         cql = "INSERT INTO lotus_dev.vagas (id,descricao,empresa_id,valor, estado, cidade, 
-         turno,imagem_base64,disponibilidade_viajar,planejamento_futuro) VALUES (uuid(),
-         '#{params["descricao"]}', '#{id_user}', #{_valor}, '#{params["estado"]}',
-         '#{params["cidade"]}', '#{params["turno"]}', '#{file64}',#{convert!(params["disponibilidade"])},
-         #{convert!(params["planejamento"])})"
+        {_valor, _} = Integer.parse(params["valor"])
 
+        new_params = %{} 
+
+        |> Map.put(:id, params["id"])
+        |> Map.put(:descricao, params["descricao"])
+        |> Map.put(:cidade, params["cidade"])
+        |> Map.put(:turno, params["turno"])
+        |> Map.put(:estado, params["estado"])
+        |> Map.put(:imagem_base64, file64)
+        |> Map.put(:valor, _valor) 
+        |> Map.put(:empresa_id, id_user)
+        |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
+        |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
+        
+        {:ok, data} = JSON.encode(new_params) 
+
+
+         cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
+        
        case Xandra.execute(CassPID,cql, params = [])  do
            {:ok, _} -> json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})

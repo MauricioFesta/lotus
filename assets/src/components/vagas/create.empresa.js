@@ -8,6 +8,7 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import { postCadastroVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
+import { v4 as uuidv4 } from 'uuid';
 
 import { ReactReduxContext } from 'react-redux';
 const currencyConfig = {
@@ -28,7 +29,7 @@ export default class CreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
+        this.state = {image: "/images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
 
     }
 
@@ -51,14 +52,15 @@ export default class CreateEmpresa extends React.Component {
 
         let file = document.querySelector('#file');
 
+        formData.append("id", uuidv4());
         formData.append("file", file.files[0]);
         formData.append("valor", $("#valor-vaga").val().slice(3).replaceAll(".", "").replace(",", ""));
         formData.append("descricao", $("#descricao").val());
         formData.append("cidade", $("#cidade").val());
         formData.append("turno", $("#turno").val());
         formData.append("estado", $("#estado").val());
-        formData.append("disponibilidade", $("#disponibilidade").prop("checked").toString());
-        formData.append("planejamento", $("#planejamento").prop("checked").toString());
+        formData.append("disponibilidade_viajar", $("#disponibilidade").prop("checked").toString());
+        formData.append("planejamento_futuro", $("#planejamento").prop("checked").toString());
 
         if (!file.files[0]){
             AppToaster.show({message: "Precisa anexar a imagem para prosseguir", intent: "warning" });

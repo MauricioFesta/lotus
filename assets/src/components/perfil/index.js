@@ -1,5 +1,5 @@
 import React from 'react';
-import { Figure, Jumbotron, Container, Row, Form, Alert, Col, Toast } from 'react-bootstrap';
+import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { Button, Icon } from "@blueprintjs/core";
 import { Store } from "../../store"
@@ -12,13 +12,14 @@ import { perfilMODEL } from "../../model/perfil"
 import { perfilForm, perfilQuery } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { AppToaster } from "../../others/toaster"
 
 class Perfil extends React.Component {
 
 
     constructor(props) {
         super(props)
-        this.state = { perfilMODEL,image: "images/alert-sucsses.gif", retornoBanco: {}, email: '', nome: '', senha: '', close_msg: false, variant: "primary", msg_text: "", msg_title: "" }
+        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: ''}
 
     }
 
@@ -70,11 +71,9 @@ class Perfil extends React.Component {
 
         if (res.data.Ok) {
             store.perfilState.form.length ? window.location.reload() :
-            this.setState({ close_msg: true, msg_text: "Perfil alterado com sucesso!", msg_title: "Parabéns" });
-            
+            AppToaster.show({message: "Perfil alterado com sucesso!", intent: "success" });
         } else {
-            this.setState({image: "images/alert-error.gif", close_msg: true, msg_text: "Não foi possível alterar o perfil", msg_title: "Error!!" });
-
+            AppToaster.show({message: "Não foi possível alterar o perfil", intent: "error" });
         }
 
     }
@@ -89,21 +88,6 @@ class Perfil extends React.Component {
                 <Navbar />
 
                 <Container className="mt-4">
-
-                    <Col xs={6}>
-                        <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
-                            <Toast.Header>
-                                <img
-                                    src={this.state.image}
-                                    className="rounded mr-2"
-                                    alt=""
-                                />
-                                <strong className="mr-auto">{this.state.msg_title}</strong>
-                                <small>{this.getMin()} mins ago</small>
-                            </Toast.Header>
-                            <Toast.Body>{this.state.msg_text}</Toast.Body>
-                        </Toast>
-                    </Col>
 
                     <Jumbotron className="mt-4" >
 

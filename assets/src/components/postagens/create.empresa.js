@@ -1,24 +1,22 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button, Col , Toast} from 'react-bootstrap';
+import { Form, Button} from 'react-bootstrap';
 import {postCreatePostagem} from "../../stores/postagens/api"
 import $, { param } from "jquery";
+import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-
+import { v4 as uuidv4 } from 'uuid';
 export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {image: "/images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
+        this.state = {image: "/images/alert-sucsses.gif"};
 
     }
 
-    closeToasts() {
-        this.setState({ close_msg: false });
-    }
-
+  
     getMin() {
 
         let date = new Date();
@@ -33,20 +31,20 @@ export default class PostCreateEmpresa extends React.Component {
         let descricao = $("#descricao").val()
 
         let params = {
+            id:uuidv4(),
             descricao
 
         }
   
         let res = await postCreatePostagem(params);
 
-
         if (res.data.Ok) {
 
-            this.setState({ close_msg: true, msg_text: "Postagem cadastrada com sucesso!", msg_title: "Parabéns" });
+            AppToaster.show({message: "Postagem cadastrada com sucesso!", intent: "success" });
 
 
         } else {
-            this.setState({image: "/images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar a postagem", msg_title: "Error!!" });
+            AppToaster.show({message: "Não foi possível, tente novamente mais tarde", intent: "error" });
 
         }
     }
@@ -61,21 +59,7 @@ export default class PostCreateEmpresa extends React.Component {
                 <NavbarEmpresa />
                 <div className="container mt-4">
 
-                    <Col xs={6}>
-                        <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
-                            <Toast.Header>
-                                <img
-                                    src={this.state.image}
-                                    className="rounded mr-2"
-                                    alt=""
-                                />
-                                <strong className="mr-auto">{this.state.msg_title}</strong>
-                                <small>{this.getMin()} mins ago</small>
-                            </Toast.Header>
-                            <Toast.Body>{this.state.msg_text}</Toast.Body>
-                        </Toast>
-                    </Col>
-
+                   
                     <Form>
                     
                         <Form.Group>

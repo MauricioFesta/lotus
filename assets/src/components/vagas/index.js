@@ -3,9 +3,11 @@ import { Button, Card, CardDeck } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { listVagas } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
+import { postCandidatarseVaga } from "../../stores/vagas/api"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+
 
 require("./css/index.css")
 
@@ -15,7 +17,6 @@ export default class Vagas extends React.Component {
 
         super(props);
         this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
-
 
     }
 
@@ -40,20 +41,22 @@ export default class Vagas extends React.Component {
                 tmp++
             })
     
-        
             array2.push(array)
     
             this.setState({ vagas: array2 })
             
         }
         
-
-        
-
     }
 
-    cadastroVaga(){
-        AppToaster.show({message: "Candidatura enviada com sucesso", intent: "success" });
+    cadastroVaga(id){
+        let res = postCandidatarseVaga(id)
+        if(res.data.Ok){
+            AppToaster.show({message: "Candidatura enviada com sucesso", intent: "success" });
+        }else{
+            AppToaster.show({message: "Não foi possível candidatar-se, tente novamente mais tarde", intent: "error" });
+        }
+        
     }
 
     render() {
@@ -64,7 +67,7 @@ export default class Vagas extends React.Component {
 
                 <Navbar />
 
-                <div  className="container mt-4 card">
+                <div  className="container mt-4 scroll-card">
 
                     {this.state.vagas.map((el, index) => {
 
@@ -83,7 +86,7 @@ export default class Vagas extends React.Component {
                                                     <Card.Text>
                                                         {el2.descricao}
                                                     </Card.Text>
-                                                    <Button onClick={this.cadastroVaga} variant="primary" size="sm">
+                                                    <Button onClick={() => this.cadastroVaga(el2.id)} variant="primary" size="sm">
                                                         Candidatar-se
                                                 </Button>
                                                 </Card.Body>
@@ -92,7 +95,6 @@ export default class Vagas extends React.Component {
                                                     <small className="text-muted">Last updated 3 mins ago</small>
                                                 </Card.Footer>
                                             </Card>
-
 
                                         )
                                     })

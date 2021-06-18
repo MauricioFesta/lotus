@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
+require("./css/index.css")
+
 export default class Postagens extends React.Component {
 
     constructor(props) {
@@ -38,7 +40,7 @@ export default class Postagens extends React.Component {
 
                 <Navbar />
 
-                <div className="container mt-4">
+                <div className="container mt-4 scroll-card">
 
                     {this.state.data.map((el, index) => {
                         return (

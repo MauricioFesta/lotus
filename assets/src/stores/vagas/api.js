@@ -14,3 +14,8 @@ export const listVagas = async () => {
 
 
 }
+
+export const postCandidatarseVaga = async (id) => {
+    let result = await api.get("/api/vagas-candidatar-se")
+    return result
+}

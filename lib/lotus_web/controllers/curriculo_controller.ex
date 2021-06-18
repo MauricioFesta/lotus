@@ -5,12 +5,18 @@ defmodule LotusWeb.CurriculoController do
 
        id_user =  get_session(conn, "idUser");
 
+    
         if upload = params["file"] do
 
             file64 =  File.read!(upload.path) |> Base.encode64();
 
-            statement = "INSERT INTO lotus_dev.curriculo (id, file_base64, id_usuario) VALUES (uuid(), '#{file64}', '#{id_user}')"
-            
+            new_params = %{} |> Map.put(:file_base64,file64) |> Map.put(:descricao,params["descricao"]) |> Map.put(:id,params["id"]) |> Map.put(:id_usuario, id_user)
+        
+
+            {:ok, data} = JSON.encode(new_params) 
+         
+            statement = "INSERT INTO lotus_dev.curriculo JSON '#{data}'"
+        
             case Xandra.execute!(CassPID, statement, _params = []) do
                 {:ok, _res} -> json(conn, "OK")
                 _ -> json(conn, "Error")
@@ -24,7 +30,7 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "idUser");
 
-        statement =  "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
+        statement =  "SELECT id, descricao FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
          

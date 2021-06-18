@@ -31,15 +31,16 @@ defmodule LotusWeb.LoginController do
     
     end
 
-    def cadastro_login(conn, %{"nome" => nome, "email" => email, "senha" => senha, "is_empresa" => is_empresa})do
-
-      statement = "INSERT INTO lotus_dev.user (id,nome, email, senha, is_empresa) VALUES (uuid(),'#{nome}', '#{email}','#{senha}','#{is_empresa}')"
+    def cadastro_login(conn, params)do
+  
+      {:ok, data} = JSON.encode(params) 
       
-      case Xandra.execute(CassPID, statement, _params = []) do
-        {:ok, result} -> json(conn, "Ok")
-        _ -> IO.puts json(conn, "Error")
+      statement = "INSERT INTO lotus_dev.user JSON '#{data}'"
+       case Xandra.execute(CassPID, statement, _params = []) do
+         {:ok, result} -> json(conn, "Ok")
+         _ -> IO.puts json(conn, "Error")
 
-      end
+       end
 
 
     end

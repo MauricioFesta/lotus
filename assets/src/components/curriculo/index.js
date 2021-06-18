@@ -3,162 +3,162 @@ import { Toast, Col, Alert } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { getCurriculo, getDownload, postExcluir } from "../../stores/curriculo/api";
 import { Link } from 'react-router-dom';
-
-
+import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+
 
 export default class Curriculo extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { dataTable: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
-
-    //this.state = {msg: true,variant: "warning", text: "null"};
-    // this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
-
+    this.state = { showItems: false, dataTable: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
   }
-
-
-
-  getMin() {
-
-    let date = new Date();
-
-    return date.getMinutes()
-
-  }
-
-  async download_Pdf(el) {
-
-    let res = await getDownload(el)
-
-    window.open(`/pdf_tmp/${res.data}`, false)
-
-
-  }
-
-  async excluir_Pdf(el) {
-
-    let res = await postExcluir(el)
-
-    if (res.data === "Ok") {
-
-      this.setState({ close_msg: true, msg_text: "Currículo deletado com sucesso!", msg_title: "Parabéns" });
-      this.componentDidMount()
-
-    } else {
-      this.setState({ close_msg: true, msg_text: "Não foi possível deletar o currículo!", msg_title: "Error" });
-
-    }
-
-  }
-
-  closeToasts() {
-    this.setState({ close_msg: false });
-  }
-
 
   async componentDidMount() {
 
     let res = await getCurriculo()
-    this.setState({ dataTable: res.data })
-
-  }
-
-  dataTable() {
-    if (Array.isArray(this.state.dataTable)) {
-
-      return this.state.dataTable.map((el, index) => {
-
-        return (
-
-          <tr key={index}>
-            <th scope="row">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="11"
-                />
-              </div>
-            </th>
-            <td>{el.id}</td>
-            <td>
-              <button onClick={() => { this.download_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button></td>
-            <td>
-              <button onClick={() => { this.excluir_Pdf(el.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
-            </td>
-          </tr>
-
-        );
-      })
-    } else {
-
-
+    if (res.data.lenth > 0) {
+      this.setState({ showItems: true, dataTable: res.data })
     }
 
 
   }
 
+
   render() {
 
+    const excluir_Pdf = async (el) => {
 
+      let res = await postExcluir(el)
+
+      if (res.data === "Ok") {
+
+        AppToaster.show({ message: "Curriculo deletado com sucesso", intent: "success" });
+        this.componentDidMount()
+
+      }
+
+    }
+    async function download_Pdf(el) {
+
+      let res = await getDownload(el)
+
+      window.open(`/pdf_tmp/${res.data}`, false)
+
+
+    }
+
+    function excluirFormatter(cell, row, rowIndex, formatExtraData) {
+      return (
+        <button onClick={() => { excluir_Pdf(row.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
+      )
+    }
+
+
+    function downloadFormatter(cell, row, rowIndex, formatExtraData) {
+      return (
+        <button onClick={() => { download_Pdf(row.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button>
+      );
+    }
+
+
+    const columns = [
+      {
+        dataField: 'id',
+        text: 'Curriculo ID',
+        hidden: true
+
+      },
+      {
+        dataField: 'descricao',
+        text: 'Descrição',
+        sort: true
+      },
+      {
+        dataField: 'download',
+        text: "Download",
+        formatter: downloadFormatter
+
+      },
+      {
+        dataField: 'excluir',
+        text: "Excluir",
+        formatter: excluirFormatter
+
+      }
+
+
+    ]
+    const { SearchBar } = Search;
+    const { ExportCSVButton } = CSVExport;
     return (
 
       <div>
 
         <Navbar />
-        <div className="container table-responsive mt-4">
+        <div className="ml-4 mr-4 mt-4">
 
-          <Col className="mb-4" xs={6}>
-            <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
-              <Toast.Header>
-                <img
-                  src="/bootstrap/alert.gif"
-                  className="rounded mr-2"
-                  alt=""
-                />
-                <strong className="mr-auto">{this.state.msg_title}</strong>
-                <small>{this.getMin()} mins ago</small>
-              </Toast.Header>
-              <Toast.Body>{this.state.msg_text}</Toast.Body>
-            </Toast>
-          </Col>
+          <Link className="mb-4" to="curriculo/cadastro">Cadastrar Currículo</Link>
 
+          {!this.state.showItems &&
 
-          <Link to="curriculo/cadastro">Cadastrar Currículo</Link>
-
-
-          <table className="table align-middle mt-4">
-            <thead>
-              <tr>
-                <th scope="col">Seleção</th>
-                <th scope="col">Nome</th>
-                <th scope="col">PDF</th>
-                <th scope="col">*</th>
-              </tr>
-            </thead>
-            <tbody>
-
-              {this.dataTable()}
-
-            </tbody>
-          </table>
-
-          {!Array.isArray(this.state.dataTable) &&
             <Alert variant="info" className="mt-4">
               Não há curriculos cadastrados!
-           <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
-           </Alert>
+            <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
+            </Alert>
           }
+
+          {this.state.showItems &&
+
+            <ToolkitProvider
+              keyField="id"
+              data={this.state.dataTable}
+              columns={columns}
+              pagination
+              search
+              exportCSV
+              overlay
+
+            >
+              {
+
+                props =>
+                  <div className="mt-4">
+                    <ExportCSVButton {...props.csvProps}>Exportar para excell</ExportCSVButton>
+                    <hr />
+                    <label>Pesquise</label>
+                    <SearchBar {...props.searchProps} />
+                    <hr />
+                    <div className="table-sm mt-4">
+                      <BootstrapTable
+                        bordered={false}
+                        hover
+                        pagination={paginationFactory()}
+
+                        {...props.baseProps}
+
+                      />
+
+                    </div>
+                  </div>
+
+              }
+            </ToolkitProvider>
+
+          }
+
 
         </div>
 
-      </div>
+      </div >
 
     );
   }

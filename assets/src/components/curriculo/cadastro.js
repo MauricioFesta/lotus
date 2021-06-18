@@ -1,9 +1,11 @@
 import React from 'react';
-import { Form, Button, Toast, Col } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
+import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../navbar/index"
 import { postCurriculo } from "../../stores/curriculo/api"
 import $ from "jquery";
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -11,8 +13,7 @@ export class Cadastro extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {image: "/images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
-
+   
   }
 
   closeToasts() {
@@ -25,8 +26,9 @@ export class Cadastro extends React.Component {
 
     let file = document.querySelector('#file');
 
+    formData.append("id", uuidv4());
     formData.append("file", file.files[0]);
-    formData.append("desc", $("#curriculotext").val());
+    formData.append("descricao", $("#curriculotext").val());
 
 
     let config = {
@@ -44,12 +46,10 @@ export class Cadastro extends React.Component {
 
     if (res.status === 200) {
 
-      this.setState({ close_msg: true, msg_text: "Currículo cadastrada com sucesso!", msg_title: "Parabéns" });
-
+      AppToaster.show({message: "Currículo cadastrada com sucesso!", intent: "success" });
 
     } else {
-      this.setState({image: "/images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar o currículo", msg_title: "Error!!" });
-
+      AppToaster.show({message: "Não foi possível cadastrar o currículo", intent: "error" });
     }
   }
 
@@ -70,21 +70,6 @@ export class Cadastro extends React.Component {
         <Navbar />
 
         <div className='container mt-4 main'>
-
-          <Col xs={6}>
-            <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
-              <Toast.Header>
-                <img
-                  src={this.state.image}
-                  className="rounded mr-2"
-                  alt=""
-                />
-                <strong className="mr-auto">{this.state.msg_title}</strong>
-                <small>{this.getMin()} mins ago</small>
-              </Toast.Header>
-              <Toast.Body>{this.state.msg_text}</Toast.Body>
-            </Toast>
-          </Col>
 
           <Form id="form-curriculo" className="mt-4">
 
