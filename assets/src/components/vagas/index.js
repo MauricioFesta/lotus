@@ -65,7 +65,6 @@ export default class Vagas extends React.Component {
 
             <div>
 
-                <Navbar />
 
                 <div  className="container mt-4 scroll-card">
 

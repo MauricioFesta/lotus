@@ -101,9 +101,8 @@ export default class Curriculo extends React.Component {
     const { ExportCSVButton } = CSVExport;
     return (
 
-      <div>
+      <>
 
-        <Navbar />
         <div className="ml-4 mr-4 mt-4">
 
           <Link className="mb-4" to="curriculo/cadastro">Cadastrar Currículo</Link>
@@ -158,7 +157,7 @@ export default class Curriculo extends React.Component {
 
         </div>
 
-      </div >
+      </>
 
     );
   }

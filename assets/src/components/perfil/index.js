@@ -85,8 +85,6 @@ class Perfil extends React.Component {
 
             <div>
 
-                <Navbar />
-
                 <Container className="mt-4">
 
                     <Jumbotron className="mt-4" >
