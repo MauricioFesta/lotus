@@ -12,7 +12,26 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
+import * as Mui from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import DeleteIcon from '@material-ui/icons/Delete';
 
+const useStyles = Mui.makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: 'none',
+  },
+}));
+
+
+const styleButomDelete = {
+  color: '#ff5252',
+ 
+};
 
 export default class Curriculo extends React.Component {
 
@@ -25,7 +44,8 @@ export default class Curriculo extends React.Component {
   async componentDidMount() {
 
     let res = await getCurriculo()
-    if (res.data.lenth > 0) {
+    console.log(res.data)
+    if (res.data.length > 0) {
       this.setState({ showItems: true, dataTable: res.data })
     }
 
@@ -58,14 +78,20 @@ export default class Curriculo extends React.Component {
 
     function excluirFormatter(cell, row, rowIndex, formatExtraData) {
       return (
-        <button onClick={() => { excluir_Pdf(row.id) }} className="bp3-button bp3-minimal bp3-icon-cross">Excluir</button>
+        <Mui.IconButton  style={styleButomDelete}   onClick={() => { excluir_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+          <DeleteIcon />
+        </Mui.IconButton>
+
       )
     }
 
 
     function downloadFormatter(cell, row, rowIndex, formatExtraData) {
       return (
-        <button onClick={() => { download_Pdf(row.id) }} className="bp3-button bp3-minimal bp3-icon-cloud-download">Download</button>
+        <Mui.IconButton  onClick={() => { download_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+          <GetAppIcon />
+        </Mui.IconButton>
+
       );
     }
 
@@ -136,7 +162,7 @@ export default class Curriculo extends React.Component {
                     <label>Pesquise</label>
                     <SearchBar {...props.searchProps} />
                     <hr />
-                    <div className="table-sm mt-4">
+                    <div className="table-sm">
                       <BootstrapTable
                         bordered={false}
                         hover

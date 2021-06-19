@@ -65,9 +65,7 @@ export class Cadastro extends React.Component {
 
     return (
 
-      <div>
-
-        <Navbar />
+      <>
 
         <div className='container mt-4 main'>
 
@@ -89,7 +87,7 @@ export class Cadastro extends React.Component {
 
         </div>
 
-      </div>
+      </>
 
     );
   }

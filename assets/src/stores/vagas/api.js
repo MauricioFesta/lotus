@@ -1,5 +1,6 @@
 import api from "../../others/api_default"
 
+const config = {}
 
 export const postCadastroVaga = async (data, config) => {
 
@@ -15,7 +16,7 @@ export const listVagas = async () => {
 
 }
 
-export const postCandidatarseVaga = async (id) => {
-    let result = await api.get("/api/vagas-candidatar-se")
+export const postCandidatarseVaga = async (data) => {
+    let result = await api.post("/api/vagas-candidatar-se", data, config)
     return result
 }

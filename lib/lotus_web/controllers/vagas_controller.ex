@@ -29,6 +29,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:empresa_id, id_user)
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
+        |> Map.put(:candidatos, ["_"])
         
         {:ok, data} = JSON.encode(new_params) 
 
@@ -60,6 +61,20 @@ defmodule LotusWeb.VagasController do
 
             json(conn, "Nenhuma vaga encontrada")
 
+        end
+
+    end
+
+    def insert_vaga_user(conn, params) do
+
+        id_user = get_session(conn, "idUser");
+
+        
+        cql = "UPDATE lotus_dev.vagas SET candidatos = '[12]' + candidatos WHERE id = '#{params["id"]}'"
+         
+        case Xandra.execute(CassPID, cql, _params = []) do
+            {:ok, _} -> IO.puts "Deu certo"
+            _ -> IO.puts " Errorrrr"
         end
 
     end

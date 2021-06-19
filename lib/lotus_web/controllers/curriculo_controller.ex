@@ -33,14 +33,16 @@ defmodule LotusWeb.CurriculoController do
         statement =  "SELECT id, descricao FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
-         
+        
+      
+
         if page |> Enum.at(0) != nil do
         
          json(conn, Enum.to_list(page))
 
         else
-
-            json(conn, "Nenhum curriculo encontrado")
+          
+            json(conn, [])
 
         end
          

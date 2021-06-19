@@ -8,13 +8,12 @@ CREATE TABLE lotus_dev.user(
    senha varchar,
    is_empresa varchar,
    foto_base64 text,
-   candidatura text,
    inserted_at timestamp,
    updated_at timestamp,
    PRIMARY KEY (id)
    );
 
-CREATE TABLE curriculo(
+CREATE TABLE lotus_dev.curriculo(
    id uuid PRIMARY KEY,
    file_base64 text,
    id_usuario varchar,
@@ -36,6 +35,9 @@ CREATE TABLE lotus_dev.vagas(
    imagem_base64 text,
    disponibilidade_viajar boolean,
    planejamento_futuro boolean,
+   candidatos list<text>,
+   inserted_at timestamp,
+   updated_at timestamp,
    PRIMARY KEY (id)
    );
 

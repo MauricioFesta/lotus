@@ -29,8 +29,6 @@ export default class CreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {image: "/images/alert-sucsses.gif", close_msg: false, variant: "primary", msg_text: "", msg_title: "" };
-
     }
 
     closeToasts() {
@@ -78,13 +76,10 @@ export default class CreateEmpresa extends React.Component {
         let res = await postCadastroVaga(formData, config);
 
         if (res.data.Ok) {
-
-            this.setState({ close_msg: true, msg_text: "Vaga cadastrada com sucesso!", msg_title: "Parabéns" });
-
+            AppToaster.show({message: "Vaga cadastrada com sucesso!", intent: "success" });
 
         } else {
-            this.setState({image: "/images/alert-error.gif", close_msg: true, msg_text: "Não foi possível cadastrar a vaga", msg_title: "Error!!" });
-
+            AppToaster.show({message: "Não foi possível cadastrar a vaga", intent: "erro" });
         }
     }
 
@@ -95,23 +90,8 @@ export default class CreateEmpresa extends React.Component {
 
             <div>
 
-                <NavbarEmpresa />
+            {/*     <NavbarEmpresa /> */}
                 <div className="container mt-4">
-
-                    <Col xs={6}>
-                        <Toast onClose={() => this.closeToasts()} show={this.state.close_msg} delay={6000} autohide>
-                            <Toast.Header>
-                                <img
-                                    src={this.state.image}
-                                    className="rounded mr-2"
-                                    alt=""
-                                />
-                                <strong className="mr-auto">{this.state.msg_title}</strong>
-                                <small>{this.getMin()} mins ago</small>
-                            </Toast.Header>
-                            <Toast.Body>{this.state.msg_text}</Toast.Body>
-                        </Toast>
-                    </Col>
 
                     <Form className="mt-4">
                         <Form.Row>
