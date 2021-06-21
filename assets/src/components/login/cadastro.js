@@ -35,7 +35,7 @@ export default class Cadastro extends React.Component {
 
     } else {
 
-      AppToaster.show({message: "Não foi possível cadastrar o usuário Erro", intent: "success" });
+      AppToaster.show({message: "Não foi possível cadastrar o usuário Erro", intent: "danger" });
 
     }
 

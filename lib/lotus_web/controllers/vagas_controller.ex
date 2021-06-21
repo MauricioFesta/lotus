@@ -68,13 +68,20 @@ defmodule LotusWeb.VagasController do
     def insert_vaga_user(conn, params) do
 
         id_user = get_session(conn, "idUser");
+       
+        cql_consulta =  "SELECT candidatos FROM lotus_dev.vagas WHERE id = ?"
 
+        {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, [{"uuid", params["id"]}])
+
+        {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("candidatos") |> IO.inspect
         
-        cql = "UPDATE lotus_dev.vagas SET candidatos = '[12]' + candidatos WHERE id = '#{params["id"]}'"
+        if Enum.member?(candidato, id_user), do: json(conn, %{erro: " Candidatura já enviada"})
+           
+        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_user}'] + candidatos WHERE id = #{params["id"]}"
          
         case Xandra.execute(CassPID, cql, _params = []) do
-            {:ok, _} -> IO.puts "Deu certo"
-            _ -> IO.puts " Errorrrr"
+            {:ok, _} -> json(conn, %{Ok: true})
+            _ -> json(conn, %{Ok: false})
         end
 
     end

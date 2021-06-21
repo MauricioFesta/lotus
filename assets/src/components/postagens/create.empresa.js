@@ -44,7 +44,7 @@ export default class PostCreateEmpresa extends React.Component {
 
 
         } else {
-            AppToaster.show({message: "Não foi possível, tente novamente mais tarde", intent: "error" });
+            AppToaster.show({message: "Não foi possível, tente novamente mais tarde", intent: "danger" });
 
         }
     }

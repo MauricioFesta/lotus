@@ -79,7 +79,7 @@ export default class CreateEmpresa extends React.Component {
             AppToaster.show({message: "Vaga cadastrada com sucesso!", intent: "success" });
 
         } else {
-            AppToaster.show({message: "Não foi possível cadastrar a vaga", intent: "erro" });
+            AppToaster.show({message: "Não foi possível cadastrar a vaga", intent: "danger" });
         }
     }
 

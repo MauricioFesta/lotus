@@ -53,21 +53,30 @@ export default class Vagas extends React.Component {
     }
 
     async cadastroVaga(id) {
+
+        console.log(id)
+
         let data = {
             id
         }
+
         let res = await postCandidatarseVaga(data)
+
+
         if (res.data.Ok) {
             AppToaster.show({ message: "Candidatura enviada com sucesso", intent: "success" });
+        } else if (res.data.erro) {
+            AppToaster.show({ message: `Não foi possível, error: ${res.data.erro}`, intent: "warning" });
+
         } else {
-            AppToaster.show({ message: "Não foi possível candidatar-se, tente novamente mais tarde", intent: "error" });
+            AppToaster.show({ message: "Error, tente novamente mais tarde", intent: "danger" });
         }
 
     }
 
     render() {
 
-    
+
         return (
 
             <div>
@@ -97,7 +106,7 @@ export default class Vagas extends React.Component {
                                                         variant="contained"
                                                         color="primary"
                                                         endIcon={<SendIcon />}
-
+                                                        onClick={() => this.cadastroVaga(el2.id)}
                                                     >
                                                         Candidatar-se
                                                     </Mui.Button>

@@ -73,7 +73,7 @@ class Perfil extends React.Component {
             store.perfilState.form.length ? window.location.reload() :
             AppToaster.show({message: "Perfil alterado com sucesso!", intent: "success" });
         } else {
-            AppToaster.show({message: "Não foi possível alterar o perfil", intent: "error" });
+            AppToaster.show({message: "Não foi possível alterar o perfil", intent: "danger" });
         }
 
     }

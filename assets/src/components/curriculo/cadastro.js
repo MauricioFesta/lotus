@@ -49,7 +49,7 @@ export class Cadastro extends React.Component {
       AppToaster.show({message: "Currículo cadastrada com sucesso!", intent: "success" });
 
     } else {
-      AppToaster.show({message: "Não foi possível cadastrar o currículo", intent: "error" });
+      AppToaster.show({message: "Não foi possível cadastrar o currículo", intent: "danger" });
     }
   }
 
