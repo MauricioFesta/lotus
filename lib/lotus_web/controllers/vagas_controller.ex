@@ -85,6 +85,16 @@ defmodule LotusWeb.VagasController do
         end
 
     end
+
+    def delete_candidatura_user(conn, params) do
+        #Parado aqui
+        %{"id" => _id} = params
+            sql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = ?"
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql,[{"uuid", _id}] )
+         
+        {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("candidatos") |> IO.inspect
+
+    end
  
 
 end

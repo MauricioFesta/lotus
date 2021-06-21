@@ -43,6 +43,7 @@ defmodule LotusWeb.Router do
     post "/vagas-cadastro", VagasController, :cadastro_vagas
     get "/vagas-lista", VagasController, :list_vagas
     post "/vagas-candidatar-se", VagasController, :insert_vaga_user
+    delete "/vagas-delete-candidatura/:id", VagasController, :delete_candidatura_user
    
 
   end

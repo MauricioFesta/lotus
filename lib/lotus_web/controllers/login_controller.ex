@@ -17,7 +17,7 @@ defmodule LotusWeb.LoginController do
              
               {:ok, _empresa} =  page |> Enum.at(0) |> Map.fetch("is_empresa")
               token = Token.sign(conn, "va^4S^u!b%@RlTrb", _id)
-              json(conn, %{Ok: true, is_empresa: _empresa, token: token})
+              json(conn, %{Ok: true, is_empresa: _empresa, token: token, id: _id})
   
             _ -> json(conn, %{Ok: false})
           end

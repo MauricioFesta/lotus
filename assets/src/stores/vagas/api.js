@@ -20,3 +20,8 @@ export const postCandidatarseVaga = async (data) => {
     let result = await api.post("/api/vagas-candidatar-se", data, config)
     return result
 }
+
+export const deleteCandidatarseVaga = async (id_vaga) => {
+    let result = await api.delete(`/api/vagas-delete-candidatura/${id_vaga}`)
+    return result
+}

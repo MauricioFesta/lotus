@@ -15,3 +15,7 @@
         overflow-y: auto;
     }
 }
+
+.candidatura-enviada {
+    opacity: 0.2;
+}
