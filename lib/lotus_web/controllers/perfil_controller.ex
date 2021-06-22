@@ -4,27 +4,28 @@ defmodule LotusWeb.PerfilController do
 
     def alterar_perfil(conn, params) do
 
-
         id_user =  get_session(conn, "idUser");
     
-        file64 = if params["file"] != nil do
+      query = if params["file"] != nil do
            
-            File.read!(params["file"].path) |> Base.encode64();
+            file64 =  File.read!(params["file"].path) |> Base.encode64();
+
+            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = ?"
 
             else
 
-            "false"
+           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = ?"
+
 
         end
 
-    
-        sql = "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = ?"
 
-        case Xandra.execute(CassPID, sql, [{"uuid", id_user}]) do
+        case Xandra.execute(CassPID, query , [{"uuid", id_user}]) do
             {:ok, _} -> json(conn, %{Ok: true})
             _ -> json(conn, %{Ok: false})
         
         end
+
 
     end
 

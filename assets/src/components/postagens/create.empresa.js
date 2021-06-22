@@ -56,7 +56,6 @@ export default class PostCreateEmpresa extends React.Component {
 
             <div>
 
-                <NavbarEmpresa />
                 <div className="container mt-4">
 
                    

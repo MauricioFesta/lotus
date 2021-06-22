@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "./css/index.sass"
 import { Classes, Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
 import { Redirect } from 'react-router-dom';
+import "./css/index.scss"
 
 
 import "@blueprintjs/core/lib/css/blueprint.css"
@@ -53,11 +53,11 @@ export default class Navbar extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Conta" />
-                    <MenuItem onClick={() => this.setState({to_redirect: "perfil", is_redirect: true})} icon="align-left" text="Perfil" />
+                    <MenuItem onClick={() => this.setState({to_redirect: "/perfil", is_redirect: true})} icon="align-left" text="Perfil" />
                     <MenuItem icon="align-left" text="Config">
                       <MenuItem icon="align-left" text="Bloquear" />
                       <MenuItem icon="align-center" text="Excluir" />
-                      <MenuItem onClick={() => this.setState({to_redirect: "perfil", is_redirect: true})} icon="clipboard" text="Alaterar foto" />
+                      <MenuItem onClick={() => this.setState({to_redirect: "/perfil", is_redirect: true})} icon="clipboard" text="Alaterar foto" />
                     </MenuItem>
                   </Menu>
                 </Example>

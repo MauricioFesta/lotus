@@ -17,7 +17,7 @@ const id_master = idMaster()
 
 
 
-require("./css/index.sass")
+require("./css/index.scss")
 
 export default class Vagas extends React.Component {
 
@@ -83,7 +83,12 @@ export default class Vagas extends React.Component {
 
     async excluirCandidaturaVaga(id_vaga) {
         let res = await deleteCandidatarseVaga(id_vaga)
-        console.log(res)
+        if (res.data.Ok) {
+            AppToaster.show({ message: "Candidatura retirada com sucesso", intent: "success" });
+            this.componentDidMount()
+        }else {
+            AppToaster.show({ message: "Error, tente novamente mais tarde", intent: "danger" });
+        }
     }
 
     handleValidaCandidato(arrCandidatos) {
@@ -94,11 +99,9 @@ export default class Vagas extends React.Component {
 
     render() {
 
-
         return (
 
             <div>
-
 
                 <div className="container mt-4 scroll-card">
 
@@ -128,7 +131,7 @@ export default class Vagas extends React.Component {
                                                             endIcon={<SendIcon />}
                                                             onClick={() => this.candidatarSeVaga(el2.id)}
                                                         >
-                                                            Candidatar-se
+                                                            Candidatar
                                                         </Mui.Button>
 
                                                         :

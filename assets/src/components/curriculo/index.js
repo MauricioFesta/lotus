@@ -30,7 +30,7 @@ const useStyles = Mui.makeStyles((theme) => ({
 
 const styleButomDelete = {
   color: '#ff5252',
- 
+
 };
 
 export default class Curriculo extends React.Component {
@@ -78,7 +78,7 @@ export default class Curriculo extends React.Component {
 
     function excluirFormatter(cell, row, rowIndex, formatExtraData) {
       return (
-        <Mui.IconButton  style={styleButomDelete}   onClick={() => { excluir_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+        <Mui.IconButton size="small" style={styleButomDelete} onClick={() => { excluir_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
           <DeleteIcon />
         </Mui.IconButton>
 
@@ -88,7 +88,7 @@ export default class Curriculo extends React.Component {
 
     function downloadFormatter(cell, row, rowIndex, formatExtraData) {
       return (
-        <Mui.IconButton  onClick={() => { download_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+        <Mui.IconButton size="small" onClick={() => { download_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
           <GetAppIcon />
         </Mui.IconButton>
 
@@ -133,15 +133,7 @@ export default class Curriculo extends React.Component {
 
           <Link className="mb-4" to="curriculo/cadastro">Cadastrar Currículo</Link>
 
-          {!this.state.showItems &&
-
-            <Alert variant="info" className="mt-4">
-              Não há curriculos cadastrados!
-            <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
-            </Alert>
-          }
-
-          {this.state.showItems &&
+          {this.state.showItems ?
 
             <ToolkitProvider
               keyField="id"
@@ -177,6 +169,13 @@ export default class Curriculo extends React.Component {
 
               }
             </ToolkitProvider>
+
+            :
+
+            <Alert variant="info" className="mt-4">
+              Não há curriculos cadastrados!
+          <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
+          </Alert>
 
           }
 

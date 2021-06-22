@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(https://i.pinimg.com/564x/66/cd/5f/66cd5f6e109a082583891f363fa3f1c8.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -167,8 +167,7 @@ export default class Login extends React.Component {
 
       const secret = 'nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H';
 
-      var token = jwt.sign({ logged: true, id: res.data.id }, secret, { expiresIn: '1h' })
-
+      var token = jwt.sign({ logged: true, id: res.data.id, is_empresa: res.data.is_empresa }, secret, { expiresIn: '1h' })
 
       cookies.set('_A-T', res.data.token);
       cookies.set('_A-T-T_L', token);

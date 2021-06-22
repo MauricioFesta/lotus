@@ -90,7 +90,6 @@ export default class CreateEmpresa extends React.Component {
 
             <div>
 
-            {/*     <NavbarEmpresa /> */}
                 <div className="container mt-4">
 
                     <Form className="mt-4">

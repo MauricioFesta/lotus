@@ -88,12 +88,26 @@ defmodule LotusWeb.VagasController do
 
     def delete_candidatura_user(conn, params) do
         #Parado aqui
+        id_user = get_session(conn, "idUser");
+
         %{"id" => _id} = params
             sql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = ?"
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql,[{"uuid", _id}] )
          
         {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("candidatos") |> IO.inspect
+      
+       new_list = Enum.reject(candidato, fn x -> x == id_user end) 
 
+       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = #{_id}"
+         
+       case Xandra.execute(CassPID, cql, _params = []) do
+           {:ok, _} -> json(conn, %{Ok: true})
+           _ -> json(conn, %{Ok: false})
+       end
+
+
+
+    
     end
  
 
