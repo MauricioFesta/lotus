@@ -39,7 +39,6 @@ export const isAuthenticated = () => {
 
         return decoded.logged
 
-
     } catch (err) {
         console.log(err)
         return false

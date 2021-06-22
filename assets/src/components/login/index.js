@@ -167,7 +167,7 @@ export default class Login extends React.Component {
 
       const secret = 'nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H';
 
-      var token = jwt.sign({ logged: true, id: res.data.id, is_empresa: res.data.is_empresa }, secret, { expiresIn: '1h' })
+      var token = jwt.sign({ logged: true, id: res.data.id, is_empresa: (res.data.is_empresa === 'true')}, secret, { expiresIn: '1h' })
 
       cookies.set('_A-T', res.data.token);
       cookies.set('_A-T-T_L', token);
