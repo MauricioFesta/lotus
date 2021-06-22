@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/index.css';
 import $ from "jquery";
 import { postCadastroUser } from "../../stores/login/api"
 import { AppToaster } from "../../others/toaster"

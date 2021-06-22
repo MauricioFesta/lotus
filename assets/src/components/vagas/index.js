@@ -10,19 +10,14 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import * as Mui from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Cookies from 'universal-cookie';
-import { secret } from "../login/secret"
-const cookies = new Cookies();
-var jwt = require('jsonwebtoken');
+import { idMaster } from "../login/auth"
 
-let ck_token = cookies.get('_A-T-T_L');
-var decoded = jwt.verify(ck_token, secret());
 
-const id_master = decoded.id
+const id_master = idMaster()
 
 
 
-require("./css/index.css")
+require("./css/index.sass")
 
 export default class Vagas extends React.Component {
 

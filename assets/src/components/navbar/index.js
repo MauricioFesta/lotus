@@ -1,8 +1,6 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
-
-import "./css/index.css"
+import "./css/index.sass"
 import { Classes, Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";

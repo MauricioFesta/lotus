@@ -11,10 +11,6 @@ export const isAuthenticated = () => {
 
         var decoded = jwt.verify(ck_token, secret());
 
-        console.log(decoded.logged) // bar
-
-
-
         return decoded.logged
 
     } catch (err) {
@@ -23,5 +19,23 @@ export const isAuthenticated = () => {
 
     }
 
+
+}
+
+export const idMaster = () => {
+
+    try {
+
+        let ck_token = cookies.get('_A-T-T_L');
+
+        var decoded = jwt.verify(ck_token, secret());
+
+        return decoded.id
+
+    } catch (err) {
+        console.log(err)
+        return false
+
+    }
 
 }
