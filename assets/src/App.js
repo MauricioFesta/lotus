@@ -13,6 +13,7 @@ import CreateEmpresa from "./components/vagas/create.empresa"
 import PostCreateEmpresa from "./components/postagens/create.empresa"
 import Perfil from "./components/perfil"
 import Navbar from "./components/navbar"
+import CandidatosEmpresa  from "./components/vagas/candidatos.empresa"
 import NavbarEmpresa  from "./components/navbar/index.empresa"
 require("./css/style.scss")
 
@@ -95,8 +96,9 @@ function App() {
           <Route path="/cadastro" component={Cadastro} exact />
           <PrivateRouteAny path="/home" component={Home} />
           <PrivateRouteUser path="/vagas" exact component={Vagas} />
-          <PrivateRouteEmpresa path="/vagas/empresas" component={VagasEmpresa} />
+          <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />
           <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
+          <PrivateRouteEmpresa path="/vagas/candidatos" component={CandidatosEmpresa} />
           <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
           <PrivateRouteUser path="/curriculo/cadastro" component={cadastro_curriculo} />
           <PrivateRouteUser path="/postagens" exact component={Postagens} />
