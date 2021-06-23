@@ -1,11 +1,7 @@
 import React from 'react';
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import Navbar from "../navbar/index"
 import { Button, Icon } from "@blueprintjs/core";
 import { Store } from "../../store"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "@blueprintjs/core/lib/css/blueprint.css"
-import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import PerfilFoto from './index.foto';
 import { putPerfil, getPerfil } from "../../stores/perfil/api"
 import { perfilMODEL } from "../../model/perfil"

@@ -35,6 +35,8 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
+          <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/cadastradas">Vagas cadastradas</Link></button>
+          <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/candidatos">Candidatos</Link></button>
             <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/cadastro">Cadastrar Vagas</Link></button>
             <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/postagens/cadastro">Cadastrar Postagem</Link></button>
             <span className="bp3-navbar-divider"></span>

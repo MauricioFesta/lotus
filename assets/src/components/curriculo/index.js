@@ -1,32 +1,16 @@
 import React from 'react';
-import { Toast, Col, Alert } from 'react-bootstrap';
-import Navbar from "../navbar/index"
+import { Col, Alert } from 'react-bootstrap';
 import { getCurriculo, getDownload, postExcluir } from "../../stores/curriculo/api";
 import { Link } from 'react-router-dom';
 import { AppToaster } from "../../others/toaster"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "@blueprintjs/core/lib/css/blueprint.css"
-import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit.min.css';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import ToolkitProvider, { Search, CSVExport } from 'react-bootstrap-table2-toolkit';
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-const useStyles = Mui.makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-  input: {
-    display: 'none',
-  },
-}));
-
+import { Card, Icon, Image } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
+require("./css/style.scss")
 
 const styleButomDelete = {
   color: '#ff5252',
@@ -38,15 +22,15 @@ export default class Curriculo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showItems: false, dataTable: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
+    this.state = { showItems: false, dataCurriculo: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
   }
 
   async componentDidMount() {
 
     let res = await getCurriculo()
-    console.log(res.data)
+
     if (res.data.length > 0) {
-      this.setState({ showItems: true, dataTable: res.data })
+      this.setState({ showItems: true, dataCurriculo: res.data })
     }
 
 
@@ -54,6 +38,7 @@ export default class Curriculo extends React.Component {
 
 
   render() {
+
 
     const excluir_Pdf = async (el) => {
 
@@ -76,111 +61,74 @@ export default class Curriculo extends React.Component {
 
     }
 
-    function excluirFormatter(cell, row, rowIndex, formatExtraData) {
+    function excluirFormatter(id) {
       return (
-        <Mui.IconButton size="small" style={styleButomDelete} onClick={() => { excluir_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+        <Mui.IconButton size="small" style={styleButomDelete} onClick={() => { excluir_Pdf(id) }} color="primary" aria-label="upload picture" component="span">
           <DeleteIcon />
         </Mui.IconButton>
 
       )
     }
 
-
-    function downloadFormatter(cell, row, rowIndex, formatExtraData) {
+    function downloadFormatter(id) {
       return (
-        <Mui.IconButton size="small" onClick={() => { download_Pdf(row.id) }} color="primary" aria-label="upload picture" component="span">
+        <Mui.IconButton size="small" onClick={() => { download_Pdf(id) }} color="primary" aria-label="upload picture" component="span">
           <GetAppIcon />
         </Mui.IconButton>
 
       );
     }
 
-
-    const columns = [
-      {
-        dataField: 'id',
-        text: 'Curriculo ID',
-        hidden: true
-
-      },
-      {
-        dataField: 'descricao',
-        text: 'Descrição',
-        sort: true
-      },
-      {
-        dataField: 'download',
-        text: "Download",
-        formatter: downloadFormatter
-
-      },
-      {
-        dataField: 'excluir',
-        text: "Excluir",
-        formatter: excluirFormatter
-
-      }
-
-
-    ]
-    const { SearchBar } = Search;
-    const { ExportCSVButton } = CSVExport;
     return (
 
       <>
 
-        <div className="ml-4 mr-4 mt-4">
+        <Container className="mt-4">
 
-          <Link className="mb-4" to="curriculo/cadastro">Cadastrar Currículo</Link>
+          <Jumbotron className="mt-4">
 
-          {this.state.showItems ?
+            <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
+            <Card.Group>
+              {this.state.showItems ?
 
-            <ToolkitProvider
-              keyField="id"
-              data={this.state.dataTable}
-              columns={columns}
-              pagination
-              search
-              exportCSV
-              overlay
+                this.state.dataCurriculo.map(el => {
 
-            >
-              {
+                  return (
 
-                props =>
-                  <div className="mt-4">
-                    <ExportCSVButton {...props.csvProps}>Exportar para excell</ExportCSVButton>
-                    <hr />
-                    <label>Pesquise</label>
-                    <SearchBar {...props.searchProps} />
-                    <hr />
-                    <div className="table-sm">
-                      <BootstrapTable
-                        bordered={false}
-                        hover
-                        pagination={paginationFactory()}
+                    <Card className="mt-4">
+                      <Image src='https://react.semantic-ui.com/images/avatar/large/daniel.jpg' wrapped ui={false} />
+                      <Card.Content>
+                        <Card.Header>{el.descricao}</Card.Header>
+                        <Card.Meta>Cadastrado em 2021</Card.Meta>
+                        <Card.Description>
+                          {el.descricao}
+                        </Card.Description>
+                      </Card.Content>
 
-                        {...props.baseProps}
+                      <Card.Content extra>
+                        {downloadFormatter(el.id)}&nbsp;&nbsp;&nbsp;
+                    {excluirFormatter(el.id)}
+                      </Card.Content>
+                    </Card>
 
-                      />
 
-                    </div>
-                  </div>
+
+                  )
+                })
+
+                :
+
+                <Alert variant="info" className="mt-4">
+                  Não há curriculos cadastrados!
+                <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
+                </Alert>
 
               }
-            </ToolkitProvider>
 
-            :
+            </Card.Group>
 
-            <Alert variant="info" className="mt-4">
-              Não há curriculos cadastrados!
-          <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
-          </Alert>
-
-          }
-
-
-        </div>
+          </Jumbotron>
+        </Container>
 
       </>
 

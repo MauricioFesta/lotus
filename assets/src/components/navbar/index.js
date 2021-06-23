@@ -5,8 +5,6 @@ import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
 import { Redirect } from 'react-router-dom';
 import "./css/index.scss"
-
-
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
