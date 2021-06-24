@@ -29,7 +29,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:empresa_id, id_user)
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
-        |> Map.put(:candidatos, ["_"])
+        |> Map.put(:candidatos, [UUID.uuid4()])
         
         {:ok, data} = JSON.encode(new_params) 
 
@@ -64,6 +64,45 @@ defmodule LotusWeb.VagasController do
         end
 
     end
+
+    def list_vagas_empresa(conn,_) do
+
+
+        id_user = get_session(conn, "idUser");
+
+        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' ALLOW FILTERING"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+         
+        if page |> Enum.at(0) != nil do
+        
+         json(conn, Enum.to_list(page))
+
+        else
+
+            json(conn, "Nenhuma vaga encontrada")
+
+        end
+    end
+
+    def list_vagas_candidatos(conn, %{"id" => id_vaga}) do
+
+        cql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = ?"
+
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, [{"uuid", id_vaga}])
+
+        page_new = page |> Enum.to_list() |> Enum.at(0)
+  
+        formated =  Enum.join(page_new["candidatos"], ",")
+           
+        cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN (#{formated})"
+
+        {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
+
+        json(conn, page_candidatos |> Enum.to_list() ) 
+        
+    end
+
 
     def insert_vaga_user(conn, params) do
 

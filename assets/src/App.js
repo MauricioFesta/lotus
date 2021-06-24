@@ -98,7 +98,7 @@ function App() {
           <PrivateRouteUser path="/vagas" exact component={Vagas} />
           <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />
           <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
-          <PrivateRouteEmpresa path="/vagas/candidatos" component={CandidatosEmpresa} />
+          <PrivateRouteEmpresa path="/vagas/candidatos/:id" component={CandidatosEmpresa} />
           <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
           <PrivateRouteUser path="/curriculo/cadastro" component={cadastro_curriculo} />
           <PrivateRouteUser path="/postagens" exact component={Postagens} />

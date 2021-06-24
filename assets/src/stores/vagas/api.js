@@ -25,3 +25,16 @@ export const deleteCandidatarseVaga = async (id_vaga) => {
     let result = await api.delete(`/api/vagas-delete-candidatura/${id_vaga}`)
     return result
 }
+
+export const listVagasEmpresa = async () => {
+
+    let result = await api.get("/api/vagas-lista-empresa")
+    return result
+}
+
+export const listVagasEmpresaId = async (id) =>{
+
+    let result = await api.get(`/api/vagas-lista-candidatos/${id}`)
+    return result
+
+}
