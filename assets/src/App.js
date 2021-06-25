@@ -7,14 +7,15 @@ import { Cadastro as cadastro_curriculo } from "./components/curriculo/cadastro"
 import VagasEmpresa from "./components/vagas/index.empresa"
 import Vagas from "./components/vagas/index"
 import Postagens from "./components/postagens/index"
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { isAuthenticated,isAuthenticatedUser,isAuthenticatedEmpresa, isEmpresa } from "./components/login/auth"
+import { BrowserRouter, Switch, Route, Redirect, Router } from 'react-router-dom';
+import { isAuthenticated, isAuthenticatedUser, isAuthenticatedEmpresa, isEmpresa } from "./components/login/auth"
 import CreateEmpresa from "./components/vagas/create.empresa"
 import PostCreateEmpresa from "./components/postagens/create.empresa"
 import Perfil from "./components/perfil"
 import Navbar from "./components/navbar"
-import CandidatosEmpresa  from "./components/vagas/candidatos.empresa"
-import NavbarEmpresa  from "./components/navbar/index.empresa"
+import CandidatosEmpresa from "./components/vagas/candidatos.empresa"
+import NavbarEmpresa from "./components/navbar/index.empresa"
+import history from "./others/redirect"
 require("./css/style.scss")
 
 const PrivateRouteUser = ({ component: Component, ...rest }) => (
@@ -25,7 +26,7 @@ const PrivateRouteUser = ({ component: Component, ...rest }) => (
       isAuthenticatedUser() ? (
         <>
           {isEmpresa() ?
-            <NavbarEmpresa  />
+            <NavbarEmpresa />
             :
             <Navbar />
           }
@@ -47,7 +48,7 @@ const PrivateRouteEmpresa = ({ component: Component, ...rest }) => (
       isAuthenticatedEmpresa() ? (
         <>
           {isEmpresa() ?
-            <NavbarEmpresa  />
+            <NavbarEmpresa />
             :
             <Navbar />
           }
@@ -69,7 +70,7 @@ const PrivateRouteAny = ({ component: Component, ...rest }) => (
       isAuthenticated() ? (
         <>
           {isEmpresa() ?
-            <NavbarEmpresa  />
+            <NavbarEmpresa />
             :
             <Navbar />
           }
@@ -90,21 +91,23 @@ function App() {
     <>
 
       <BrowserRouter>
+        <Router history={history}>
+          <Switch>
+            <Route path="/" component={Login} exact />
+            <Route path="/cadastro" component={Cadastro} exact />
+            <PrivateRouteAny path="/home" component={Home} />
+            <PrivateRouteUser path="/vagas" exact component={Vagas} />
+            <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />
+            <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
+            <PrivateRouteEmpresa path="/vagas/candidatos/:id" component={CandidatosEmpresa} />
+            <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
+            <PrivateRouteUser path="/curriculo/cadastro" component={cadastro_curriculo} />
+            <PrivateRouteUser path="/postagens" exact component={Postagens} />
+            <PrivateRouteEmpresa path="/postagens/cadastro" component={PostCreateEmpresa} />
+            <PrivateRouteAny path="/perfil" exact component={Perfil} />
+          </Switch>
 
-        <Switch>
-          <Route path="/" component={Login} exact />
-          <Route path="/cadastro" component={Cadastro} exact />
-          <PrivateRouteAny path="/home" component={Home} />
-          <PrivateRouteUser path="/vagas" exact component={Vagas} />
-          <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />
-          <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
-          <PrivateRouteEmpresa path="/vagas/candidatos/:id" component={CandidatosEmpresa} />
-          <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
-          <PrivateRouteUser path="/curriculo/cadastro" component={cadastro_curriculo} />
-          <PrivateRouteUser path="/postagens" exact component={Postagens} />
-          <PrivateRouteEmpresa path="/postagens/cadastro" component={PostCreateEmpresa} />
-          <PrivateRouteAny path="/perfil" exact component={Perfil} />
-        </Switch>
+        </Router>
 
       </BrowserRouter>
     </>

@@ -3,19 +3,27 @@ import { Link } from 'react-router-dom';
 import { Classes, Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { Example } from "@blueprintjs/docs-theme";
 import { Popover2 } from "@blueprintjs/popover2";
-import { Redirect } from 'react-router-dom';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "./css/index.scss"
+import history from "../../others/redirect";
 
 
 export default class NavbarEmpresa extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { to_redirect: '', is_redirect: false }
+
 
   }
+
+  handleRedirect(path){
+
+    history.push(path);
+
+  }
+
+
 
   render() {
 
@@ -23,11 +31,6 @@ export default class NavbarEmpresa extends React.Component {
 
       <nav className="bp3-navbar bp3-dark">
 
-        {this.state.is_redirect &&
-
-          <Redirect to={{ pathname: this.state.to_redirect }} />
-
-        }
 
         <div styles="margin: 0 auto; width: 480px;">
           <div className="bp3-navbar-group bp3-align-left">
@@ -35,10 +38,10 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-          <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/cadastradas">Vagas cadastradas</Link></button>
-            <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/vagas/cadastro">Cadastrar Vagas</Link></button>
-            <button className="bp3-button bp3-minimal bp3-icon-home"><Link className="linkDefault" style={{ textDecoration: 'none' }} to="/postagens/cadastro">Cadastrar Postagem</Link></button>
-            <span className="bp3-navbar-divider"></span>
+          <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal bp3-icon-home">Vagas cadastradas</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Vagas</button>
+            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Postagem</button>
+            <span  className="bp3-navbar-divider"></span>
 
             <Popover2
               autoFocus={false}
@@ -49,12 +52,12 @@ export default class NavbarEmpresa extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Conta" />
-                    <MenuItem onClick={() => this.setState({ to_redirect: "/perfil", is_redirect: true })} icon="align-left" text="Perfil" />
+                    <MenuItem onClick={() => this.handleRedirect("/perfil")}  icon="align-left" text="Perfil" />
                     <MenuItem icon="align-left" text="Compartilhar" />
                     <MenuItem icon="align-left" text="Config">
                       <MenuItem icon="align-left" text="Bloquear" />
                       <MenuItem icon="align-center" text="Excluir" />
-                      <MenuItem onClick={() => this.setState({to_redirect: "/perfil", is_redirect: true})} icon="clipboard" text="Alaterar foto" />
+                      <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="clipboard" text="Alaterar foto" />
                     </MenuItem>
                   </Menu>
                 </Example>
