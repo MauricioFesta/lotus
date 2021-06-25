@@ -38,3 +38,9 @@ export const listVagasEmpresaId = async (id) =>{
     return result
 
 }
+
+export const downloadCurriculoCandidato = async (id) => {
+   
+    let result = await api.get(`/api/curriculo-download-candidato/${id}`)
+    return result
+}

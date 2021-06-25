@@ -17,12 +17,13 @@ CREATE TABLE lotus_dev.curriculo(
    id uuid PRIMARY KEY,
    file_base64 text,
    id_usuario varchar,
+   principal boolean,
    descricao text,
    inserted_at timestamp,
    updated_at timestamp
   
    
-   );
+);
 
 CREATE TABLE lotus_dev.vagas(
    id uuid,

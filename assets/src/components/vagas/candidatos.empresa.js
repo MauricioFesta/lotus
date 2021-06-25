@@ -2,7 +2,10 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, Image } from 'semantic-ui-react'
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import { listVagasEmpresaId } from "../../stores/vagas/api"
+import { listVagasEmpresaId, downloadCurriculoCandidato } from "../../stores/vagas/api"
+import * as Mui from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import CheckIcon from '@material-ui/icons/Check';
 
 
 export default class CandidatosEmpresa extends React.Component {
@@ -27,6 +30,46 @@ export default class CandidatosEmpresa extends React.Component {
 
     render() {
 
+        async function download_Pdf(el) {
+
+            let res = await downloadCurriculoCandidato(el)
+
+            window.open(`/pdf_tmp/${res.data}`, false)
+
+
+        }
+
+        async function aprovar(el) {
+
+            // let res = await downloadCurriculoCandidato(el)
+
+            // window.open(`/pdf_tmp/${res.data}`, false)
+            console.log("aprovar", el)
+
+
+        }
+
+
+        function downloadFormatter(id) {
+            return (
+                <Mui.IconButton onClick={() => { download_Pdf(id) }} color="primary" aria-label="upload picture" component="span">
+                    <GetAppIcon />
+                </Mui.IconButton>
+
+            );
+        }
+
+        function aprovarCandidato(id) {
+            return (
+                <Mui.IconButton onClick={() => { aprovar(id) }} color="primary" aria-label="upload picture" component="span">
+                    <CheckIcon />
+                </Mui.IconButton>
+
+            );
+        }
+
+
+
 
         return (
 
@@ -48,7 +91,7 @@ export default class CandidatosEmpresa extends React.Component {
                                                 <Image
                                                     floated='right'
                                                     size='mini'
-                                                    src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                    src={"data:image/png;base64," + el.foto_base64}
                                                 />
                                                 <Card.Header>{el.nome}</Card.Header>
                                                 <Card.Meta>Friends of Elliot</Card.Meta>
@@ -58,12 +101,9 @@ export default class CandidatosEmpresa extends React.Component {
                                             </Card.Content>
                                             <Card.Content extra>
                                                 <div className='ui two buttons'>
-                                                    <Button basic color='green'>
-                                                        Approve
-                                                    </Button>
-                                                    <Button basic color='red'>
-                                                        Decline
-                                                </Button>
+                                                    {downloadFormatter(el.id)}
+                                                    {aprovarCandidato(el.id)}
+                                                  
                                                 </div>
                                             </Card.Content>
                                         </Card>

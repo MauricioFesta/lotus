@@ -11,6 +11,7 @@ import { Card, Icon, Image } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
+import CheckIcon from '@material-ui/icons/Check';
 require("./css/style.scss")
 
 const styleButomDelete = {
@@ -19,7 +20,7 @@ const styleButomDelete = {
 };
 
 const styleButomPrincipal = {
-  color: '#ff5252',
+  color: '#32CD32',
 
 };
 
@@ -65,6 +66,15 @@ export default class Curriculo extends React.Component {
       window.open(`/pdf_tmp/${res.data}`, false)
 
 
+    }
+
+    function tornarPrincipal(id) {
+      return (
+        <Mui.IconButton  color="primary" aria-label="upload picture" component="span">
+          <CheckIcon/>
+        </Mui.IconButton>
+
+      )
     }
 
     function curriculoPrincipal(id) {
@@ -124,7 +134,9 @@ export default class Curriculo extends React.Component {
                       <Card.Content extra>
                         {downloadFormatter(el.id)}
                        {excluirFormatter(el.id)}
-                       {curriculoPrincipal(el.id)}
+                       {el.principal ?
+                       curriculoPrincipal(el.id) :
+                       tornarPrincipal(el.id)}
                       </Card.Content>
                     </Card>
 

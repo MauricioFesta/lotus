@@ -10,7 +10,11 @@ defmodule LotusWeb.CurriculoController do
 
             file64 =  File.read!(upload.path) |> Base.encode64();
 
-            new_params = %{} |> Map.put(:file_base64,file64) |> Map.put(:descricao,params["descricao"]) |> Map.put(:id,params["id"]) |> Map.put(:id_usuario, id_user)
+            new_params = %{} |> Map.put(:file_base64,file64) 
+            |> Map.put(:descricao,params["descricao"]) 
+            |> Map.put(:id,params["id"]) 
+            |> Map.put(:id_usuario, id_user)
+            |> Map.put(:principal, true)
         
 
             {:ok, data} = JSON.encode(new_params) 
@@ -30,7 +34,7 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "idUser");
 
-        statement =  "SELECT id, descricao FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
+        statement =  "SELECT id, descricao, principal FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
         
@@ -70,6 +74,30 @@ defmodule LotusWeb.CurriculoController do
 
         end
               
+    end
+
+    def download_curriculo_candidato(conn, %{"id" => id_candidato}) do
+
+        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_candidato}' AND principal = true ALLOW FILTERING"
+
+        {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
+        {:ok, _base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+     
+        if page |> Enum.at(0) != nil do
+
+            file_name = UUID.uuid4() <> ".pdf"
+
+           case Base.decode64(_base) do
+
+                {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
+                     json(conn, file_name)
+                end
+                _-> json(conn, "Error")
+
+           end
+
+        end
+        
     end
 
 

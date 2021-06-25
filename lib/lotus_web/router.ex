@@ -38,6 +38,7 @@ defmodule LotusWeb.Router do
     delete "/curriculo-excluir/:id", CurriculoController, :excluir_curriculo
     get "/curriculo-consulta", CurriculoController, :consulta_curriculo
     get "/curriculo-download/:id", CurriculoController, :download_curriculo
+    get "/curriculo-download-candidato/:id", CurriculoController, :download_curriculo_candidato
     post "/postagens-cadastro", PostagensController, :cadastro_postagem
     get "/postagens-listar", PostagensController, :list_postagens
     post "/vagas-cadastro", VagasController, :cadastro_vagas
