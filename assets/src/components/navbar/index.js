@@ -7,6 +7,7 @@ import "./css/index.scss"
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
+import Notificacoes from "./notificacoes/index"
 
 
 export default class Navbar extends React.Component {
@@ -79,11 +80,9 @@ export default class Navbar extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Notificações" />
-                    <MenuItem icon="align-left" text="Visualizar" />
-                    <MenuItem icon="align-left" text="Config">
-                      <MenuItem icon="align-left" text="Desabilitar" />
-                      <MenuItem icon="align-center" text="Programar" />
-                    </MenuItem>
+
+                    <Notificacoes />
+
                   </Menu>
                 </Example>
 

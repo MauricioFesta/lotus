@@ -44,3 +44,9 @@ export const downloadCurriculoCandidato = async (id) => {
     let result = await api.get(`/api/curriculo-download-candidato/${id}`)
     return result
 }
+
+export const candidatoAprovar = async (id, data) => {
+
+    let result = await api.post("/api/vagas-arovar-candidato", data, config)
+    return result
+}

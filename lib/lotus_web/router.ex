@@ -39,6 +39,7 @@ defmodule LotusWeb.Router do
     get "/curriculo-consulta", CurriculoController, :consulta_curriculo
     get "/curriculo-download/:id", CurriculoController, :download_curriculo
     get "/curriculo-download-candidato/:id", CurriculoController, :download_curriculo_candidato
+    put "/curriculo-principal-set/:id", CurriculoController, :curriculo_principal
     post "/postagens-cadastro", PostagensController, :cadastro_postagem
     get "/postagens-listar", PostagensController, :list_postagens
     post "/vagas-cadastro", VagasController, :cadastro_vagas
@@ -47,6 +48,7 @@ defmodule LotusWeb.Router do
     get "/vagas-lista-candidatos/:id", VagasController, :list_vagas_candidatos
     post "/vagas-candidatar-se", VagasController, :insert_vaga_user
     delete "/vagas-delete-candidatura/:id", VagasController, :delete_candidatura_user
+    
    
    
 

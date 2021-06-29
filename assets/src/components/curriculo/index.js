@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Alert } from 'react-bootstrap';
-import { getCurriculo, getDownload, postExcluir } from "../../stores/curriculo/api";
+import { getCurriculo, getDownload, postExcluir, setPrincipal } from "../../stores/curriculo/api";
 import { Link } from 'react-router-dom';
 import { AppToaster } from "../../others/toaster"
 import * as Mui from '@material-ui/core';
@@ -12,6 +12,9 @@ import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
 import CheckIcon from '@material-ui/icons/Check';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+import { data } from 'jquery';
 require("./css/style.scss")
 
 const styleButomDelete = {
@@ -46,6 +49,61 @@ export default class Curriculo extends React.Component {
 
   render() {
 
+    const confirmExcluirCurriculo = (id) => {
+     
+      confirmAlert({
+        title: 'Alerta',
+        message: 'Deseja excluir este Currículo ?',
+        buttons: [
+          {
+            label: 'Sim',
+            onClick: () => excluir_Pdf(id)
+          },
+          {
+            label: 'Não',
+            onClick: () => {}
+          }
+        ]
+      });
+    };
+
+    const confirmPrincipal = (id) => {
+      
+      confirmAlert({
+        title: 'Currículo',
+        message: 'Deseja tornar este como principal ?',
+        buttons: [
+          {
+            label: 'Sim',
+            onClick: () => tornar_principal(id, true)
+          },
+          {
+            label: 'Não',
+            onClick: () => console.log("No")
+          }
+        ]
+      });
+    };
+
+
+    const confirmNotPrincipal = (id) => {
+    
+      confirmAlert({
+        title: 'Currículo',
+        message: 'Deseja remover este como principal ?',
+        buttons: [
+          {
+            label: 'Sim',
+            onClick: () => tornar_principal(id, false)
+          },
+          {
+            label: 'Não',
+            onClick: () => console.log("No")
+          }
+        ]
+      });
+    };
+
 
     const excluir_Pdf = async (el) => {
 
@@ -68,27 +126,50 @@ export default class Curriculo extends React.Component {
 
     }
 
+   const tornar_principal = async  (id, bol) => {
+
+      let data = {
+        boolean: bol,
+
+      }
+
+      let res = await setPrincipal(id, data)
+
+      if(res.data === "Ok"){
+        AppToaster.show({ message: "Prioridade alterada com sucesso", intent: "success" });
+        this.componentDidMount()
+      }else{
+        AppToaster.show({message: "Não foi possível alterar a prioridade", intent: "warning" });
+      }
+
+
+    }
+
+
     function tornarPrincipal(id) {
       return (
-        <Mui.IconButton  color="primary" aria-label="upload picture" component="span">
-          <CheckIcon/>
-        </Mui.IconButton>
+      
+          <Mui.IconButton onClick={() => confirmPrincipal(id)} color="primary" aria-label="upload picture" component="span">
+            <CheckIcon />
+          </Mui.IconButton>
 
       )
     }
 
     function curriculoPrincipal(id) {
       return (
-        <Mui.IconButton style={styleButomPrincipal}   color="primary" aria-label="upload picture" component="span">
-          <DoneAllIcon/>
-        </Mui.IconButton>
-
+       
+          <Mui.IconButton style={styleButomPrincipal} onClick={() => confirmNotPrincipal(id)} color="primary" aria-label="upload picture" component="span">
+            <DoneAllIcon />
+          </Mui.IconButton>
+    
       )
     }
 
-    function  excluirFormatter(id) {
+    function excluirFormatter(id) {
       return (
-        <Mui.IconButton style={styleButomDelete} onClick={() => { excluir_Pdf(id) }} color="primary" aria-label="upload picture" component="span">
+
+        <Mui.IconButton style={styleButomDelete} onClick={() => { confirmExcluirCurriculo(id) }} color="primary" aria-label="upload picture" component="span">
           <DeleteIcon />
         </Mui.IconButton>
 
@@ -113,6 +194,7 @@ export default class Curriculo extends React.Component {
 
           <Jumbotron className="mt-4">
 
+
             <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
             <Card.Group>
               {this.state.showItems ?
@@ -133,10 +215,10 @@ export default class Curriculo extends React.Component {
 
                       <Card.Content extra>
                         {downloadFormatter(el.id)}
-                       {excluirFormatter(el.id)}
-                       {el.principal ?
-                       curriculoPrincipal(el.id) :
-                       tornarPrincipal(el.id)}
+                        {excluirFormatter(el.id)}
+                        {el.principal ?
+                          curriculoPrincipal(el.id) :
+                          tornarPrincipal(el.id)}
                       </Card.Content>
                     </Card>
 

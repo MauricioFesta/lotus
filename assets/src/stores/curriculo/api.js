@@ -22,3 +22,10 @@ export const postExcluir = async (id) => {
     return await api.delete(`/api/curriculo-excluir/${id}`)
 
 }
+
+export const setPrincipal = async (id, data) => {
+
+    return await api.put(`/api/curriculo-principal-set/${id}`,data)
+
+}
+

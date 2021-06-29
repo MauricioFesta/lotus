@@ -2,11 +2,19 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, Image } from 'semantic-ui-react'
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import { listVagasEmpresaId, downloadCurriculoCandidato } from "../../stores/vagas/api"
+import { listVagasEmpresaId, downloadCurriculoCandidato ,candidatoAprovar} from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
+import { confirmAlert } from 'react-confirm-alert';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
+const styleButomPrincipal = {
+    color: '#32CD32',
+  
+  };
+  
 
 export default class CandidatosEmpresa extends React.Component {
 
@@ -30,6 +38,41 @@ export default class CandidatosEmpresa extends React.Component {
 
     render() {
 
+        const confirmNotSelecionado = (id) => {
+            confirmAlert({
+                title: 'Alerta',
+                message: 'Deseja remover este candidato ?',
+                buttons: [
+                    {
+                        label: 'Sim',
+                        onClick: () => { aprovar(id, true) }
+                    },
+                    {
+                        label: 'Não',
+                        onClick: () => { }
+                    }
+                ]
+            });
+        }
+
+        const confirmSelecionado = (id) => {
+
+            confirmAlert({
+                title: 'Alerta',
+                message: 'Deseja selecionar este candidato',
+                buttons: [
+                    {
+                        label: 'Sim',
+                        onClick: () => { aprovar(id, false) }
+                    },
+                    {
+                        label: 'Não',
+                        onClick: () => { }
+                    }
+                ]
+            });
+        };
+
         async function download_Pdf(el) {
 
             let res = await downloadCurriculoCandidato(el)
@@ -38,14 +81,39 @@ export default class CandidatosEmpresa extends React.Component {
 
 
         }
+       
 
-        async function aprovar(el) {
+        function tornarSelecionado(id) {
+            return (
 
-            // let res = await downloadCurriculoCandidato(el)
+                <Mui.IconButton onClick={() => confirmSelecionado(id)} color="primary" aria-label="upload picture" component="span">
+                    <CheckIcon />
+                </Mui.IconButton>
 
-            // window.open(`/pdf_tmp/${res.data}`, false)
-            console.log("aprovar", el)
+            )
+        }
 
+
+
+        function candidatoSelecionado(id) {
+            return (
+
+                <Mui.IconButton style={styleButomPrincipal} onClick={() => confirmNotSelecionado(id)} color="primary" aria-label="upload picture" component="span">
+                    <DoneAllIcon />
+                </Mui.IconButton>
+
+            )
+        }
+
+        async function aprovar(id, bol) {
+
+            let data = {
+                boolean: bol
+            }
+
+            let res = await candidatoAprovar(id,data)
+
+        
 
         }
 
@@ -103,7 +171,7 @@ export default class CandidatosEmpresa extends React.Component {
                                                 <div className='ui two buttons'>
                                                     {downloadFormatter(el.id)}
                                                     {aprovarCandidato(el.id)}
-                                                  
+
                                                 </div>
                                             </Card.Content>
                                         </Card>

@@ -16,7 +16,7 @@ CREATE TABLE lotus_dev.user(
 CREATE TABLE lotus_dev.curriculo(
    id uuid PRIMARY KEY,
    file_base64 text,
-   id_usuario varchar,
+   id_usuario uuid,
    principal boolean,
    descricao text,
    inserted_at timestamp,
