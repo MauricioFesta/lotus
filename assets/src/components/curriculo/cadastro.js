@@ -16,10 +16,6 @@ export class Cadastro extends React.Component {
    
   }
 
-  closeToasts() {
-    this.setState({ close_msg: false });
-  }
-
   cadastrar = async () => {
 
     let formData = new FormData();

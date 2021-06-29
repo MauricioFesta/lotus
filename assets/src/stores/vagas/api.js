@@ -32,7 +32,7 @@ export const listVagasEmpresa = async () => {
     return result
 }
 
-export const listVagasEmpresaId = async (id) =>{
+export const listVagasEmpresaId = async (id) => {
 
     let result = await api.get(`/api/vagas-lista-candidatos/${id}`)
     return result
@@ -40,13 +40,18 @@ export const listVagasEmpresaId = async (id) =>{
 }
 
 export const downloadCurriculoCandidato = async (id) => {
-   
+
     let result = await api.get(`/api/curriculo-download-candidato/${id}`)
     return result
 }
 
 export const candidatoAprovar = async (id, data) => {
 
-    let result = await api.post("/api/vagas-arovar-candidato", data, config)
+    let result = await api.put(`/api/vagas-arovar-candidato/${id}`, data, config)
+    return result
+}
+
+export const listNotificacoes = async () => {
+    let result = await api.get("/api/lista-notificacoes")
     return result
 }

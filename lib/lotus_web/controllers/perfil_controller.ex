@@ -29,6 +29,16 @@ defmodule LotusWeb.PerfilController do
 
     end
 
+    def lista_notificacoes(conn,params) do
+        id_user =  get_session(conn, "idUser");
+
+        cql = "SELECT notificacoes FROM lotus_dev.user WHERE id = #{id_user}"
+        
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = []) 
+
+        json(conn, Enum.to_list(page))
+    end
+
     def get_perfil(conn, _params) do
 
         id_user =  get_session(conn, "idUser");

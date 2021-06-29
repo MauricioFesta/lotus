@@ -1,7 +1,29 @@
 import React from 'react'
 import { Card, Feed } from 'semantic-ui-react'
+import { listNotificacoes } from "../../../stores/vagas/api"
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
-export default class Notificacoes extends React.Component {
+
+class Notificacoes extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.obs = observable({
+            itens_notificacoes: []
+
+        })
+    }
+
+    async componentDidMount() {
+
+        let res = await listNotificacoes()
+
+        console.log(res.data, " Aqui")
+
+        this.obs.itens_notificacoes = res.data[0].notificacoes
+    }
 
     render() {
 
@@ -13,35 +35,28 @@ export default class Notificacoes extends React.Component {
                 </Card.Content>
                 <Card.Content>
                     <Feed>
-                        <Feed.Event>
-                            <Feed.Label image='/images/avatar/small/jenny.jpg' />
-                            <Feed.Content>
-                                <Feed.Date content='1 day ago' />
-                                <Feed.Summary>
-                                    Empresa Ricefer aprovou seu currículo
-                    </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
 
-                        <Feed.Event>
-                            <Feed.Label image='/images/avatar/small/molly.png' />
-                            <Feed.Content>
-                                <Feed.Date content='3 days ago' />
-                                <Feed.Summary>
-                                    You added <a>Molly Malone</a> as a friend.
-                    </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
+                        {this.obs.itens_notificacoes.map(el => {
 
-                        <Feed.Event>
-                            <Feed.Label image='/images/avatar/small/elliot.jpg' />
-                            <Feed.Content>
-                                <Feed.Date content='4 days ago' />
-                                <Feed.Summary>
-                                    You added <a>Elliot Baker</a> to your <a>musicians</a> group.
-                    </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
+                            let json = JSON.parse(el)
+
+                            return (
+
+                                <Feed.Event>
+                                    <Feed.Label image={"data:image/png;base64," + json.foto_base64} />
+                                    <Feed.Content>
+                                        <Feed.Date content='1 day ago' />
+                                        <Feed.Summary>
+                                            Empresa {json.nome} aprovou seu currículo
+                                    </Feed.Summary>
+                                    </Feed.Content>
+                                </Feed.Event>
+                            )
+
+                        })
+
+                        }
+
                     </Feed>
                 </Card.Content>
             </Card>
@@ -51,3 +66,10 @@ export default class Notificacoes extends React.Component {
 
 
 }
+
+export default observer(Notificacoes) 
+
+
+
+
+

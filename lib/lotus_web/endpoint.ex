@@ -1,6 +1,8 @@
 defmodule LotusWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :lotus
 
+  socket "/socket", LotusWeb.UserSocket
+
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
@@ -9,10 +11,6 @@ defmodule LotusWeb.Endpoint do
     key: "_lotus_key",
     signing_salt: "JmjniwAN"
   ]
-
-  socket "/socket", LotusWeb.UserSocket,
-    websocket: true,
-    longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 

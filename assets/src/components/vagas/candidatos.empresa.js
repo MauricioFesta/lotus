@@ -2,19 +2,22 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, Image } from 'semantic-ui-react'
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import { listVagasEmpresaId, downloadCurriculoCandidato ,candidatoAprovar} from "../../stores/vagas/api"
+import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar } from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import { AppToaster } from "../../others/toaster"
+import socket from '../socket';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+
 
 const styleButomPrincipal = {
     color: '#32CD32',
-  
-  };
-  
+
+};
+
 
 export default class CandidatosEmpresa extends React.Component {
 
@@ -45,7 +48,7 @@ export default class CandidatosEmpresa extends React.Component {
                 buttons: [
                     {
                         label: 'Sim',
-                        onClick: () => { aprovar(id, true) }
+                        onClick: () => { aprovar(id, false) }
                     },
                     {
                         label: 'Não',
@@ -63,7 +66,7 @@ export default class CandidatosEmpresa extends React.Component {
                 buttons: [
                     {
                         label: 'Sim',
-                        onClick: () => { aprovar(id, false) }
+                        onClick: () => { aprovar(id, true) }
                     },
                     {
                         label: 'Não',
@@ -81,7 +84,7 @@ export default class CandidatosEmpresa extends React.Component {
 
 
         }
-       
+
 
         function tornarSelecionado(id) {
             return (
@@ -107,13 +110,31 @@ export default class CandidatosEmpresa extends React.Component {
 
         async function aprovar(id, bol) {
 
+            let channel = socket.channel("notify:open");
+
+            channel.join()
+                .receive("ok", resp => {
+
+                    console.log("Bem vindo", resp)
+                })
+                .receive("error", resp => {
+                    console.log("Error", resp)
+                })
+
             let data = {
                 boolean: bol
             }
 
-            let res = await candidatoAprovar(id,data)
+            let res = await candidatoAprovar(id, data)
 
-        
+            if (res.data.Ok) {
+
+
+                channel.push("notify_send", { body: "Notificação recebida" })
+
+                AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
+
+            }
 
         }
 
@@ -126,16 +147,6 @@ export default class CandidatosEmpresa extends React.Component {
 
             );
         }
-
-        function aprovarCandidato(id) {
-            return (
-                <Mui.IconButton onClick={() => { aprovar(id) }} color="primary" aria-label="upload picture" component="span">
-                    <CheckIcon />
-                </Mui.IconButton>
-
-            );
-        }
-
 
 
 
@@ -169,8 +180,9 @@ export default class CandidatosEmpresa extends React.Component {
                                             </Card.Content>
                                             <Card.Content extra>
                                                 <div className='ui two buttons'>
+
                                                     {downloadFormatter(el.id)}
-                                                    {aprovarCandidato(el.id)}
+                                                    {tornarSelecionado(el.id)}
 
                                                 </div>
                                             </Card.Content>

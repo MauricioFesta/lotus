@@ -126,7 +126,7 @@ defmodule LotusWeb.VagasController do
     end
 
     def delete_candidatura_user(conn, params) do
-        #Parado aqui
+        
         id_user = get_session(conn, "idUser");
 
         %{"id" => _id} = params
@@ -144,9 +144,34 @@ defmodule LotusWeb.VagasController do
            _ -> json(conn, %{Ok: false})
        end
 
+    end
 
+    def aprovar_candidato(conn, params) do
+        
+        id_user = get_session(conn, "idUser");
 
-    
+        cql1 = "SELECT id, nome, foto_base64 FROM lotus_dev.user WHERE id = #{id_user} ALLOW FILTERING"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
+
+        nome = page |> Enum.to_list |> Enum.at(0) |> Map.get("nome")
+        id = page |> Enum.to_list |> Enum.at(0) |> Map.get("id")
+        foto_base64 = page |> Enum.to_list |> Enum.at(0) |> Map.get("foto_base64")
+
+        new_map = %{} |> Map.put_new(:id, id) 
+        |> Map.put_new(:nome, nome)
+        |> Map.put_new(:foto_base64, foto_base64)
+        |> Map.put_new(:aprovado, true)
+
+        {:ok, data} = JSON.encode(new_map) 
+        
+        cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}']+ notificacoes  WHERE id = #{params["id"]}"
+
+        case Xandra.execute(CassPID, cql, _params = []) do
+            {:ok, _} -> json(conn, %{Ok: true})
+            _ -> json(conn, %{Ok: false})
+        end
+        
     end
  
 

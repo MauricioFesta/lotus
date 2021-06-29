@@ -8,13 +8,33 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
 import Notificacoes from "./notificacoes/index"
-
+import socket from '../socket';
 
 export default class Navbar extends React.Component {
 
   constructor(props) {
     super(props)
 
+  }
+
+  componentDidMount(){
+
+    let channel = socket.channel("notify:open");
+
+    channel.join()
+        .receive("ok", resp => {
+
+            console.log("Bem vindo", resp)
+        })
+        .receive("error", resp => {
+            console.log("Error", resp)
+        })
+
+
+    channel.on("notify_send", payload => {
+        alert("Chegou notificação")
+
+    })
   }
 
   handleRedirect(path) {
