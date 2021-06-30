@@ -29,6 +29,8 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:empresa_id, id_user)
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
+        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
+		|> Map.put_new(:updated_at,DateTime.utc_now |> DateTime.add(-10800))
         |> Map.put(:candidatos, [UUID.uuid4()])
         
         {:ok, data} = JSON.encode(new_params) 
@@ -162,6 +164,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put_new(:nome, nome)
         |> Map.put_new(:foto_base64, foto_base64)
         |> Map.put_new(:aprovado, true)
+        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
 
         {:ok, data} = JSON.encode(new_map) 
         

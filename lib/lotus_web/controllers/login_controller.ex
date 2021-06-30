@@ -32,8 +32,12 @@ defmodule LotusWeb.LoginController do
     end
 
     def cadastro_login(conn, params)do
-  
-      {:ok, data} = JSON.encode(params) 
+      
+      new_params = params 
+      |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
+      |> Map.put_new(:updated_at,DateTime.utc_now |> DateTime.add(-10800))
+
+      {:ok, data} = JSON.encode(new_params) 
       
       statement = "INSERT INTO lotus_dev.user JSON '#{data}'"
        case Xandra.execute(CassPID, statement, _params = []) do

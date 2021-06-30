@@ -130,7 +130,7 @@ export default class CandidatosEmpresa extends React.Component {
             if (res.data.Ok) {
 
 
-                channel.push("notify_send", { body: "Notificação recebida" })
+                channel.push("notify_send", { body: "Candidato aceito" })
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
 

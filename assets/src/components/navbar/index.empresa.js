@@ -7,6 +7,7 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "./css/index.scss"
 import history from "../../others/redirect";
+import socket from '../socket';
 
 
 export default class NavbarEmpresa extends React.Component {
@@ -17,7 +18,28 @@ export default class NavbarEmpresa extends React.Component {
 
   }
 
-  handleRedirect(path){
+
+  componentDidMount() {
+    let channel = socket.channel("notify:open");
+
+    channel.join()
+      .receive("ok", resp => {
+
+        console.log("Bem vindo", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error", resp)
+      })
+
+
+    channel.on("notify_send", payload => {
+  
+      alert(payload.body)
+
+    })
+  }
+
+  handleRedirect(path) {
 
     history.push(path);
 
@@ -38,10 +60,10 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-          <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal bp3-icon-home">Vagas cadastradas</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal bp3-icon-home">Vagas cadastradas</button>
             <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Vagas</button>
             <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Postagem</button>
-            <span  className="bp3-navbar-divider"></span>
+            <span className="bp3-navbar-divider"></span>
 
             <Popover2
               autoFocus={false}
@@ -52,7 +74,7 @@ export default class NavbarEmpresa extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Conta" />
-                    <MenuItem onClick={() => this.handleRedirect("/perfil")}  icon="align-left" text="Perfil" />
+                    <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="align-left" text="Perfil" />
                     <MenuItem icon="align-left" text="Compartilhar" />
                     <MenuItem icon="align-left" text="Config">
                       <MenuItem icon="align-left" text="Bloquear" />

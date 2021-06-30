@@ -3,11 +3,15 @@ defmodule LotusWeb.PostagensController do
 
     def cadastro_postagem(conn, params) do
 
-        {:ok, data} = JSON.encode(params) 
+        new_params = params 
+        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
+		|> Map.put_new(:updated_at,DateTime.utc_now |> DateTime.add(-10800))
+
+        {:ok, data} = JSON.encode(new_params) 
       
         cql =  "INSERT INTO lotus_dev.postagens JSON '#{data}'"
 
-        case Xandra.execute(CassPID,cql, params = [])  do
+        case Xandra.execute(CassPID,cql, _params = [])  do
             {:ok, _} -> json(conn, %{"Ok": true})
             _ -> json(conn, %{"Ok": false})
         end

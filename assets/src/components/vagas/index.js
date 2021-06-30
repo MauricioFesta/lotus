@@ -11,7 +11,7 @@ import * as Mui from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { idMaster } from "../login/auth"
-
+import socket from '../socket';
 
 const id_master = idMaster()
 
@@ -60,7 +60,16 @@ export default class Vagas extends React.Component {
 
     async candidatarSeVaga(id) {
 
-        console.log(id)
+        let channel = socket.channel("notify:open");
+
+        channel.join()
+            .receive("ok", resp => {
+
+                console.log("Bem vindo", resp)
+            })
+            .receive("error", resp => {
+                console.log("Error", resp)
+            })
 
         let data = {
             id
@@ -70,6 +79,9 @@ export default class Vagas extends React.Component {
 
 
         if (res.data.Ok) {
+
+            channel.push("notify_send", { body: "Candidado se cadastrou na vaga x" })
+            
             AppToaster.show({ message: "Candidatura enviada com sucesso", intent: "success" });
             this.componentDidMount()
         } else if (res.data.erro) {

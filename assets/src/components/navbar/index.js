@@ -32,7 +32,7 @@ export default class Navbar extends React.Component {
 
 
     channel.on("notify_send", payload => {
-        alert("Chegou notificação")
+      alert(payload.body)
 
     })
   }

@@ -54,7 +54,7 @@ class Perfil extends React.Component {
       
         if (store.perfilState.form.length > 0) {
 
-            formData.append("file", store.perfilState.form[0]);
+            formData.append("file_base64", store.perfilState.form[0]);
         }
 
         formData.append("nome", this.state.nome || this.state.perfilMODEL.nome);
