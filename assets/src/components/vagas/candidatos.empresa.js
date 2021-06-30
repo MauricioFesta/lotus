@@ -11,7 +11,8 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import { AppToaster } from "../../others/toaster"
 import socket from '../socket';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 const styleButomPrincipal = {
     color: '#32CD32',
@@ -19,12 +20,19 @@ const styleButomPrincipal = {
 };
 
 
-export default class CandidatosEmpresa extends React.Component {
+class CandidatosEmpresa extends React.Component {
+
+
 
     constructor(props) {
 
         super(props);
         this.state = { candidatos: false };
+
+        this.obs = observable({
+            id_vaga: 0
+
+        })
 
     }
 
@@ -33,6 +41,8 @@ export default class CandidatosEmpresa extends React.Component {
         let url = window.location.pathname.split("/")
 
         let res = await listVagasEmpresaId(url[3])
+
+        this.obs.id_vaga = url[3]
 
         this.setState({ candidatos: res.data })
 
@@ -108,7 +118,7 @@ export default class CandidatosEmpresa extends React.Component {
             )
         }
 
-        async function aprovar(id, bol) {
+        const aprovar = async (id, bol) => {
 
             let channel = socket.channel("notify:open");
 
@@ -122,18 +132,20 @@ export default class CandidatosEmpresa extends React.Component {
                 })
 
             let data = {
-                boolean: bol
+                boolean: bol,
+                id_vaga: this.obs.id_vaga
             }
 
             let res = await candidatoAprovar(id, data)
 
             if (res.data.Ok) {
-
-
+                
                 channel.push("notify_send", { body: "Candidato aceito" })
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
 
+            }else{
+                AppToaster.show({ message: "Candidato já selecionado", intent: "warning" });
             }
 
         }
@@ -207,3 +219,5 @@ export default class CandidatosEmpresa extends React.Component {
         );
     }
 }
+
+export default observer(CandidatosEmpresa) 

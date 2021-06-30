@@ -1,5 +1,6 @@
 defmodule LotusWeb.VagasController do
     use LotusWeb, :controller
+    alias Lotus.Vagas
     
     def cadastro_vagas(conn, params) do
 
@@ -29,8 +30,6 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:empresa_id, id_user)
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
-        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
-		|> Map.put_new(:updated_at,DateTime.utc_now |> DateTime.add(-10800))
         |> Map.put(:candidatos, [UUID.uuid4()])
         
         {:ok, data} = JSON.encode(new_params) 
@@ -149,6 +148,8 @@ defmodule LotusWeb.VagasController do
     end
 
     def aprovar_candidato(conn, params) do
+
+        params |> IO.inspect
         
         id_user = get_session(conn, "idUser");
 
@@ -169,13 +170,25 @@ defmodule LotusWeb.VagasController do
         {:ok, data} = JSON.encode(new_map) 
         
         cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}']+ notificacoes  WHERE id = #{params["id"]}"
+       
+        case Vagas.aprovar_candidato_vaga(id, params["id_vaga"]) do
 
-        case Xandra.execute(CassPID, cql, _params = []) do
-            {:ok, _} -> json(conn, %{Ok: true})
-            _ -> json(conn, %{Ok: false})
+            true -> case Xandra.execute(CassPID, cql, _params = []) do
+
+                {:ok, _}-> json(conn, %{Ok: true})
+
+                _ -> 
+                    
+                    json(conn, %{Ok: false})
+                
+            end
+           
+            _ ->
+                json(conn, %{Ok: false})
         end
         
     end
- 
+
+   
 
 end
