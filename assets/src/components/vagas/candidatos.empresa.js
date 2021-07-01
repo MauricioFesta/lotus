@@ -2,7 +2,7 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, Image } from 'semantic-ui-react'
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar } from "../../stores/vagas/api"
+import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar,candidatoDesaprovar } from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
@@ -60,7 +60,7 @@ class CandidatosEmpresa extends React.Component {
                 buttons: [
                     {
                         label: 'Sim',
-                        onClick: () => { aprovar(id, false) }
+                        onClick: () => { desaProvar(id) }
                     },
                     {
                         label: 'Não',
@@ -103,7 +103,7 @@ class CandidatosEmpresa extends React.Component {
         }
 
 
-        function tornarSelecionado(id, arr_vagas) {
+        function tornarSelecionado(id) {
             return (
 
                 <Mui.IconButton onClick={() => confirmSelecionado(id)} color="primary" aria-label="upload picture" component="span">
@@ -112,7 +112,6 @@ class CandidatosEmpresa extends React.Component {
 
             )
         }
-
 
 
         function candidatoSelecionado(id) {
@@ -125,7 +124,47 @@ class CandidatosEmpresa extends React.Component {
             )
         }
 
+        const desaProvar = async (id) => {
+
+            alert(id)
+
+            let channel = socket.channel("notify:open");
+
+            channel.join()
+                .receive("ok", resp => {
+
+                    console.log("Bem vindo", resp)
+                })
+                .receive("error", resp => {
+                    console.log("Error", resp)
+                })
+
+            let data = {
+
+                id_vaga: this.obs.id_vaga
+            }
+
+            let res = await candidatoDesaprovar(id, data)
+
+            if (res.data.Ok) {
+
+                channel.push("notify_send", { body: "Candidato desaprovado" })
+
+                this.componentDidMount() 
+
+                AppToaster.show({ message: "Candidato desaprovado com sucesso", intent: "success" });
+
+            } else {
+
+                AppToaster.show({ message: "Erro, tente novamente mais tarde", intent: "danger" });
+            }
+
+
+        }
+
         const aprovar = async (id, bol) => {
+
+
 
             let channel = socket.channel("notify:open");
 
@@ -149,6 +188,8 @@ class CandidatosEmpresa extends React.Component {
             if (res.data.Ok) {
 
                 channel.push("notify_send", { body: "Candidato aceito" })
+
+                this.componentDidMount() 
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
 

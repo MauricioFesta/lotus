@@ -1,6 +1,7 @@
 defmodule LotusWeb.VagasController do
     use LotusWeb, :controller
     alias Lotus.Vagas
+    alias LotusWeb.PerfilController
     
     def cadastro_vagas(conn, params) do
 
@@ -167,45 +168,53 @@ defmodule LotusWeb.VagasController do
     end
 
     def aprovar_candidato(conn, params) do
-
-        params |> IO.inspect
         
         id_user = get_session(conn, "idUser");
 
-        cql1 = "SELECT id, nome, foto_base64 FROM lotus_dev.user WHERE id = #{id_user} ALLOW FILTERING"
+        case Vagas.aprovar_candidato_vaga(params["id_user"],params["id_vaga"]) do
 
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
+            true -> 
 
-        nome = page |> Enum.to_list |> Enum.at(0) |> Map.get("nome")
-        id = page |> Enum.to_list |> Enum.at(0) |> Map.get("id")
-        foto_base64 = page |> Enum.to_list |> Enum.at(0) |> Map.get("foto_base64")
-
-        new_map = %{} |> Map.put_new(:id, id) 
-        |> Map.put_new(:nome, nome)
-        |> Map.put_new(:foto_base64, foto_base64)
-        |> Map.put_new(:aprovado, true)
-        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
-
-        {:ok, data} = JSON.encode(new_map) 
+                case Vagas.notificacao_user_aprovado(params["id_user"],params["id_vaga"], "aprovou seu currículo") do
+                    true -> json(conn, %{Ok: true})
         
-        cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}']+ notificacoes  WHERE id = #{params["id"]}"
-       
-        case Vagas.aprovar_candidato_vaga(params["id_user"], params["id_vaga"]) do
+                    _ ->  json(conn, %{Ok: false})
+                end
 
-            true -> case Xandra.execute(CassPID, cql, _params = []) do
+                _ ->  json(conn, %{Ok: false})
 
-                {:ok, _}-> json(conn, %{Ok: true})
-
-                _ -> 
-                    
-                    json(conn, %{Ok: false})
-                
-            end
-           
-            _ ->
-                json(conn, %{Ok: false})
         end
+      
+
+      
+    end
+
+    def delete_candidato_aprovado(conn, params) do
+
+        sql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = ?"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql,[{"uuid", params["id"]}] )
+         
+        {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("vagas_aprovadas")
+      
+        new_list = Enum.reject(candidato, fn x -> x == params["id_vaga"] end) 
+
+        new_list|> IO.inspect
         
+        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = #{params["id"]}"
+         
+        case Vagas.notificacao_user_aprovado(params["id"],params["id_vaga"], "desaprovou seu currículo :(") do
+            true -> 
+
+                case Xandra.execute(CassPID, cql, _params = []) do
+                    {:ok, _} -> json(conn, %{Ok: true})
+                    _ -> json(conn, %{Ok: false})
+                end
+        
+
+            _ ->  json(conn, %{Ok: false})
+        end
+
     end
 
    

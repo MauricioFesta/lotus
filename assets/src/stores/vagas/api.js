@@ -51,6 +51,13 @@ export const candidatoAprovar = async (id, data) => {
     return result
 }
 
+export const candidatoDesaprovar = async (id, data) => {
+
+    let result = await api.put(`/api/vagas-desaprovar-candidato/${id}`, data, config)
+    return result
+}
+
+
 export const listNotificacoes = async () => {
     let result = await api.get("/api/lista-notificacoes")
     return result

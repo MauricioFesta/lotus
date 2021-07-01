@@ -20,7 +20,7 @@ class Notificacoes extends React.Component {
 
         let res = await listNotificacoes()
 
-        console.log(res.data, " Aqui")
+        console.log(res.data[0].notificacoes, " Aqui")
 
         this.obs.itens_notificacoes = res.data[0].notificacoes
     }
@@ -38,20 +38,26 @@ class Notificacoes extends React.Component {
 
                         {this.obs.itens_notificacoes.map(el => {
 
-                            let json = JSON.parse(el)
+                            if (Array.isArray(this.obs.itens_notificacoes)) {
 
-                            return (
+                                let json = JSON.parse(el)
 
-                                <Feed.Event>
-                                    <Feed.Label image={"data:image/png;base64," + json.foto_base64} />
-                                    <Feed.Content>
-                                        <Feed.Date content='1 day ago' />
-                                        <Feed.Summary>
-                                            Empresa {json.nome} aprovou seu currículo
-                                    </Feed.Summary>
-                                    </Feed.Content>
-                                </Feed.Event>
-                            )
+                                return (
+
+                                    <Feed.Event>
+                                        <Feed.Label image={"data:image/png;base64," + json.foto_base64} />
+                                        <Feed.Content>
+                                            <Feed.Date content='1 day ago' />
+                                            <Feed.Summary>
+                                               {json.notify}
+                                        </Feed.Summary>
+                                        </Feed.Content>
+                                    </Feed.Event>
+                                )
+
+
+                            }
+
 
                         })
 
@@ -67,7 +73,7 @@ class Notificacoes extends React.Component {
 
 }
 
-export default observer(Notificacoes) 
+export default observer(Notificacoes)
 
 
 
