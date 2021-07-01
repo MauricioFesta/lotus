@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardDeck } from 'react-bootstrap';
 import Navbar from "../navbar/index"
-import { listVagas } from "../../stores/vagas/api"
+import { listVagas,  listVagasAprovadas} from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { postCandidatarseVaga, deleteCandidatarseVaga } from "../../stores/vagas/api"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,6 +12,9 @@ import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { idMaster } from "../login/auth"
 import socket from '../socket';
+import Alert from '@material-ui/lab/Alert';
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 const id_master = idMaster()
 
@@ -19,12 +22,17 @@ const id_master = idMaster()
 
 require("./css/index.scss")
 
-export default class Vagas extends React.Component {
+class Vagas extends React.Component {
 
     constructor(props) {
 
         super(props);
         this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
+
+        this.obs = observable({
+            candidato_vagas: []
+
+        })
 
     }
 
@@ -33,7 +41,9 @@ export default class Vagas extends React.Component {
         let tmp = 0, array = [], array2 = [];
 
         let res = await listVagas()
+        let res2 = await  listVagasAprovadas()
 
+        this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
 
         if (Array.isArray(res.data)) {
 
@@ -81,7 +91,7 @@ export default class Vagas extends React.Component {
         if (res.data.Ok) {
 
             channel.push("notify_send", { body: "Candidado se cadastrou na vaga x" })
-            
+
             AppToaster.show({ message: "Candidatura enviada com sucesso", intent: "success" });
             this.componentDidMount()
         } else if (res.data.erro) {
@@ -98,7 +108,7 @@ export default class Vagas extends React.Component {
         if (res.data.Ok) {
             AppToaster.show({ message: "Candidatura retirada com sucesso", intent: "success" });
             this.componentDidMount()
-        }else {
+        } else {
             AppToaster.show({ message: "Error, tente novamente mais tarde", intent: "danger" });
         }
     }
@@ -107,6 +117,11 @@ export default class Vagas extends React.Component {
 
         return arrCandidatos.indexOf(id_master) === -1
 
+    }
+
+    handleCandidatoAprovado(id) {
+        
+        return this.obs.candidato_vagas.indexOf(id) === -1
     }
 
     render() {
@@ -128,10 +143,18 @@ export default class Vagas extends React.Component {
                                         return (
 
                                             <Card key={index}>
-                                                <Card.Img  className={this.handleValidaCandidato(el2.candidatos) ? '': "candidatura-enviada" } variant="top" src={"data:image/png;base64," + el2.imagem_base64} />
+                                                {!this.handleCandidatoAprovado(el2.id) &&
+
+                                                    <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
+                                                        Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
+                                                    </Alert>
+
+                                                }
+                                                <Card.Img className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"} variant="top" src={"data:image/png;base64," + el2.imagem_base64} />
                                                 <Card.Body>
-                                                    <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? '': "candidatura-enviada" }>{el2.cidade}</Card.Title>
-                                                    <Card.Text className={this.handleValidaCandidato(el2.candidatos) ? '': "candidatura-enviada" }>
+
+                                                    <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>{el2.cidade}</Card.Title>
+                                                    <Card.Text className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>
                                                         {el2.descricao}
                                                     </Card.Text>
 
@@ -187,3 +210,5 @@ export default class Vagas extends React.Component {
         );
     }
 }
+
+export default observer(Vagas) 

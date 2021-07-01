@@ -49,7 +49,9 @@ defmodule LotusWeb.Router do
     post "/vagas-candidatar-se", VagasController, :insert_vaga_user
     delete "/vagas-delete-candidatura/:id", VagasController, :delete_candidatura_user
     put "/vagas-arovar-candidato/:id", VagasController, :aprovar_candidato
+    get "/lista-vagas-aprovadas", VagasController, :lista_vagas_aprovadas
     get "/lista-notificacoes", PerfilController, :lista_notificacoes
+  
     
    
    

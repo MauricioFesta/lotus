@@ -104,6 +104,25 @@ defmodule LotusWeb.VagasController do
         
     end
 
+    def lista_vagas_aprovadas(conn, _params) do
+
+        id_user = get_session(conn, "idUser");
+
+        cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = ?"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, [{"uuid", id_user}])
+         
+        if page |> Enum.at(0) != nil do
+        
+         json(conn, Enum.to_list(page))
+
+        else
+
+            json(conn, "Nenhuma vaga aprovada")
+
+        end
+        
+    end
 
     def insert_vaga_user(conn, params) do
 
@@ -171,7 +190,7 @@ defmodule LotusWeb.VagasController do
         
         cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}']+ notificacoes  WHERE id = #{params["id"]}"
        
-        case Vagas.aprovar_candidato_vaga(id, params["id_vaga"]) do
+        case Vagas.aprovar_candidato_vaga(params["id_user"], params["id_vaga"]) do
 
             true -> case Xandra.execute(CassPID, cql, _params = []) do
 

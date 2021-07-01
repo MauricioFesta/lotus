@@ -42,6 +42,8 @@ class CandidatosEmpresa extends React.Component {
 
         let res = await listVagasEmpresaId(url[3])
 
+        console.log(res)
+
         this.obs.id_vaga = url[3]
 
         this.setState({ candidatos: res.data })
@@ -95,8 +97,13 @@ class CandidatosEmpresa extends React.Component {
 
         }
 
+        const validaSelecionado = (arr_vagas) => {
 
-        function tornarSelecionado(id) {
+            return arr_vagas.indexOf(this.obs.id_vaga) === -1
+        }
+
+
+        function tornarSelecionado(id, arr_vagas) {
             return (
 
                 <Mui.IconButton onClick={() => confirmSelecionado(id)} color="primary" aria-label="upload picture" component="span">
@@ -133,18 +140,19 @@ class CandidatosEmpresa extends React.Component {
 
             let data = {
                 boolean: bol,
-                id_vaga: this.obs.id_vaga
+                id_vaga: this.obs.id_vaga,
+                id_user: id
             }
 
             let res = await candidatoAprovar(id, data)
 
             if (res.data.Ok) {
-                
+
                 channel.push("notify_send", { body: "Candidato aceito" })
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
 
-            }else{
+            } else {
                 AppToaster.show({ message: "Candidato já selecionado", intent: "warning" });
             }
 
@@ -194,7 +202,13 @@ class CandidatosEmpresa extends React.Component {
                                                 <div className='ui two buttons'>
 
                                                     {downloadFormatter(el.id)}
-                                                    {tornarSelecionado(el.id)}
+                                                    {validaSelecionado(el.vagas_aprovadas) ?
+                                                        tornarSelecionado(el.id)
+                                                        :
+                                                        candidatoSelecionado(el.id)
+                                                    }
+
+
 
                                                 </div>
                                             </Card.Content>
@@ -220,4 +234,4 @@ class CandidatosEmpresa extends React.Component {
     }
 }
 
-export default observer(CandidatosEmpresa) 
+export default observer(CandidatosEmpresa)

@@ -55,3 +55,10 @@ export const listNotificacoes = async () => {
     let result = await api.get("/api/lista-notificacoes")
     return result
 }
+
+export const listVagasAprovadas = async () => {
+
+    let result = await api.get("/api/lista-vagas-aprovadas")
+    return result
+
+}
