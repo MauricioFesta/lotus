@@ -3,11 +3,8 @@ defmodule LotusWeb.PostagensController do
 
     def cadastro_postagem(conn, params) do
 
-        new_params = params 
-        |> Map.put_new(:inserted_at,DateTime.utc_now |> DateTime.add(-10800))
-		|> Map.put_new(:updated_at,DateTime.utc_now |> DateTime.add(-10800))
-
-        {:ok, data} = JSON.encode(new_params) 
+     
+       {:ok, data} = JSON.encode(params) 
       
         cql =  "INSERT INTO lotus_dev.postagens JSON '#{data}'"
 

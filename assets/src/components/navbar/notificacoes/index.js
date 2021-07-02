@@ -3,6 +3,7 @@ import { Card, Feed } from 'semantic-ui-react'
 import { listNotificacoes } from "../../../stores/vagas/api"
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import * as Mui from "@material-ui/core"
 
 
 class Notificacoes extends React.Component {
@@ -45,12 +46,15 @@ class Notificacoes extends React.Component {
                                 return (
 
                                     <Feed.Event>
-                                        <Feed.Label image={"data:image/png;base64," + json.foto_base64} />
+                                        <Feed.Label>
+                                            <Mui.Avatar alt="Remy Sharp" src={"data:image/png;base64," + json.foto_base64} />
+
+                                        </Feed.Label>
                                         <Feed.Content>
                                             <Feed.Date content='1 day ago' />
                                             <Feed.Summary>
-                                               {json.notify}
-                                        </Feed.Summary>
+                                                {json.notify}
+                                            </Feed.Summary>
                                         </Feed.Content>
                                     </Feed.Event>
                                 )

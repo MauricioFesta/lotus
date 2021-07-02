@@ -8,24 +8,55 @@ import { perfilForm } from '../../actions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
+import * as Mui from "@material-ui/core"
+
+const useStyles = Mui.makeStyles((theme) => ({
+
+    large: {
+        width: theme.spacing(26),
+        height: theme.spacing(26),
+    },
+}));
+
+export function ImagePerfil(props) {
+
+    
+
+    const classes = useStyles();
+
+    return (
+
+        <Mui.Avatar alt="Remy Sharp" src={props.image} className={classes.large} />
+
+    );
+}
+
 
 class PerfilFoto extends React.Component {
 
+
+
     constructor(props) {
         super(props)
+
 
     }
 
 
     render() {
 
+
+
         return (
 
             <div>
 
-
                 <Figure>
-                    <Figure.Image
+
+                    <ImagePerfil image={Store.getState().perfilState.query.foto_base64 ? "data:image/png;base64," + Store.getState().perfilState.query.foto_base64
+                            : "images/perfil-avatar.jpg"} />
+
+                    {/* <Figure.Image
                         width={171}
                         height={180}
                         alt="171x180"
@@ -33,7 +64,7 @@ class PerfilFoto extends React.Component {
                         src={Store.getState().perfilState.query.foto_base64 ? "data:image/png;base64," + Store.getState().perfilState.query.foto_base64
                             : "images/perfil-avatar.jpg"}
 
-                    />
+                    /> */}
                     <Figure.Caption>
 
                         <Form.File onChange={(e) => this.props.perfilForm(e.target.files)} id="file" label="Alterar foto" />

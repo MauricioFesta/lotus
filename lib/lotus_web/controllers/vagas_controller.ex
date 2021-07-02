@@ -218,5 +218,4 @@ defmodule LotusWeb.VagasController do
     end
 
    
-
 end

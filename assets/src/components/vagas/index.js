@@ -4,6 +4,7 @@ import Navbar from "../navbar/index"
 import { listVagas,  listVagasAprovadas} from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { postCandidatarseVaga, deleteCandidatarseVaga } from "../../stores/vagas/api"
+import { getCurriculo } from "../../stores/curriculo/api";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -30,7 +31,8 @@ class Vagas extends React.Component {
         this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
 
         this.obs = observable({
-            candidato_vagas: []
+            candidato_vagas: [],
+            is_curriculo: false
 
         })
 
@@ -42,6 +44,13 @@ class Vagas extends React.Component {
 
         let res = await listVagas()
         let res2 = await  listVagasAprovadas()
+        let res3 = await getCurriculo()
+
+        if (res3.data.length > 0) {
+            this.obs.is_curriculo = true
+          }
+      
+        
 
         this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
 
@@ -69,6 +78,12 @@ class Vagas extends React.Component {
     }
 
     async candidatarSeVaga(id) {
+
+        if(!this.obs.is_curriculo ){
+
+            AppToaster.show({ message: "Você precia ter um currículo cadastrado para se candidatar", intent: "warning" });
+            return
+        }
 
         let channel = socket.channel("notify:open");
 
@@ -170,6 +185,9 @@ class Vagas extends React.Component {
                                                         </Mui.Button>
 
                                                         :
+
+                                                        this.handleCandidatoAprovado(el2.id) &&
+
                                                         <Mui.Button
                                                             size="small"
                                                             variant="contained"
