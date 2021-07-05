@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Card, CardDeck } from 'react-bootstrap';
+import { Button, Card, CardDeck, Row, Form, Col } from 'react-bootstrap';
 import Navbar from "../navbar/index"
-import { listVagas,  listVagasAprovadas} from "../../stores/vagas/api"
+import { listVagas, listVagasAprovadas } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { postCandidatarseVaga, deleteCandidatarseVaga } from "../../stores/vagas/api"
 import { getCurriculo } from "../../stores/curriculo/api";
@@ -17,8 +17,12 @@ import Alert from '@material-ui/lab/Alert';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 
-const id_master = idMaster()
+import FilterLocation from "./filters/location"
+import Setor from "./filters/setor"
+import Empresa from "./filters/empresa"
 
+
+const id_master = idMaster()
 
 
 require("./css/index.scss")
@@ -43,14 +47,14 @@ class Vagas extends React.Component {
         let tmp = 0, array = [], array2 = [];
 
         let res = await listVagas()
-        let res2 = await  listVagasAprovadas()
+        let res2 = await listVagasAprovadas()
         let res3 = await getCurriculo()
 
         if (res3.data.length > 0) {
             this.obs.is_curriculo = true
-          }
-      
-        
+        }
+
+
 
         this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
 
@@ -79,7 +83,7 @@ class Vagas extends React.Component {
 
     async candidatarSeVaga(id) {
 
-        if(!this.obs.is_curriculo ){
+        if (!this.obs.is_curriculo) {
 
             AppToaster.show({ message: "Você precia ter um currículo cadastrado para se candidatar", intent: "warning" });
             return
@@ -135,17 +139,62 @@ class Vagas extends React.Component {
     }
 
     handleCandidatoAprovado(id) {
-        
+
         return this.obs.candidato_vagas.indexOf(id) === -1
     }
 
     render() {
+
 
         return (
 
             <div>
 
                 <div className="container mt-4 scroll-card">
+
+
+                    <Form className="mt-4">
+
+                        <Form.Row>
+                            <Col>
+                                <Form.Group as={Col} controlId="formSetor">
+
+                                    <Setor />
+
+                                    <Form.Text className="text-muted">
+                                        Selecione os setores para o filtro.
+                                    </Form.Text>
+
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group as={Col} controlId="formSetor">
+
+                                    <Empresa />
+
+                                    <Form.Text className="text-muted">
+                                        Selecione as empresas para o filtro.
+                                    </Form.Text>
+
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group as={Col} controlId="formLocation">
+
+                                    <Form.Label>Endereço</Form.Label>
+
+                                    <FilterLocation size="small" />
+                                    <Form.Text className="text-muted">
+                                        Selecione estado ou cidade para o filtro.
+                                </Form.Text>
+
+                                </Form.Group>
+                            </Col>
+                        </Form.Row>
+
+                    </Form>
+
+
 
                     {this.state.vagas.map((el, index) => {
 
@@ -229,4 +278,4 @@ class Vagas extends React.Component {
     }
 }
 
-export default observer(Vagas) 
+export default observer(Vagas)
