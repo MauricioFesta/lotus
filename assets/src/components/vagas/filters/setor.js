@@ -150,7 +150,7 @@ export default function Setor() {
     <NoSsr>
       <div>
         <div {...getRootProps()}>
-          <Label {...getInputLabelProps()}>Filtro por Empresas</Label>
+          <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
           <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
               <Tag label={option.title} {...getTagProps({ index })} />
