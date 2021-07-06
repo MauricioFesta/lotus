@@ -1,6 +1,7 @@
 
 pub mod cassandra{
     pub mod connect;
+    pub mod queries;
 }
 
 
@@ -10,9 +11,10 @@ fn add(a: i64, b: i64) -> i64 {
 }
 
 #[rustler::nif]
-fn get_value(a: &str){
-
-    cassandra::connect::main(a)
+fn get_value(){
+  
+    cassandra::connect::main()
+    // cassandra::connect::create_keyspace()
 
 }
 
