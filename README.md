@@ -8,6 +8,7 @@ Postegress
 Node Version: 10.19.0
 Npm
 Git
+rustc 1.53.0
 
 Dependencias LINUX:
 Python3,
