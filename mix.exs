@@ -7,7 +7,8 @@ defmodule Lotus.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext, :rustler] ++ Mix.compilers(),
+      rustler_crates: [mynif: []],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -49,7 +50,8 @@ defmodule Lotus.MixProject do
       {:quantum, "~> 3.0"}, 
       {:uuid, "~> 1.1" },
       {:erlport, "~> 0.9"},
-      {:xandra, "~> 0.13.1"}
+      {:xandra, "~> 0.13.1"},
+      {:rustler, "~> 0.22.0"}
     
     ]
   end

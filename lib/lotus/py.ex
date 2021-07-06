@@ -1,5 +1,5 @@
 defmodule Lotus.Py do
-  
+    alias Lotus
     def clear_Pdf_tmp do 
 
         path =
@@ -11,6 +11,13 @@ defmodule Lotus.Py do
             :python.call(pid, :files, :removeFilesPdfTmp, []) |> IO.inspect
             :python.stop(pid)
         end
+    end
+
+    def teste do
+        
+        Lotus.LotusRust.Back.add(12, 12) |> IO.inspect
+
+
     end
 
 end

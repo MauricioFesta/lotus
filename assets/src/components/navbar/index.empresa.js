@@ -33,8 +33,8 @@ export default class NavbarEmpresa extends React.Component {
 
 
     channel.on("notify_send", payload => {
-  
-      alert(payload.body)
+      console.log("chegouuu")
+      // alert(payload.body)
 
     })
   }
