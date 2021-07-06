@@ -15,7 +15,8 @@ defmodule Lotus.Py do
 
     def teste do
         
-        Lotus.LotusRust.Back.add(12, 12) |> IO.inspect
+        LotusRust.Back.add(12, 12) |> IO.inspect
+        LotusRust.Back.get_value("Ola mundo!!!") |> IO.inspect
 
 
     end
