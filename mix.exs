@@ -51,7 +51,8 @@ defmodule Lotus.MixProject do
       {:uuid, "~> 1.1" },
       {:erlport, "~> 0.9"},
       {:xandra, "~> 0.13.1"},
-      {:rustler, "~> 0.22.0"}
+      {:rustler, "~> 0.22.0"},
+      {:distillery, "~> 2.1"},
     
     ]
   end
