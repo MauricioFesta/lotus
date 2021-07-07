@@ -21,8 +21,8 @@ type CurrentSession = Session<RoundRobin<TcpConnectionPool<StaticPasswordAuthent
 #[derive(Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
 pub struct RowStruct {
     
-    email: String,
-    nome: String,
+    pub email: String,
+    pub nome: String,
   
 }
 

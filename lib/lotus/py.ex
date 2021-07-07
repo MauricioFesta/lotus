@@ -18,7 +18,9 @@ defmodule Lotus.Py do
         # LotusRust.Back.add(12, 12) |> IO.inspect
     
     
-       LotusRust.Back.get_value()
+      ret = LotusRust.Back.get_value()
+
+      Enum.map(ret, fn x -> x |> JSON.decode! end)
 
       
     end
