@@ -17,25 +17,15 @@ use cdrs::types::prelude::*;
 
 type CurrentSession = Session<RoundRobin<TcpConnectionPool<StaticPasswordAuthenticator>>>;
 
-pub fn main() {
-    let user = "user";
-    let password = "password";
-    let auth = StaticPasswordAuthenticator::new(&user, &password);
-    let node = NodeTcpConfigBuilder::new("localhost:9042", auth).build();
-    let cluster_config = ClusterTcpConfig(vec![node]);
-    let no_compression: CurrentSession =
-        new_session(&cluster_config, RoundRobin::new()).expect("session should be created");
-
-    select_filtro(&no_compression);
-  
-}
 
 #[derive(Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
-struct RowStruct {
+pub struct RowStruct {
+    
     email: String,
     nome: String,
   
 }
+
 
 impl RowStruct {
     fn into_query_values(self) -> QueryValues {
@@ -43,15 +33,20 @@ impl RowStruct {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, IntoCDRSValue, TryFromUDT)]
-struct User {
-    username: String,
-}
+pub fn get_user() -> Vec<RowStruct>  {
 
+    let user = "user";
+    let password = "password";
+    let auth = StaticPasswordAuthenticator::new(&user, &password);
+    let node = NodeTcpConfigBuilder::new("localhost:9042", auth).build();
+    let cluster_config = ClusterTcpConfig(vec![node]);
+    let no_compression: CurrentSession =
 
-fn select_filtro(session: &CurrentSession) {
-    let select_struct_cql = "SELECT * FROM lotus_dev.user";
-    let rows = session
+        new_session(&cluster_config, RoundRobin::new()).expect("session should be created");
+
+        let select_struct_cql = "SELECT * FROM lotus_dev.user";
+
+        let rows = no_compression
         .query(select_struct_cql)
         .expect("query")
         .get_body()
@@ -59,11 +54,22 @@ fn select_filtro(session: &CurrentSession) {
         .into_rows()
         .expect("into rows");
 
-    for row in rows {
-        
-        let my_row: RowStruct = RowStruct::try_from_row(row).expect("into RowStruct");
-        println!("[{:?}]", my_row);
-    }
+        let mut rows_vec = vec![];
+
+        for row in rows {
     
+            let my_row: RowStruct = RowStruct::try_from_row(row).expect("into RowStruct");
+            rows_vec.push(my_row)
+            
+        }
+       
+        rows_vec 
+  
 }
+
+
+
+
+
+
 

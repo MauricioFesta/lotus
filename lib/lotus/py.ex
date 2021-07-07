@@ -18,12 +18,9 @@ defmodule Lotus.Py do
         # LotusRust.Back.add(12, 12) |> IO.inspect
     
     
-       ret = LotusRust.Back.get_value()
+       LotusRust.Back.get_value()
 
-       is_binary(ret)
-       
-    
-
+      
     end
 
 end

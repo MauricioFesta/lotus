@@ -10,9 +10,13 @@ pub fn add(a: i64, b: i64) -> i64 {
 }
 
 #[rustler::nif]
-pub fn get_value(){
-  
-    cassandra::vagas_filtros::main();
+pub fn get_value()  {
+
+   let vec_user = cassandra::vagas_filtros::get_user();
+
+//    vec_user;
+   
+    println!("{:?}", vec_user);
 
 }
 
