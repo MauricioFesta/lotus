@@ -1,7 +1,6 @@
 
 pub mod cassandra{
-    pub mod connect;
-    pub mod queries;
+    pub mod vagas_filtros;
 }
 
 
@@ -13,9 +12,8 @@ pub fn add(a: i64, b: i64) -> i64 {
 #[rustler::nif]
 pub fn get_value(){
   
-    cassandra::connect::main();
-    
-    
+    cassandra::vagas_filtros::main();
+
 }
 
 
