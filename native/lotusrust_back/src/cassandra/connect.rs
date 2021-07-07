@@ -1,4 +1,3 @@
-
 use cdrs::*;
 use cdrs_helpers_derive::*;
 
@@ -19,21 +18,22 @@ use cdrs::types::prelude::*;
 type CurrentSession = Session<RoundRobin<TcpConnectionPool<StaticPasswordAuthenticator>>>;
 
 pub fn main() {
-    let user = "";
-    let password = "";
+    let user = "user";
+    let password = "password";
     let auth = StaticPasswordAuthenticator::new(&user, &password);
     let node = NodeTcpConfigBuilder::new("localhost:9042", auth).build();
     let cluster_config = ClusterTcpConfig(vec![node]);
     let no_compression: CurrentSession =
         new_session(&cluster_config, RoundRobin::new()).expect("session should be created");
 
+        
     create_keyspace(&no_compression);
-    create_udt(&no_compression);
-    create_table(&no_compression);
-    insert_struct(&no_compression);
-    select_struct(&no_compression);
-    update_struct(&no_compression);
-    delete_struct(&no_compression);
+    // create_udt(&no_compression);
+    // create_table(&no_compression);
+    // insert_struct(&no_compression);
+    // select_struct(&no_compression);
+    // update_struct(&no_compression);
+    // delete_struct(&no_compression);
 }
 
 #[derive(Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
@@ -55,8 +55,8 @@ struct User {
     username: String,
 }
 
-pub fn create_keyspace(session: &CurrentSession) {
-    let create_ks: &'static str = "CREATE KEYSPACE IF NOT EXISTS test_ks WITH REPLICATION = { \
+fn create_keyspace(session: &CurrentSession) {
+    let create_ks: &'static str = "CREATE KEYSPACE IF NOT EXISTS jbs WITH REPLICATION = { \
                                    'class' : 'SimpleStrategy', 'replication_factor' : 1 };";
     session.query(create_ks).expect("Keyspace creation error");
 }
