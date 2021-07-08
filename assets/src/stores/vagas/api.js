@@ -69,3 +69,9 @@ export const listVagasAprovadas = async () => {
     return result
 
 }
+
+export const filterSetor = async (data) => {
+
+    let result = await api.post("/api/vagas-filter-setor", data)
+    return result
+}

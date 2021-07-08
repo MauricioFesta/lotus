@@ -9,6 +9,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
 import Notificacoes from "./notificacoes/index"
 import socket from '../socket';
+require("./css/index.scss")
 
 export default class Navbar extends React.Component {
 
@@ -51,7 +52,7 @@ export default class Navbar extends React.Component {
 
 
 
-      <nav className="bp3-navbar bp3-dark">
+      <nav className="bp3-navbar bp3-dark layout-default">
 
 
         <div styles="margin: 0 auto; width: 480px;">

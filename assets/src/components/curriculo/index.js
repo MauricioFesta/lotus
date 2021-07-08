@@ -190,9 +190,8 @@ export default class Curriculo extends React.Component {
 
       <>
 
-        <Container className="mt-4">
-
-          <Jumbotron className="mt-4">
+      
+          <Jumbotron className="ml-4 mr-4 mt-4">
 
 
             <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
@@ -239,7 +238,7 @@ export default class Curriculo extends React.Component {
             </Card.Group>
 
           </Jumbotron>
-        </Container>
+
 
       </>
 

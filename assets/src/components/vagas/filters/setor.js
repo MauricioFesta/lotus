@@ -5,6 +5,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
+import {filterSetor} from "../../../stores/vagas/api"
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -126,7 +127,7 @@ const Listbox = styled('ul')`
   }
 `;
 
-export default function Setor() {
+export default function Setor(props) {
   const {
     getRootProps,
     getInputLabelProps,
@@ -138,16 +139,20 @@ export default function Setor() {
     value,
     focused,
     setAnchorEl,
+    
   } = useAutocomplete({
-    id: 'customized-hook-demo',
+    id: 'customized-auto-complete',
     defaultValue: [top100Films[1]],
     multiple: true,
     options: top100Films,
     getOptionLabel: (option) => option.title,
   });
 
-  const handleSendFilter = () =>{
-    console.log(value)
+  const handleSendFilter = async (current) =>{
+    let arr_tmp = [...value, current]
+    // props.getVagas()
+    // let res =  await filterSetor()
+    
   }
   
   return (
@@ -157,17 +162,18 @@ export default function Setor() {
           <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
           <InputWrapper  ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
-              <Tag label={option.title} {...getTagProps({ index })} />
+            
+              <Tag onClick={() => handleSendFilter(option)} label={option.title} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
           </InputWrapper>
         </div>
         {groupedOptions.length > 0 ? (
-          <Listbox onClick={() => handleSendFilter()} {...getListboxProps()}>
+          <Listbox {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
-                <span>{option.title}</span>
+                <span onClick={() => handleSendFilter(option)}>{option.title}</span>
                 <CheckIcon fontSize="small" />
               </li>
             ))}

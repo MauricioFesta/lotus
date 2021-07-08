@@ -38,7 +38,7 @@ export default class Postagens extends React.Component {
 
             <div>
 
-                <div className="container mt-4 scroll-card">
+                <div className="ml-4 mr-4 mt-4 scroll-card">
 
                     {this.state.data.map((el, index) => {
                         return (

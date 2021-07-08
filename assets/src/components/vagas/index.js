@@ -44,9 +44,18 @@ class Vagas extends React.Component {
 
     async componentDidMount() {
 
+        this.getVagas()
+
+    }
+
+    async getVagas(){
+
+        console.log("chamou")
+
         let tmp = 0, array = [], array2 = [];
 
         let res = await listVagas()
+      
         let res2 = await listVagasAprovadas()
         let res3 = await getCurriculo()
 
@@ -54,8 +63,7 @@ class Vagas extends React.Component {
             this.obs.is_curriculo = true
         }
 
-
-
+       
         this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
 
         if (Array.isArray(res.data)) {
@@ -150,7 +158,7 @@ class Vagas extends React.Component {
 
             <div>
 
-                <div className="container mt-4 scroll-card">
+                <div className="ml-4 mr-4 mt-4 scroll-card">
 
 
                     <Form className="mt-4">
@@ -159,7 +167,7 @@ class Vagas extends React.Component {
                             <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
-                                    <Setor />
+                                    <Setor getVagas={this.getVagas} />
 
                                     <Form.Text className="text-muted">
                                         Selecione os setores para o filtro.
@@ -206,7 +214,7 @@ class Vagas extends React.Component {
 
                                         return (
 
-                                            <Card key={index}>
+                                            <Card className="vagas-cards" key={index}>
                                                 {!this.handleCandidatoAprovado(el2.id) &&
 
                                                     <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
@@ -217,7 +225,7 @@ class Vagas extends React.Component {
                                                 <Card.Img className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"} variant="top" src={"data:image/png;base64," + el2.imagem_base64} />
                                                 <Card.Body>
 
-                                                    <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>{el2.cidade}</Card.Title>
+                                                    <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? 'vagas-cards-title' : "candidatura-enviada vagas-cards-title"}>{el2.cidade}</Card.Title>
                                                     <Card.Text className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>
                                                         {el2.descricao}
                                                     </Card.Text>
@@ -230,7 +238,7 @@ class Vagas extends React.Component {
                                                             endIcon={<SendIcon />}
                                                             onClick={() => this.candidatarSeVaga(el2.id)}
                                                         >
-                                                            Candidatar
+                                                            Candidatar-se
                                                         </Mui.Button>
 
                                                         :
