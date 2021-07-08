@@ -11,8 +11,6 @@
 # production
 /build
 
-priv/native/
-
 # misc
 .DS_Store
 .env.local
