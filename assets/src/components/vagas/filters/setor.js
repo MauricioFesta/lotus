@@ -146,12 +146,16 @@ export default function Setor() {
     getOptionLabel: (option) => option.title,
   });
 
+  const handleSendFilter = () =>{
+    console.log(value)
+  }
+  
   return (
-    <NoSsr>
+    <NoSsr >
       <div>
         <div {...getRootProps()}>
           <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
-          <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
+          <InputWrapper  ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
               <Tag label={option.title} {...getTagProps({ index })} />
             ))}
@@ -160,7 +164,7 @@ export default function Setor() {
           </InputWrapper>
         </div>
         {groupedOptions.length > 0 ? (
-          <Listbox {...getListboxProps()}>
+          <Listbox onClick={() => handleSendFilter()} {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
                 <span>{option.title}</span>
