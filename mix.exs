@@ -8,7 +8,7 @@ defmodule Lotus.MixProject do
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext, :rustler] ++ Mix.compilers(),
-      rustler_crates: [mynif: []],
+      rustler_crates: rustler_crates(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -69,6 +69,14 @@ defmodule Lotus.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+    ]
+  end
+
+  defp rustler_crates do
+    [
+      notazap: [
+        path: "native/lotusrust_back"
+      ]
     ]
   end
 end

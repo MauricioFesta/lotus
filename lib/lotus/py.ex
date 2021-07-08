@@ -18,7 +18,7 @@ defmodule Lotus.Py do
         # LotusRust.Back.add(12, 12) |> IO.inspect
     
     
-      ret = LotusRust.Back.get_value()
+      ret = LotusRust.Back.get_filtro_vagas("56169957-9a1d-4324-a043-d98795b73774")
 
       Enum.map(ret, fn x -> x |> JSON.decode! end)
 

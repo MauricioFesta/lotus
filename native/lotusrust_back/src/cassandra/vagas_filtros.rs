@@ -23,12 +23,12 @@ impl RowStruct {
     }
 }
 
-pub fn get_user() -> Vec<String>  {
+pub fn get_filtro_vagas_db(id: &str) -> Vec<String>  {
 
    
     let no_compression = connect::conn();
 
-    let select_struct_cql = "SELECT * FROM lotus_dev.user";
+    let select_struct_cql =  format!("SELECT * FROM lotus_dev.user WHERE id = {}", id);
 
         let rows = no_compression
         .query(select_struct_cql)
