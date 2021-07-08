@@ -1,21 +1,11 @@
 use cdrs::*;
 use cdrs_helpers_derive::*;
-
-use maplit::*;
-
-use std::collections::HashMap;
-
-use cdrs::authenticators::StaticPasswordAuthenticator;
-use cdrs::cluster::session::{new as new_session, Session};
-use cdrs::cluster::{ClusterTcpConfig, NodeTcpConfigBuilder, TcpConnectionPool};
-use cdrs::load_balancing::RoundRobin;
 use cdrs::query::*;
-
 use cdrs::frame::IntoBytes;
 use cdrs::types::from_cdrs::FromCDRSByName;
 use cdrs::types::prelude::*;
 
-type CurrentSession = Session<RoundRobin<TcpConnectionPool<StaticPasswordAuthenticator>>>;
+use super::connect;
 
 
 #[derive(Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
@@ -33,18 +23,12 @@ impl RowStruct {
     }
 }
 
-pub fn get_user() -> Vec<RowStruct>  {
+pub fn get_user() -> Vec<String>  {
 
-    let user = "user";
-    let password = "password";
-    let auth = StaticPasswordAuthenticator::new(&user, &password);
-    let node = NodeTcpConfigBuilder::new("localhost:9042", auth).build();
-    let cluster_config = ClusterTcpConfig(vec![node]);
-    let no_compression: CurrentSession =
+   
+    let no_compression = connect::conn();
 
-        new_session(&cluster_config, RoundRobin::new()).expect("session should be created");
-
-        let select_struct_cql = "SELECT * FROM lotus_dev.user";
+    let select_struct_cql = "SELECT * FROM lotus_dev.user";
 
         let rows = no_compression
         .query(select_struct_cql)
@@ -54,17 +38,21 @@ pub fn get_user() -> Vec<RowStruct>  {
         .into_rows()
         .expect("into rows");
 
-        let mut rows_vec = vec![];
+        let mut arr_vec = Vec::new();
 
         for row in rows {
     
             let my_row: RowStruct = RowStruct::try_from_row(row).expect("into RowStruct");
-            rows_vec.push(my_row)
+            let str_format = format!("{{\"nome\": \"{}\",\"email\": {}}}", my_row.nome, my_row.email);
+           
+            arr_vec.push(str_format);
+            
             
         }
-       
-        rows_vec 
-  
+
+
+        arr_vec
+      
 }
 
 
