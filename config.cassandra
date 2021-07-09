@@ -29,6 +29,7 @@ CREATE TABLE lotus_dev.curriculo(
 
 CREATE TABLE lotus_dev.vagas(
    id uuid,
+   id_tmp varchar,
    descricao varchar,
    empresa_id varchar,
    valor int,

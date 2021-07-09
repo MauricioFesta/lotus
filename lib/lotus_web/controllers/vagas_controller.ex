@@ -2,6 +2,7 @@ defmodule LotusWeb.VagasController do
     use LotusWeb, :controller
     alias Lotus.Vagas
     alias LotusWeb.PerfilController
+    alias Lotus
     
     def cadastro_vagas(conn, params) do
 
@@ -22,6 +23,7 @@ defmodule LotusWeb.VagasController do
         new_params = %{} 
 
         |> Map.put(:id, params["id"])
+        |> Map.put(:id_tmp, params["id_tmp"])
         |> Map.put(:descricao, params["descricao"])
         |> Map.put(:cidade, params["cidade"])
         |> Map.put(:turno, params["turno"])
@@ -51,19 +53,11 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas(conn, _) do
 
-        cql = "SELECT * FROM lotus_dev.vagas"
+        ret = LotusRust.Back.get_list_vagas()
 
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
-         
-        if page |> Enum.at(0) != nil do
-        
-         json(conn, Enum.to_list(page))
+        new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
 
-        else
-
-            json(conn, "Nenhuma vaga encontrada")
-
-        end
+        json(conn, new_ret)
 
     end
 

@@ -51,7 +51,7 @@ export default class NavbarEmpresa extends React.Component {
 
     return (
 
-      <nav className="bp3-navbar bp3-dark">
+      <nav className="bp3-navbar bp3-dark layout-default">
 
 
         <div styles="margin: 0 auto; width: 480px;">

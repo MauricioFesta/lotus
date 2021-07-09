@@ -36,4 +36,5 @@ npm-debug.log
 #Pdfs temporarios
 assets/public/pdf_tmp/
 
-priv/native/
+/priv/native/
+

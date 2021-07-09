@@ -10,6 +10,8 @@ import { postCadastroVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { v4 as uuidv4 } from 'uuid';
 
+
+
 import { ReactReduxContext } from 'react-redux';
 const currencyConfig = {
     locale: "pt-BR",
@@ -49,8 +51,10 @@ export default class CreateEmpresa extends React.Component {
         let formData = new FormData();
 
         let file = document.querySelector('#file');
-
-        formData.append("id", uuidv4());
+        const id = uuidv4()
+     
+        formData.append("id", id);
+        formData.append("id_tmp", id);
         formData.append("file", file.files[0]);
         formData.append("valor", $("#valor-vaga").val().slice(3).replaceAll(".", "").replace(",", ""));
         formData.append("descricao", $("#descricao").val());
