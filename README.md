@@ -14,4 +14,13 @@ Dependencias LINUX:
 Python3,
 Apache Cassandra,
 
+Install especific version for Elixir in windows: https://chocolatey.org/install  https://www.erlang-solutions.com/downloads/
+Install especific version for Elixir and Erlang in windows and Linux:   https://www.erlang-solutions.com/downloads/
+
+Windows error rust:
+cmd line:
+rustup toolchain install stable-x86_64-pc-windows-gnu
+rustup default stable-x86_64-pc-windows-gnu
+ 
+
 ## Learn more
