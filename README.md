@@ -1,26 +1,20 @@
-# Lotus Dependencias
+# Lotus
 
-Elixir Version: 1.12.0,
-Erlang Version: 24,
-Terminal Version: erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell
-Cassandra Version: 3.4.5
-Postegress
-Node Version: 10.19.0
-Npm
-Git
-rustc 1.53.0
+To start your Phoenix server:
 
-Dependencias LINUX:
-Python3,
-Apache Cassandra,
+  * Install dependencies with `mix deps.get`
+  * Start Phoenix endpoint with `mix phx.server`
 
-Install especific version for Elixir in windows: https://chocolatey.org/install  https://www.erlang-solutions.com/downloads/
-Install especific version for Elixir and Erlang in windows and Linux:   https://www.erlang-solutions.com/downloads/
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+# React
+Now you can visit [`localhost:3000`](http://localhost:3000) from your browser.
 
-Windows error rust:
-cmd line:
-rustup toolchain install stable-x86_64-pc-windows-gnu
-rustup default stable-x86_64-pc-windows-gnu
- 
+Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 ## Learn more
+
+  * Official website: https://www.phoenixframework.org/
+  * Guides: https://hexdocs.pm/phoenix/overview.html
+  * Docs: https://hexdocs.pm/phoenix
+  * Forum: https://elixirforum.com/c/phoenix-forum
+  * Source: https://github.com/phoenixframework/phoenix
