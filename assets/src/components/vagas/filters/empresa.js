@@ -187,7 +187,6 @@ function Empresa(props) {
       
     }
 
-    console.log(arr_tmp)
 
     let tmp = []
 

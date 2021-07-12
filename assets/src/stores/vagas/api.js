@@ -70,9 +70,9 @@ export const listVagasAprovadas = async () => {
 
 }
 
-export const filterSetor = async (data) => {
+export const filterRamo = async (data) => {
 
-    let result = await api.post("/api/vagas-filter-setor", data)
+    let result = await api.post("/api/vagas-filter-ramo", data)
     return result
 }
 

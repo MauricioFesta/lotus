@@ -85,6 +85,40 @@ pub fn get_filtro_vagas_empresa_db(ids: &str) -> Vec<String>  {
       
 }
 
+pub fn get_filtro_vagas_ramo_db(ids: &str) -> Vec<String>  {
+
+   
+    let no_compression = connect::conn();
+
+    println!("{}", ids);
+
+    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE ramo in {} ALLOW FILTERING", ids);
+
+        let rows = no_compression
+        .query(select_struct_cql)
+        .expect("query")
+        .get_body()
+        .expect("get body")
+        .into_rows()
+        .expect("into rows");
+
+        let mut arr_vec = Vec::new();
+
+        for row in rows {
+    
+            let my_row: RowStructVagas = RowStructVagas::try_from_row(row).expect("into RowStruct");
+            let encoded = json::encode(&my_row).unwrap();
+
+            arr_vec.push(encoded);
+            
+            
+        }
+
+
+        arr_vec
+      
+}
+
 pub fn get_vagas_db() ->  Vec<String>  {
 
     let no_compression = connect::conn();

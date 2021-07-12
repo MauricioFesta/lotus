@@ -21,6 +21,16 @@ pub fn get_filtro_vagas_empresa(ids: &str) -> Vec<String>  {
    
 }
 
+
+#[rustler::nif]
+pub fn get_filtro_vagas_ramo(ramos: &str) -> Vec<String>  {
+
+   let vec_user = cassandra::vagas::get_filtro_vagas_ramo_db(ramos);
+ 
+   vec_user
+   
+}
+
 #[rustler::nif]
 pub fn get_list_vagas() -> Vec<String> {
 
@@ -32,4 +42,4 @@ pub fn get_list_vagas() -> Vec<String> {
 
 
 
-rustler::init!("Elixir.LotusRust.Back", [add, get_filtro_vagas_empresa, get_list_vagas]);
+rustler::init!("Elixir.LotusRust.Back", [add, get_filtro_vagas_empresa, get_list_vagas, get_filtro_vagas_ramo]);

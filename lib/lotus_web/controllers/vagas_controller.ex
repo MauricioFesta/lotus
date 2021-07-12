@@ -28,6 +28,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:cidade, params["cidade"])
         |> Map.put(:turno, params["turno"])
         |> Map.put(:estado, params["estado"])
+        |> Map.put(:ramo, params["ramo"])
         |> Map.put(:imagem_base64, file64)
         |> Map.put(:valor, _valor) 
         |> Map.put(:empresa_id, id_user)
@@ -90,6 +91,17 @@ defmodule LotusWeb.VagasController do
 
         
 
+    end
+
+    def filter_ramo(conn, params) do
+
+        ret = LotusRust.Back.get_filtro_vagas_ramo(params["tuple"])
+
+        new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
+
+        json(conn, new_ret)
+
+        
     end
 
     def list_vagas_empresa(conn,_) do
@@ -241,6 +253,8 @@ defmodule LotusWeb.VagasController do
         end
 
     end
+
+ 
 
    
 end

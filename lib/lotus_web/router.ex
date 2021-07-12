@@ -53,6 +53,7 @@ defmodule LotusWeb.Router do
     get "/lista-vagas-aprovadas", VagasController, :lista_vagas_aprovadas
     get "/vagas-all-empresas", VagasController, :lista_all_empresas
     post "/vagas-filter-empresa", VagasController, :filter_empresa
+    post "/vagas-filter-ramo", VagasController, :filter_ramo
     get "/lista-notificacoes", PerfilController, :lista_notificacoes
   
 

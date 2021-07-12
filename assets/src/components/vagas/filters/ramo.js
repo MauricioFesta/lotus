@@ -7,6 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import { filterRamo } from "../../../stores/vagas/api"
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -128,14 +129,17 @@ const Listbox = styled('ul')`
   }
 `;
 
-function Setor(props) {
+function Ramo(props) {
 
   const obs = observable({
-    data_empresas: props.empresas
+    data_ramo: [
+      { title: 'Alimentos', subtitle: "alimentos"},
+      { title: 'Metalurgicos',subtitle: "metalurgicos" },
+      { title: 'Comércio',subtitle: "comercio"}
+      ]
 
   })
 
- 
 
   const {
     getRootProps,
@@ -153,18 +157,60 @@ function Setor(props) {
     id: 'customized-auto-complete',
     // defaultValue: [top100Films[1]],
     multiple: true,
-    options: obs.data_empresas,
-    getOptionLabel: (option) => option.nome,
+    options: obs.data_ramo,
+    getOptionLabel: (option) => option.title,
   });
 
-  const handleSendFilter = async (current) => {
+  const handleSendFilter = async (current, bol) => {
 
-  
-    let arr_tmp = [...value, current]
-    console.log(arr_tmp)
-    console.log(obs.data_empresas)
-    // props.getVagas()
-    // let res =  await filterSetor()
+    let arr_tmp = []
+
+    if (!bol) {
+
+      value.map((el, index) => {
+
+        if(el.subtitle === current.subtitle){
+          
+          value.splice(index, 1)
+          return;
+        }
+
+
+      })
+
+      arr_tmp = [...value]
+
+      if (value.length === 0) {
+       
+        props.getVagas()
+        return;
+
+      }
+
+    }else{
+
+      arr_tmp = [...value, current]
+      
+    }
+
+
+    let tmp = []
+
+    arr_tmp.map(el => {
+
+      tmp.push(`'${el.subtitle}'`)
+
+    })
+
+    let data = {
+      tuple: `(${tmp.join(",")})`
+    }
+
+    console.log(data)
+
+    let res = await filterRamo(data)
+
+    props.getVagas(res)
 
   }
 
@@ -176,7 +222,7 @@ function Setor(props) {
           <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
 
-              <Tag onClick={() => handleSendFilter(option)} label={option.nome} {...getTagProps({ index })} />
+              <Tag onClick={() => handleSendFilter(option, false)} label={option.title} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
@@ -186,7 +232,7 @@ function Setor(props) {
           <Listbox {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
-                <span onClick={() => handleSendFilter(option)}>{option.nome}</span>
+                <span onClick={() => handleSendFilter(option, true)}>{option.title}</span>
                 <CheckIcon fontSize="small" />
               </li>
             ))}
@@ -198,4 +244,4 @@ function Setor(props) {
 }
 
 
-export default observer(Setor)
+export default observer(Ramo)

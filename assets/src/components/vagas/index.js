@@ -18,7 +18,7 @@ import { observable } from 'mobx';
 import { observer } from "mobx-react";
 
 import FilterLocation from "./filters/location"
-import Setor from "./filters/setor"
+import Ramo from "./filters/ramo"
 import Empresa from "./filters/empresa"
 import { allEmpresas } from "../../stores/vagas/api"
 
@@ -181,7 +181,7 @@ class Vagas extends React.Component {
                             <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
-                                    <Setor empresas={this.obs.data_empresas} getVagas={this.getVagas} />
+                                    <Ramo empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
                                     <Form.Text className="text-muted">
                                         Selecione os setores para o filtro.

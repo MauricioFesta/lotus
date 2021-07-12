@@ -61,6 +61,7 @@ export default class CreateEmpresa extends React.Component {
         formData.append("cidade", $("#cidade").val());
         formData.append("turno", $("#turno").val());
         formData.append("estado", $("#estado").val());
+        formData.append("ramo", $("#ramo").val());
         formData.append("disponibilidade_viajar", $("#disponibilidade").prop("checked").toString());
         formData.append("planejamento_futuro", $("#planejamento").prop("checked").toString());
 
@@ -136,6 +137,15 @@ export default class CreateEmpresa extends React.Component {
                                     <option>Selecione</option>
                                     <option>RS</option>
                                     <option>SP</option>
+                                </Form.Control>
+                            </Form.Group>
+
+                            <Form.Group as={Col}>
+                                <Form.Label>Ramo: (obrigatório)</Form.Label>
+                                <Form.Control id="ramo" as="select" defaultValue="Choose...">
+                                    <option value="metalurgico">Metalúrgico</option>
+                                    <option value="comercio">Comércio</option>
+                                    <option value="alimentos">Alimentos</option>
                                 </Form.Control>
                             </Form.Group>
 
