@@ -133,12 +133,11 @@ defmodule LotusWeb.CurriculoController do
         id_user =  get_session(conn, "idUser") |> IO.inspect
      
         cql = "UPDATE lotus_dev.curriculo SET principal = #{bol} WHERE id = ?"
-        cql2 = "SELECT COUNT(*) FROM lotus_dev.curriculo WHERE id_usuario = #{id_user} AND principal = true ALLOW FILTERING"
-
-    
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
+        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = #{id_user} AND principal = true ALLOW FILTERING"
        
-        if page |> Enum.to_list |> Enum.at(0) |> Map.get("count") < 1 || !bol do
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])|> IO.inspect
+      
+        if  Enum.count(page) < 1 || !bol do
  
             case Xandra.execute(CassPID, cql, [{"uuid", id_curriculo}]) do
                     {:ok, _} ->  json(conn, "Ok")

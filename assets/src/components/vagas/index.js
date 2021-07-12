@@ -20,6 +20,7 @@ import { observer } from "mobx-react";
 import FilterLocation from "./filters/location"
 import Setor from "./filters/setor"
 import Empresa from "./filters/empresa"
+import { allEmpresas } from "../../stores/vagas/api"
 
 
 const id_master = idMaster()
@@ -33,10 +34,12 @@ class Vagas extends React.Component {
 
         super(props);
         this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
-
+        this.teste = 10
+        
         this.obs = observable({
             candidato_vagas: [],
-            is_curriculo: false
+            is_curriculo: false,
+            data_empresas: []
 
         })
 
@@ -45,17 +48,18 @@ class Vagas extends React.Component {
     async componentDidMount() {
 
         this.getVagas()
+        let res = await allEmpresas()
+        
+        this.obs.data_empresas = res.data
 
     }
 
-    async getVagas(){
+    getVagas = async (new_data) => {
 
-        console.log("chamou")
 
         let tmp = 0, array = [], array2 = [];
 
         let res = await listVagas()
-        console.log(res)
       
         let res2 = await listVagasAprovadas()
         let res3 = await getCurriculo()
@@ -64,8 +68,16 @@ class Vagas extends React.Component {
             this.obs.is_curriculo = true
         }
 
-       
+        if(new_data){
+
+            res = new_data
+
+        }
+
         this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
+
+       
+       
 
         if (Array.isArray(res.data)) {
 
@@ -131,6 +143,7 @@ class Vagas extends React.Component {
 
     }
 
+
     async excluirCandidaturaVaga(id_vaga) {
         let res = await deleteCandidatarseVaga(id_vaga)
         if (res.data.Ok) {
@@ -168,7 +181,7 @@ class Vagas extends React.Component {
                             <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
-                                    <Setor getVagas={this.getVagas} />
+                                    <Setor empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
                                     <Form.Text className="text-muted">
                                         Selecione os setores para o filtro.
@@ -179,7 +192,7 @@ class Vagas extends React.Component {
                             <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
-                                    <Empresa />
+                                    <Empresa empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
                                     <Form.Text className="text-muted">
                                         Selecione as empresas para o filtro.

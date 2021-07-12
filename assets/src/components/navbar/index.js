@@ -8,6 +8,9 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
 import Notificacoes from "./notificacoes/index"
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import BusinessIcon from '@material-ui/icons/Business';
+import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import socket from '../socket';
 require("./css/index.scss")
 
@@ -61,9 +64,9 @@ export default class Navbar extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal bp3-icon-home">Meus Curriculos</button>
-            <button onClick={() => this.handleRedirect("/vagas")} className="bp3-button bp3-minimal bp3-icon-home">Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens")} className="bp3-button bp3-minimal bp3-icon-document">Postagens</button>
+            <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal"> <AssignmentIndIcon/>&nbsp;Meus Curriculos</button>
+            <button onClick={() => this.handleRedirect("/vagas")} className="bp3-button bp3-minimal "><BusinessIcon/>&nbsp; Vagas</button>
+            <button onClick={() => this.handleRedirect("/postagens")} className="bp3-button bp3-minimal"><MarkunreadMailboxIcon/>&nbsp; Postagens</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

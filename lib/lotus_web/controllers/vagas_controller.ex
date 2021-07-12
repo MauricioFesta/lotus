@@ -61,6 +61,37 @@ defmodule LotusWeb.VagasController do
 
     end
 
+    def lista_all_empresas(conn, _) do
+        
+        cql = "SELECT id,nome FROM lotus_dev.user WHERE is_empresa = 'true' ALLOW FILTERING"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+         
+        if page |> Enum.at(0) != nil do
+        
+         json(conn, Enum.to_list(page))
+
+        else
+
+            json(conn, "Nenhuma empesa cadastrada")
+
+        end
+
+    end
+
+    def filter_empresa(conn, params) do
+
+    
+         ret = LotusRust.Back.get_filtro_vagas_empresa(params["tuple"])
+
+         new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
+
+         json(conn, new_ret)
+
+        
+
+    end
+
     def list_vagas_empresa(conn,_) do
 
 

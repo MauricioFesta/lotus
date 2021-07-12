@@ -5,7 +5,8 @@ import NoSsr from '@material-ui/core/NoSsr';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
-import {filterSetor} from "../../../stores/vagas/api"
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -127,7 +128,15 @@ const Listbox = styled('ul')`
   }
 `;
 
-export default function Setor(props) {
+function Setor(props) {
+
+  const obs = observable({
+    data_empresas: props.empresas
+
+  })
+
+ 
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -139,31 +148,35 @@ export default function Setor(props) {
     value,
     focused,
     setAnchorEl,
-    
+
   } = useAutocomplete({
     id: 'customized-auto-complete',
-    defaultValue: [top100Films[1]],
+    // defaultValue: [top100Films[1]],
     multiple: true,
-    options: top100Films,
-    getOptionLabel: (option) => option.title,
+    options: obs.data_empresas,
+    getOptionLabel: (option) => option.nome,
   });
 
-  const handleSendFilter = async (current) =>{
+  const handleSendFilter = async (current) => {
+
+  
     let arr_tmp = [...value, current]
+    console.log(arr_tmp)
+    console.log(obs.data_empresas)
     // props.getVagas()
     // let res =  await filterSetor()
-    
+
   }
-  
+
   return (
     <NoSsr >
       <div>
         <div {...getRootProps()}>
           <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
-          <InputWrapper  ref={setAnchorEl} className={focused ? 'focused' : ''}>
+          <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
-            
-              <Tag onClick={() => handleSendFilter(option)} label={option.title} {...getTagProps({ index })} />
+
+              <Tag onClick={() => handleSendFilter(option)} label={option.nome} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
@@ -173,7 +186,7 @@ export default function Setor(props) {
           <Listbox {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
-                <span onClick={() => handleSendFilter(option)}>{option.title}</span>
+                <span onClick={() => handleSendFilter(option)}>{option.nome}</span>
                 <CheckIcon fontSize="small" />
               </li>
             ))}
@@ -184,10 +197,5 @@ export default function Setor(props) {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'Alimenticios', year: 1994 },
-  { title: 'Metalurgicos', year: 1972 },
-  { title: 'Agro', year: 1974 }
-  
-];
+
+export default observer(Setor)

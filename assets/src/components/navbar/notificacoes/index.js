@@ -21,9 +21,10 @@ class Notificacoes extends React.Component {
 
         let res = await listNotificacoes()
 
-        console.log(res.data[0].notificacoes, " Aqui")
 
         this.obs.itens_notificacoes = res.data[0].notificacoes
+
+
     }
 
     render() {
@@ -37,9 +38,11 @@ class Notificacoes extends React.Component {
                 <Card.Content>
                     <Feed>
 
-                        {this.obs.itens_notificacoes.map(el => {
+                        {Array.isArray(this.obs.itens_notificacoes) &&
 
-                            if (Array.isArray(this.obs.itens_notificacoes)) {
+                            this.obs.itens_notificacoes.map(el => {
+
+
 
                                 let json = JSON.parse(el)
 
@@ -60,10 +63,10 @@ class Notificacoes extends React.Component {
                                 )
 
 
-                            }
 
 
-                        })
+
+                            })
 
                         }
 

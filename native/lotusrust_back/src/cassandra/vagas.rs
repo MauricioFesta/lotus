@@ -51,12 +51,14 @@ pub struct RowStructVagas {
 
 
 
-pub fn get_filtro_vagas_db(id: &str) -> Vec<String>  {
+pub fn get_filtro_vagas_empresa_db(ids: &str) -> Vec<String>  {
 
    
     let no_compression = connect::conn();
 
-    let select_struct_cql =  format!("SELECT * FROM lotus_dev.user WHERE id = {}", id);
+    println!("{}", ids);
+
+    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE empresa_id in {} ALLOW FILTERING", ids);
 
         let rows = no_compression
         .query(select_struct_cql)
@@ -70,10 +72,10 @@ pub fn get_filtro_vagas_db(id: &str) -> Vec<String>  {
 
         for row in rows {
     
-            let my_row: RowStruct = RowStruct::try_from_row(row).expect("into RowStruct");
-            let str_format = format!("{{\"nome\": \"{}\",\"email\": {}}}", my_row.nome, my_row.email);
-            
-            arr_vec.push(str_format);
+            let my_row: RowStructVagas = RowStructVagas::try_from_row(row).expect("into RowStruct");
+            let encoded = json::encode(&my_row).unwrap();
+
+            arr_vec.push(encoded);
             
             
         }

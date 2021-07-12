@@ -75,3 +75,16 @@ export const filterSetor = async (data) => {
     let result = await api.post("/api/vagas-filter-setor", data)
     return result
 }
+
+export const filterEmpresa = async (data) => {
+
+    let result = await api.post("/api/vagas-filter-empresa", data)
+    return result
+}
+
+export const allEmpresas = async () => {
+
+    let result = await api.get("/api/vagas-all-empresas")
+    return result
+
+}

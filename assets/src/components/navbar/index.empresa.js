@@ -7,6 +7,8 @@ import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "./css/index.scss"
 import history from "../../others/redirect";
+import AddIcon from '@material-ui/icons/Add';
+import ListIcon from '@material-ui/icons/List';
 import socket from '../socket';
 
 
@@ -60,9 +62,9 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal bp3-icon-home">Vagas cadastradas</button>
-            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal bp3-icon-home">Cadastrar Postagem</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><ListIcon/>&nbsp; Vagas cadastradas</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon/>&nbsp;  Cadastrar Vagas</button>
+            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddIcon/>&nbsp;  Cadastrar Postagem</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

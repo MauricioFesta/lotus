@@ -51,7 +51,12 @@ defmodule LotusWeb.Router do
     put "/vagas-arovar-candidato/:id", VagasController, :aprovar_candidato
     put "/vagas-desaprovar-candidato/:id", VagasController, :delete_candidato_aprovado
     get "/lista-vagas-aprovadas", VagasController, :lista_vagas_aprovadas
+    get "/vagas-all-empresas", VagasController, :lista_all_empresas
+    post "/vagas-filter-empresa", VagasController, :filter_empresa
     get "/lista-notificacoes", PerfilController, :lista_notificacoes
+  
+
+    
   
     
    

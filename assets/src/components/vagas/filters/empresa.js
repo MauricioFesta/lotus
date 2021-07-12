@@ -5,6 +5,9 @@ import NoSsr from '@material-ui/core/NoSsr';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
+import { filterEmpresa } from "../../../stores/vagas/api"
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -126,7 +129,13 @@ const Listbox = styled('ul')`
   }
 `;
 
-export default function Empresa() {
+function Empresa(props) {
+
+  const obs = observable({
+    data_empresas: props.empresas
+
+  })
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -140,11 +149,63 @@ export default function Empresa() {
     setAnchorEl,
   } = useAutocomplete({
     id: 'customized-hook-demo',
-    defaultValue: [top100Films[1]],
+    // defaultValue: [top100Films[1]],
     multiple: true,
-    options: top100Films,
-    getOptionLabel: (option) => option.title,
+    options: obs.data_empresas,
+    getOptionLabel: (option) => option.nome,
   });
+
+  const handleSendFilter = async (current, bol) => {
+
+    let arr_tmp = []
+
+    if (!bol) {
+
+      value.map((el, index) => {
+
+        if(el.id === current.id){
+          
+          value.splice(index, 1)
+          return;
+        }
+
+
+      })
+
+      arr_tmp = [...value]
+
+      if (value.length === 0) {
+       
+        props.getVagas()
+        return;
+
+      }
+
+    }else{
+
+      arr_tmp = [...value, current]
+      
+    }
+
+    console.log(arr_tmp)
+
+    let tmp = []
+
+    arr_tmp.map(el => {
+
+      tmp.push(`'${el.id}'`)
+
+    })
+
+    let data = {
+      tuple: `(${tmp.join(",")})`
+    }
+
+    let res = await filterEmpresa(data)
+
+    props.getVagas(res)
+
+  }
 
   return (
     <NoSsr>
@@ -153,7 +214,7 @@ export default function Empresa() {
           <Label {...getInputLabelProps()}>Filtro por empresa</Label>
           <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
-              <Tag label={option.title} {...getTagProps({ index })} />
+              <Tag onClick={() => handleSendFilter(option, false)} label={option.nome} label={option.nome} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
@@ -163,7 +224,7 @@ export default function Empresa() {
           <Listbox {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
-                <span>{option.title}</span>
+                <span onClick={() => handleSendFilter(option, true)} label={option.nome} >{option.nome}</span>
                 <CheckIcon fontSize="small" />
               </li>
             ))}
@@ -174,10 +235,5 @@ export default function Empresa() {
   );
 }
 
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'Zegla', year: 1994 },
-  { title: 'Tela Sul', year: 1972 },
-  { title: 'Akeo', year: 1974 }
-  
-];
+
+export default observer(Empresa)

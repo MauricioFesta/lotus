@@ -5,23 +5,33 @@ import $ from "jquery";
 import { postCadastroUser } from "../../stores/login/api"
 import { AppToaster } from "../../others/toaster"
 import { v4 as uuidv4 } from 'uuid';
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 
-
-export default class Cadastro extends React.Component {
+class Cadastro extends React.Component {
 
   constructor(props) {
     super(props);
-  
+
+
+    this.obs = observable({
+      is_empresa: false
+
+    })
+
+
   }
 
-   cadastrar = async () => {
+  cadastrar = async () => {
 
+  
     let data = {
       id: uuidv4(),
       nome: $("#nome").val(),
       email: $("#email").val(),
       senha: $("#senha").val(),
+      cnpj_cpf: $("#cnpj_cpf").val(),
       is_empresa: $("#conta-corporativa").prop("checked").toString()
 
     }
@@ -30,11 +40,11 @@ export default class Cadastro extends React.Component {
 
     if (res.data == "Ok") {
 
-      AppToaster.show({message: "Usuário cadastrado com sucesso", intent: "success" });
+      AppToaster.show({ message: "Usuário cadastrado com sucesso", intent: "success" });
 
     } else {
 
-      AppToaster.show({message: "Não foi possível cadastrar o usuário Erro", intent: "danger" });
+      AppToaster.show({ message: "Não foi possível cadastrar o usuário Erro", intent: "danger" });
 
     }
 
@@ -47,9 +57,9 @@ export default class Cadastro extends React.Component {
       <div className='container mt-4 main'>
 
         <Form>
-      
+
           <Form.Group>
-            <Form.Label>Nome ou Razão Social</Form.Label>
+            <Form.Label>{this.obs.is_empresa ? "Razão Social" : "Nome" }</Form.Label>
             <Form.Control id="nome" type="text" placeholder="Entre com seu nome" />
 
           </Form.Group>
@@ -65,13 +75,22 @@ export default class Cadastro extends React.Component {
             <Form.Label>Senha</Form.Label>
             <Form.Control id="senha" type="password" placeholder="Senha" />
           </Form.Group>
+
+
+          <Form.Group>
+            <Form.Label>{this.obs.is_empresa ? "CNPJ" : "CPF"}</Form.Label>
+            <Form.Control id="cnpj_cpf" type="number" placeholder="..." />
+          </Form.Group>
+
           <Form.Group>
             <Form.Check
               type="switch"
               id="conta-corporativa"
               label="Conta corporativa ?"
+              onChange={(e) => this.obs.is_empresa = !this.obs.is_empresa}
             />
           </Form.Group>
+
 
           <Button onClick={this.cadastrar} variant="primary" type="button">
             Cadastrar
@@ -84,3 +103,5 @@ export default class Cadastro extends React.Component {
     );
   }
 }
+
+export default observer(Cadastro)

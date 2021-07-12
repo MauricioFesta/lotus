@@ -36,17 +36,20 @@ defmodule LotusWeb.LoginController do
       new_params = params 
     
       |> Map.put(:vagas_aprovadas, [UUID.uuid4()])
-
+     
       {:ok, data} = JSON.encode(new_params) 
 
       data |> IO.inspect
+
+      IO.puts "Json"
       
       statement = "INSERT INTO lotus_dev.user JSON '#{data}'"
-       case Xandra.execute(CassPID, statement, _params = []) do
-         {:ok, result} -> json(conn, "Ok")
-         _ -> IO.puts json(conn, "Error")
 
-       end
+      case Xandra.execute(CassPID, statement, _params = []) do
+        {:ok, result} -> json(conn, "Ok")
+        _ -> IO.puts json(conn, "Error")
+
+      end
 
 
     end

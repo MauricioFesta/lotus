@@ -15,7 +15,7 @@ class Perfil extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: ''}
+        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '' }
 
     }
 
@@ -26,13 +26,13 @@ class Perfil extends React.Component {
 
         this.setState({ perfilMODEL: perfilMODEL })
 
-     
 
-        this.props.perfilQuery({foto_base64: this.state.perfilMODEL.foto_base64})
 
-       console.log(Store.getState().perfilState.query.foto_base64) 
+        this.props.perfilQuery({ foto_base64: this.state.perfilMODEL.foto_base64 })
 
-    
+        console.log(Store.getState().perfilState.query.foto_base64)
+
+
     }
 
     getMin() {
@@ -51,7 +51,7 @@ class Perfil extends React.Component {
 
         let store = Store.getState()
         let formData = new FormData();
-      
+
         if (store.perfilState.form.length > 0) {
 
             formData.append("file_base64", store.perfilState.form[0]);
@@ -67,9 +67,9 @@ class Perfil extends React.Component {
 
         if (res.data.Ok) {
             store.perfilState.form.length ? window.location.reload() :
-            AppToaster.show({message: "Perfil alterado com sucesso!", intent: "success" });
+                AppToaster.show({ message: "Perfil alterado com sucesso!", intent: "success" });
         } else {
-            AppToaster.show({message: "Não foi possível alterar o perfil", intent: "danger" });
+            AppToaster.show({ message: "Não foi possível alterar o perfil", intent: "danger" });
         }
 
     }
@@ -81,55 +81,54 @@ class Perfil extends React.Component {
 
             <div>
 
-                <Container className="mt-4">
 
-                    <Jumbotron className="mt-4" >
+                <Jumbotron className="ml-4 mr-4 mt-4" >
 
-                        <Row>
+                    <Row>
 
-                            <Form>
+                        <Form>
 
-                                <PerfilFoto />
+                            <PerfilFoto />
 
-                                <Button small="true" intent="success" onClick={this.alterarPerfil} text="Salvar alterações" />
-                            </Form>
+                            <Button small="true" intent="success" onClick={this.alterarPerfil} text="Salvar alterações" />
+                        </Form>
 
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <Form>
 
-                                <Form.Group controlId="formEmail">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control defaultValue={this.state.perfilMODEL.email} onChange={(e) => this.setState({ email: e.target.value })} type="email" placeholder="email" />
-                                    <Form.Text className="text-muted">
-                                        Preencha seu email de acesso
+                            <Form.Group controlId="formEmail">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control defaultValue={this.state.perfilMODEL.email} onChange={(e) => this.setState({ email: e.target.value })} type="email" placeholder="email" />
+                                <Form.Text className="text-muted">
+                                    Preencha seu email de acesso
                                     </Form.Text>
-                                </Form.Group>
-                                <Form.Group controlId="formNome">
-                                    <Form.Label>Nome</Form.Label>
-                                    <Form.Control defaultValue={this.state.perfilMODEL.nome} onChange={(e) => this.setState({ nome: e.target.value })} type="text" placeholder="nome" />
-                                    <Form.Text className="text-muted">
-                                        Preencha seu nome de acesso
+                            </Form.Group>
+                            <Form.Group controlId="formNome">
+                                <Form.Label>Nome</Form.Label>
+                                <Form.Control defaultValue={this.state.perfilMODEL.nome} onChange={(e) => this.setState({ nome: e.target.value })} type="text" placeholder="nome" />
+                                <Form.Text className="text-muted">
+                                    Preencha seu nome de acesso
                                     </Form.Text>
-                                </Form.Group>
+                            </Form.Group>
 
-                                <Form.Group controlId="formSenha">
-                                    <Form.Label>Senha</Form.Label>
-                                    <Form.Control defaultValue={this.state.perfilMODEL.senha} onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
-                                    <Form.Text className="text-muted">
-                                        Preencha a senha de acesso
+                            <Form.Group controlId="formSenha">
+                                <Form.Label>Senha</Form.Label>
+                                <Form.Control defaultValue={this.state.perfilMODEL.senha} onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
+                                <Form.Text className="text-muted">
+                                    Preencha a senha de acesso
                                     </Form.Text>
-                                </Form.Group>
+                            </Form.Group>
 
 
 
 
-                            </Form>
+                        </Form>
 
-                        </Row>
+                    </Row>
 
-                    </Jumbotron>
+                </Jumbotron>
 
-                </Container>
+
 
             </div >
 

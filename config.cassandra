@@ -8,6 +8,7 @@ CREATE TABLE lotus_dev.user(
    senha varchar,
    is_empresa varchar,
    foto_base64 text,
+   cnpj_cpf int,
    notificacoes list<text>,
    vagas_aprovadas list<text>,
    inserted_at timestamp,
@@ -42,7 +43,7 @@ CREATE TABLE lotus_dev.vagas(
    candidatos list<text>,
    inserted_at timestamp,
    updated_at timestamp,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id, empresa_id)
    );
 
 CREATE TABLE lotus_dev.postagens(
