@@ -24,7 +24,6 @@ CREATE TABLE lotus_dev.curriculo(
    descricao text,
    inserted_at timestamp,
    updated_at timestamp
-  
    
 );
 

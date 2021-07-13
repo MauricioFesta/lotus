@@ -83,15 +83,12 @@ export default class NavbarEmpresa extends React.Component {
               usePortal={false}
               content={
 
-                <Example className={Classes.POPOVER2_DISMISS} className="docs-menu-example" options={true} {...this.props}>
+                <Example className={Classes.POPOVER2_DISMISS}  options={true} {...this.props}>
 
-                  <Menu className={Classes.ELEVATION_1}>
+                  <Menu className={Classes.ELEVATION_1 + " layout-default"} >
                     <MenuDivider title="Conta" />
                     <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="align-left" text="Perfil" />
-                    <MenuItem icon="align-left" text="Compartilhar" />
                     <MenuItem icon="align-left" text="Config">
-                      <MenuItem icon="align-left" text="Bloquear" />
-                      <MenuItem icon="align-center" text="Excluir" />
                       <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="clipboard" text="Alaterar foto" />
                     </MenuItem>
                   </Menu>
@@ -110,9 +107,9 @@ export default class NavbarEmpresa extends React.Component {
               usePortal={false}
               content={
 
-                <Example className={Classes.POPOVER2_DISMISS} className="docs-menu-example" options={true} {...this.props}>
+                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
 
-                  <Menu className={Classes.ELEVATION_1}>
+                  <Menu className={Classes.ELEVATION_1 + " layout-default"}>
                     <MenuDivider title="Notificações" />
                     <MenuItem icon="align-left" text="Visualizar" />
                     <MenuItem icon="align-left" text="Config">
@@ -136,9 +133,9 @@ export default class NavbarEmpresa extends React.Component {
               usePortal={false}
               content={
 
-                <Example className={Classes.POPOVER2_DISMISS} className="docs-menu-example" options={true} {...this.props}>
+                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
 
-                  <Menu className={Classes.ELEVATION_1}>
+                  <Menu className={Classes.ELEVATION_1 + " layout-default"}>
                     <MenuDivider title="Configurações" />
                     <MenuItem onClick={() => this.handleSair()} icon="align-left" text="Sair" />
                     {/* <MenuItem icon="align-left" text="Status">

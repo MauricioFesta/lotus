@@ -126,8 +126,6 @@ class CandidatosEmpresa extends React.Component {
 
         const desaProvar = async (id) => {
 
-            alert(id)
-
             let channel = socket.channel("notify:open");
 
             channel.join()

@@ -20,15 +20,10 @@ defmodule LotusWeb.VagasController do
 
         {_valor, _} = Integer.parse(params["valor"])
 
-        new_params = %{} 
-
-        |> Map.put(:id, params["id"])
-        |> Map.put(:id_tmp, params["id_tmp"])
-        |> Map.put(:descricao, params["descricao"])
-        |> Map.put(:cidade, params["cidade"])
-        |> Map.put(:turno, params["turno"])
-        |> Map.put(:estado, params["estado"])
-        |> Map.put(:ramo, params["ramo"])
+   
+        new_params = params 
+        |> Map.delete("file")
+        |> Map.delete("valor")
         |> Map.put(:imagem_base64, file64)
         |> Map.put(:valor, _valor) 
         |> Map.put(:empresa_id, id_user)
