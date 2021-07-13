@@ -5,11 +5,11 @@ defmodule LotusWeb.CurriculoController do
 
        id_user =  get_session(conn, "idUser");
 
-       cql2 = "SELECT COUNT(*) FROM lotus_dev.curriculo WHERE id_usuario = #{id_user} AND principal = true ALLOW FILTERING"
+       cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = #{id_user} AND principal = true ALLOW FILTERING"
 
        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
-       
-      bol = if page |> Enum.to_list |> Enum.at(0) |> Map.get("count") < 1  do
+        
+      bol = if Enum.count(page) < 1  do
 
                      true
   

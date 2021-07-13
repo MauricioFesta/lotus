@@ -12,6 +12,8 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import BusinessIcon from '@material-ui/icons/Business';
 import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import socket from '../socket';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 require("./css/index.scss")
 
 export default class Navbar extends React.Component {
@@ -21,18 +23,18 @@ export default class Navbar extends React.Component {
 
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     let channel = socket.channel("notify:open");
 
     channel.join()
-        .receive("ok", resp => {
+      .receive("ok", resp => {
 
-            console.log("Bem vindo", resp)
-        })
-        .receive("error", resp => {
-            console.log("Error", resp)
-        })
+        console.log("Bem vindo", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error", resp)
+      })
 
 
     channel.on("notify_send", payload => {
@@ -47,12 +49,20 @@ export default class Navbar extends React.Component {
 
   }
 
+  handleSair() {
+
+    cookies.remove('_A-T');
+    cookies.remove('_A-T-T_L');
+
+    this.handleRedirect("/")
+
+  }
+
 
 
   render() {
 
     return (
-
 
 
       <nav className="bp3-navbar bp3-dark layout-default">
@@ -64,9 +74,9 @@ export default class Navbar extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal"> <AssignmentIndIcon/>&nbsp;Meus Curriculos</button>
-            <button onClick={() => this.handleRedirect("/vagas")} className="bp3-button bp3-minimal "><BusinessIcon/>&nbsp; Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens")} className="bp3-button bp3-minimal"><MarkunreadMailboxIcon/>&nbsp; Postagens</button>
+            <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal"> <AssignmentIndIcon />&nbsp;Meus Curriculos</button>
+            <button onClick={() => this.handleRedirect("/vagas")} className="bp3-button bp3-minimal "><BusinessIcon />&nbsp; Vagas</button>
+            <button onClick={() => this.handleRedirect("/postagens")} className="bp3-button bp3-minimal"><MarkunreadMailboxIcon />&nbsp; Postagens</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2
@@ -128,12 +138,12 @@ export default class Navbar extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Configurações" />
-                    <MenuItem icon="align-left" text="Sair" />
-                    <MenuItem icon="align-left" text="Status">
+                    <MenuItem onClick={() => this.handleSair()} icon="align-left" text="Sair" />
+                    {/* <MenuItem icon="align-left" text="Status">
                       <MenuItem icon="align-left" text="Online" />
                       <MenuItem icon="align-left" text="Offline" />
                       <MenuItem icon="align-left" text="Ausente" />
-                    </MenuItem>
+                    </MenuItem> */}
                   </Menu>
                 </Example>
 

@@ -170,7 +170,7 @@ defmodule LotusWeb.VagasController do
 
         {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, [{"uuid", params["id"]}])
 
-        {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("candidatos") |> IO.inspect
+        {:ok,candidato} = page |> Enum.to_list() |> Enum.at(0) |> Map.fetch("candidatos")
         
         if Enum.member?(candidato, id_user), do: json(conn, %{erro: " Candidatura já enviada"})
            

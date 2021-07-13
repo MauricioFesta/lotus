@@ -44,7 +44,7 @@ CREATE TABLE lotus_dev.vagas(
    candidatos list<text>,
    inserted_at timestamp,
    updated_at timestamp,
-   PRIMARY KEY (id, empresa_id)
+   PRIMARY KEY (id)
    );
 
 CREATE TABLE lotus_dev.postagens(

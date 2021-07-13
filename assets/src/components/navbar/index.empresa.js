@@ -10,7 +10,8 @@ import history from "../../others/redirect";
 import AddIcon from '@material-ui/icons/Add';
 import ListIcon from '@material-ui/icons/List';
 import socket from '../socket';
-
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 export default class NavbarEmpresa extends React.Component {
 
@@ -46,6 +47,16 @@ export default class NavbarEmpresa extends React.Component {
     history.push(path);
 
   }
+
+  handleSair() {
+
+    cookies.remove('_A-T');
+    cookies.remove('_A-T-T_L');
+
+    this.handleRedirect("/")
+
+  }
+
 
 
 
@@ -129,12 +140,12 @@ export default class NavbarEmpresa extends React.Component {
 
                   <Menu className={Classes.ELEVATION_1}>
                     <MenuDivider title="Configurações" />
-                    <MenuItem icon="align-left" text="Sair" />
-                    <MenuItem icon="align-left" text="Status">
+                    <MenuItem onClick={() => this.handleSair()} icon="align-left" text="Sair" />
+                    {/* <MenuItem icon="align-left" text="Status">
                       <MenuItem icon="align-left" text="Online" />
                       <MenuItem icon="align-left" text="Offline" />
                       <MenuItem icon="align-left" text="Ausente" />
-                    </MenuItem>
+                    </MenuItem> */}
                   </Menu>
                 </Example>
 

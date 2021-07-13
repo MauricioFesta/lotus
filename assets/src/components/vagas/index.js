@@ -102,7 +102,7 @@ class Vagas extends React.Component {
 
     }
 
-    async candidatarSeVaga(id) {
+    async candidatarSeVaga(id, empresa_id) {
 
         if (!this.obs.is_curriculo) {
 
@@ -122,7 +122,8 @@ class Vagas extends React.Component {
             })
 
         let data = {
-            id
+            id,
+            empresa_id
         }
 
         let res = await postCandidatarseVaga(data)
@@ -250,7 +251,7 @@ class Vagas extends React.Component {
                                                             variant="contained"
                                                             color="primary"
                                                             endIcon={<SendIcon />}
-                                                            onClick={() => this.candidatarSeVaga(el2.id_tmp)}
+                                                            onClick={() => this.candidatarSeVaga(el2.id_tmp, el2.empresa_id)}
                                                         >
                                                             Candidatar-se
                                                         </Mui.Button>

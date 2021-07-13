@@ -138,9 +138,12 @@ export default class Curriculo extends React.Component {
       if(res.data === "Ok"){
         AppToaster.show({ message: "Prioridade alterada com sucesso", intent: "success" });
         this.componentDidMount()
+       
       }else{
         AppToaster.show({message: "Não foi possível alterar a prioridade", intent: "warning" });
       }
+
+    
 
 
     }

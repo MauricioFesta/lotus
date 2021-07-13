@@ -56,8 +56,6 @@ pub fn get_filtro_vagas_empresa_db(ids: &str) -> Vec<String>  {
    
     let no_compression = connect::conn();
 
-    println!("{}", ids);
-
     let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE empresa_id in {} ALLOW FILTERING", ids);
 
         let rows = no_compression
