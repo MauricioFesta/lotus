@@ -23,7 +23,6 @@
     "mdbootstrap": "^4.19.2",
     "mobx": "^6.3.2",
     "mobx-react": "^7.2.0",
-    "node-sass": "^6.0.1",
     "phoenix": "^1.5.9",
     "react": "^16.14.0",
     "react-bootstrap": "^1.5.2",
@@ -73,6 +72,7 @@
     "@babel/preset-react": "^7.13.13",
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "cpx": "^1.5.0",
-    "mkdirp": "^1.0.3"
+    "mkdirp": "^1.0.3",
+    "node-sass": "^4.0.0"
   }
 }

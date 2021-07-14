@@ -7,11 +7,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
-import { filterRamo } from "../../../stores/vagas/api"
-import Chip from '@material-ui/core/Chip';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -54,7 +49,7 @@ const InputWrapper = styled('div')`
 const Tag = styled(({ label, onDelete, ...props }) => (
   <div {...props}>
     <span>{label}</span>
-    <CloseIcon onClick={(e) => handleSendFilter(e, true)} onClick={onDelete} />
+    <CloseIcon  onClick={onDelete} />
   </div>
 ))`
   display: flex;
@@ -158,7 +153,7 @@ function Ramo(props) {
     setAnchorEl,
 
   } = useAutocomplete({
-    id: 'customized-auto-complete',
+    id: 'customized-hook-demo',
     multiple: true,
     options: obs.data_ramo,
     getOptionLabel: (option) => option.title,
@@ -222,14 +217,13 @@ function Ramo(props) {
   return (
     <>
 
-     <NoSsr >
+<NoSsr>
       <div>
         <div {...getRootProps()}>
-          <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
+          <Label {...getInputLabelProps()}>Filtro por ramo por empresa</Label>
           <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
-
-              <Tag label={option.title} {...getTagProps({ index })} />
+              <Tag onClick={() => handleSendFilter(option, false)} label={option.title} label={option.title} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
@@ -239,14 +233,14 @@ function Ramo(props) {
           <Listbox {...getListboxProps()}>
             {groupedOptions.map((option, index) => (
               <li {...getOptionProps({ option, index })}>
-                <span onClick={() => handleSendFilter(option, true)}>{option.title}</span>
+                <span onClick={() => handleSendFilter(option, true)} label={option.title} >{option.title}</span>
                 <CheckIcon fontSize="small" />
               </li>
             ))}
           </Listbox>
         ) : null}
       </div>
-    </NoSsr> 
+    </NoSsr>
 
     </>
   );

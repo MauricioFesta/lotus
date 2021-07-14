@@ -161,16 +161,17 @@ defmodule LotusWeb.VagasController do
 
         id_user = get_session(conn, "idUser");
        
-        cql_consulta =  "SELECT candidatos, ramo FROM lotus_dev.vagas WHERE id = ? ALLOW FILTERING"
+        cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = ? ALLOW FILTERING"
 
         {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, [{"uuid", params["id"]}])
 
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
         {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
+        {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
         
         if Enum.member?(candidato, id_user), do: json(conn, %{erro: " Candidatura já enviada"})
 
-        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_user}'] + candidatos WHERE id = #{params["id"]} AND ramo = '#{ramo}'"
+        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_user}'] + candidatos WHERE id = #{params["id"]} AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
          
         case Xandra.execute(CassPID, cql, _params = []) do
             {:ok, _} -> json(conn, %{Ok: true})
@@ -185,15 +186,16 @@ defmodule LotusWeb.VagasController do
 
         %{"id" => _id} = params
             
-        sql = "SELECT candidatos, ramo FROM lotus_dev.vagas WHERE id = ? ALLOW FILTERING"
+        sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = ? ALLOW FILTERING"
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql,[{"uuid", _id}] )
          
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos") |> IO.inspect
         {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
+        {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
 
        new_list = Enum.reject(candidato, fn x -> x == id_user end) 
 
-       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = #{_id} AND ramo = '#{ramo}'"
+       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = #{_id} AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
          
        case Xandra.execute(CassPID, cql, _params = []) do
            {:ok, _} -> json(conn, %{Ok: true})
