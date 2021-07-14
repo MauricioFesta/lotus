@@ -8,6 +8,10 @@ import styled from 'styled-components';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import { filterRamo } from "../../../stores/vagas/api"
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -50,7 +54,7 @@ const InputWrapper = styled('div')`
 const Tag = styled(({ label, onDelete, ...props }) => (
   <div {...props}>
     <span>{label}</span>
-    <CloseIcon onClick={onDelete} />
+    <CloseIcon onClick={(e) => handleSendFilter(e, true)} onClick={onDelete} />
   </div>
 ))`
   display: flex;
@@ -155,7 +159,6 @@ function Ramo(props) {
 
   } = useAutocomplete({
     id: 'customized-auto-complete',
-    // defaultValue: [top100Films[1]],
     multiple: true,
     options: obs.data_ramo,
     getOptionLabel: (option) => option.title,
@@ -163,66 +166,70 @@ function Ramo(props) {
 
   const handleSendFilter = async (current, bol) => {
 
-    let arr_tmp = []
+    console.log(current,bol)
 
-    if (!bol) {
+    // let arr_tmp = []
 
-      value.map((el, index) => {
+    // if (!bol) {
 
-        if(el.subtitle === current.subtitle){
+    //   value.map((el, index) => {
+
+    //     if(el.subtitle === current.subtitle){
           
-          value.splice(index, 1)
-          return;
-        }
+    //       value.splice(index, 1)
+    //       return;
+    //     }
 
 
-      })
+    //   })
 
-      arr_tmp = [...value]
+    //   arr_tmp = [...value]
 
-      if (value.length === 0) {
+    //   if (value.length === 0) {
        
-        props.getVagas()
-        return;
+    //     props.getVagas()
+    //     return;
 
-      }
+    //   }
 
-    }else{
+    // }else{
 
-      arr_tmp = [...value, current]
+    //   arr_tmp = [...value, current]
       
-    }
+    // }
 
 
-    let tmp = []
+    // let tmp = []
 
-    arr_tmp.map(el => {
+    // arr_tmp.map(el => {
 
-      tmp.push(`'${el.subtitle}'`)
+    //   tmp.push(`'${el.subtitle}'`)
 
-    })
+    // })
 
-    let data = {
-      tuple: `(${tmp.join(",")})`
-    }
+    // let data = {
+    //   tuple: `(${tmp.join(",")})`
+    // }
 
-    console.log(data)
+    // console.log(data)
 
-    let res = await filterRamo(data)
+    // let res = await filterRamo(data)
 
-    props.getVagas(res)
+    // props.getVagas(res)
 
   }
 
   return (
-    <NoSsr >
+    <>
+
+     <NoSsr >
       <div>
         <div {...getRootProps()}>
           <Label {...getInputLabelProps()}>Filtro por ramo da empresa</Label>
           <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
             {value.map((option, index) => (
 
-              <Tag onClick={() => handleSendFilter(option, false)} label={option.title} {...getTagProps({ index })} />
+              <Tag label={option.title} {...getTagProps({ index })} />
             ))}
 
             <input {...getInputProps()} />
@@ -239,7 +246,9 @@ function Ramo(props) {
           </Listbox>
         ) : null}
       </div>
-    </NoSsr>
+    </NoSsr> 
+
+    </>
   );
 }
 

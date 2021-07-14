@@ -52,7 +52,7 @@ export default class VagasEmpresa extends React.Component {
 
                                     <>
                                         <Card>
-                                            <Card.Content header='Vaga 1' />
+                                            <Card.Content header={el.titulo} />
                                             <Card.Content description={el.descricao} />
                                             <Card.Content extra>
                                                 {el.candidatos.length > 1 ?

@@ -30,6 +30,7 @@ CREATE TABLE lotus_dev.curriculo(
 CREATE TABLE lotus_dev.vagas(
    id uuid,
    id_tmp varchar,
+   titulo varchar,
    descricao varchar,
    empresa_id varchar,
    valor int,
@@ -43,7 +44,7 @@ CREATE TABLE lotus_dev.vagas(
    candidatos list<text>,
    inserted_at timestamp,
    updated_at timestamp,
-   PRIMARY KEY (id)
+   PRIMARY KEY (ramo,id)
    );
 
 CREATE TABLE lotus_dev.postagens(

@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button, Alert, Col , Toast} from 'react-bootstrap';
+import { Form, Button, Alert, Col, Toast } from 'react-bootstrap';
 import IntlCurrencyInput from "react-intl-currency-input"
 import $ from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -46,17 +46,18 @@ export default class CreateEmpresa extends React.Component {
     }
 
 
-    cadastrar = async  () => {
+    cadastrar = async () => {
 
         let formData = new FormData();
 
         let file = document.querySelector('#file');
         const id = uuidv4()
-     
+
         formData.append("id", id);
         formData.append("id_tmp", id);
         formData.append("file", file.files[0]);
         formData.append("valor", $("#valor-vaga").val().slice(3).replaceAll(".", "").replace(",", ""));
+        formData.append("titulo", $("#titulo").val());
         formData.append("descricao", $("#descricao").val());
         formData.append("cidade", $("#cidade").val());
         formData.append("turno", $("#turno").val());
@@ -65,8 +66,8 @@ export default class CreateEmpresa extends React.Component {
         formData.append("disponibilidade_viajar", $("#disponibilidade").prop("checked").toString());
         formData.append("planejamento_futuro", $("#planejamento").prop("checked").toString());
 
-        if (!file.files[0]){
-            AppToaster.show({message: "Precisa anexar a imagem para prosseguir", intent: "warning" });
+        if (!file.files[0]) {
+            AppToaster.show({ message: "Precisa anexar a imagem para prosseguir", intent: "warning" });
             return;
         }
 
@@ -81,10 +82,10 @@ export default class CreateEmpresa extends React.Component {
         let res = await postCadastroVaga(formData, config);
 
         if (res.data.Ok) {
-            AppToaster.show({message: "Vaga cadastrada com sucesso!", intent: "success" });
+            AppToaster.show({ message: "Vaga cadastrada com sucesso!", intent: "success" });
 
         } else {
-            AppToaster.show({message: "Não foi possível cadastrar a vaga", intent: "danger" });
+            AppToaster.show({ message: "Não foi possível cadastrar a vaga", intent: "danger" });
         }
     }
 
@@ -98,18 +99,30 @@ export default class CreateEmpresa extends React.Component {
                 <div className="container mt-4">
 
                     <Form className="mt-4">
-                        <Form.Row>
-                            <Form.Group as={Col}>
-                                <Form.Label>Valor da vaga: (opcional)</Form.Label>
-                                <IntlCurrencyInput id="valor-vaga" className="form-control" currency="BRL" config={currencyConfig}
-                                    onChange={() => { }} />
-                            </Form.Group>
 
-                        </Form.Row>
+                        <Form.Group>
+                            <Form.Label>Valor da vaga: (opcional)</Form.Label>
+                            <IntlCurrencyInput id="valor-vaga" className="form-control" currency="BRL" config={currencyConfig}
+                                onChange={() => { }} />
+                            <Form.Text className="text-muted">
+                                valor em R$
+                            </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Título (obrigatório)</Form.Label>
+                            <Form.Control id="titulo" type="titulo" placeholder="Entre com seu email" />
+                            <Form.Text className="text-muted">
+                                forneça um título para o cadastro
+                        </Form.Text>
+                        </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Descrição: (obrigatório)</Form.Label>
                             <Form.Control id="descricao" as="textarea" rows={3} />
+                            <Form.Text className="text-muted">
+                                uma pequena descrição máximo 100 caracteres
+                            </Form.Text>
                         </Form.Group>
 
                         <Form.Row>
@@ -150,7 +163,10 @@ export default class CreateEmpresa extends React.Component {
                             </Form.Group>
 
                             <Form.Group as={Col}>
-                                <Form.File  id="file" label="Imagem da vaga (obrigatório)" />
+                                <Form.File id="file" label="Imagem da vaga (obrigatório)" />
+                                <Form.Text className="text-muted">
+                                    esta imagem irá aparecer no cabeçalho da vaga
+                                </Form.Text>
                             </Form.Group>
 
                         </Form.Row>
