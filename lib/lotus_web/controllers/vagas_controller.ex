@@ -78,7 +78,7 @@ defmodule LotusWeb.VagasController do
     def filter_empresa(conn, params) do
 
     
-         ret = LotusRust.Back.get_filtro_vagas_empresa(params["tuple"])
+         ret = LotusRust.Back.get_filtro_vagas_empresa(params["empresa"])
 
          new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
 

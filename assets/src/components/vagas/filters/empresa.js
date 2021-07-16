@@ -1,238 +1,128 @@
-/* eslint-disable no-use-before-define */
 import React from 'react';
-import useAutocomplete from '@material-ui/lab/useAutocomplete';
-import NoSsr from '@material-ui/core/NoSsr';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
-import styled from 'styled-components';
-import { filterEmpresa } from "../../../stores/vagas/api"
-import { observable } from 'mobx';
-import { observer } from "mobx-react";
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import { filterEmpresa, allEmpresas } from "../../../stores/vagas/api"
 
-const Label = styled('label')`
-  padding: 0 0 4px;
-  line-height: 1.5;
-  display: block;
-`;
 
-const InputWrapper = styled('div')`
-  width: 300px;
-  border: 1px solid #d9d9d9;
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 1px;
-  display: flex;
-  flex-wrap: wrap;
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+}));
 
-  &:hover {
-    border-color: #40a9ff;
-  }
+export default function Empresa(props) {
 
-  &.focused {
-    border-color: #40a9ff;
-    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
-  }
 
-  & input {
-    font-size: 14px;
-    height: 30px;
-    box-sizing: border-box;
-    padding: 4px 6px;
-    width: 0;
-    min-width: 30px;
-    flex-grow: 1;
-    border: 0;
-    margin: 0;
-    outline: 0;
-  }
-`;
 
-const Tag = styled(({ label, onDelete, ...props }) => (
-  <div {...props}>
-    <span>{label}</span>
-    <CloseIcon onClick={onDelete} />
-  </div>
-))`
-  display: flex;
-  align-items: center;
-  height: 24px;
-  margin: 2px;
-  line-height: 22px;
-  background-color: #fafafa;
-  border: 1px solid #e8e8e8;
-  border-radius: 2px;
-  box-sizing: content-box;
-  padding: 0 4px 0 10px;
-  outline: 0;
-  overflow: hidden;
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const [age, setAge] = React.useState('');
+  const [empresa, setEmpresa] = React.useState('')
+  const [empresas, setEmpresas] = React.useState([]);
 
-  &:focus {
-    border-color: #40a9ff;
-    background-color: #e6f7ff;
-  }
 
-  & span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+  const handleChange = (event) => {
+    setAge(event.target.value || '');
+    setEmpresa(event.target.value)
+  };
 
-  & svg {
-    font-size: 12px;
-    cursor: pointer;
-    padding: 4px;
-  }
-`;
+  const handleClickOpen = async () => {
 
-const Listbox = styled('ul')`
-  width: 300px;
-  margin: 2px 0 0;
-  padding: 0;
-  position: absolute;
-  list-style: none;
-  background-color: #fff;
-  overflow: auto;
-  max-height: 250px;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1;
 
-  & li {
-    padding: 5px 12px;
-    display: flex;
+    let res = await allEmpresas()
 
-    & span {
-      flex-grow: 1;
+    setEmpresas(res.data)
+
+    setOpen(true);
+  };
+
+  const handleSendPesquisa = async () => {
+
+
+    if(empresa === "sem-filtro"){
+      props.getVagas()
+      setOpen(false);
+      return ;
     }
 
-    & svg {
-      color: transparent;
-    }
-  }
-
-  & li[aria-selected='true'] {
-    background-color: #fafafa;
-    font-weight: 600;
-
-    & svg {
-      color: #1890ff;
-    }
-  }
-
-  & li[data-focus='true'] {
-    background-color: #e6f7ff;
-    cursor: pointer;
-
-    & svg {
-      color: #000;
-    }
-  }
-`;
-
-function Empresa(props) {
-
-  const obs = observable({
-    data_empresas: props.empresas
-
-  })
-
-  const {
-    getRootProps,
-    getInputLabelProps,
-    getInputProps,
-    getTagProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-    value,
-    focused,
-    setAnchorEl,
-  } = useAutocomplete({
-    id: 'customized-hook-demo',
-    // defaultValue: [top100Films[1]],
-    multiple: true,
-    options: obs.data_empresas,
-    getOptionLabel: (option) => option.nome,
-  });
-
-  const handleSendFilter = async (current, bol) => {
-
-    let arr_tmp = []
-
-    if (!bol) {
-
-      value.map((el, index) => {
-
-        if(el.id === current.id){
-          
-          value.splice(index, 1)
-          return;
-        }
-
-
-      })
-
-      arr_tmp = [...value]
-
-      if (value.length === 0) {
-       
-        props.getVagas()
-        return;
-
-      }
-
-    }else{
-
-      arr_tmp = [...value, current]
-      
-    }
-
-
-    let tmp = []
-
-    arr_tmp.map(el => {
-
-      tmp.push(`'${el.id}'`)
-
-    })
+    setOpen(false);
 
     let data = {
-      tuple: `(${tmp.join(",")})`
+      empresa: `'${empresa}'`
     }
+
 
     let res = await filterEmpresa(data)
 
     props.getVagas(res)
 
+
   }
 
-  return (
-    <NoSsr>
-      <div>
-        <div {...getRootProps()}>
-          <Label {...getInputLabelProps()}>Filtro por empresa</Label>
-          <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
-            {value.map((option, index) => (
-              <Tag onClick={() => handleSendFilter(option, false)} label={option.nome} label={option.nome} {...getTagProps({ index })} />
-            ))}
 
-            <input {...getInputProps()} />
-          </InputWrapper>
-        </div>
-        {groupedOptions.length > 0 ? (
-          <Listbox {...getListboxProps()}>
-            {groupedOptions.map((option, index) => (
-              <li {...getOptionProps({ option, index })}>
-                <span onClick={() => handleSendFilter(option, true)} label={option.nome} >{option.nome}</span>
-                <CheckIcon fontSize="small" />
-              </li>
-            ))}
-          </Listbox>
-        ) : null}
-      </div>
-    </NoSsr>
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+
+  return (
+    <div>
+      <Button size="small" onClick={handleClickOpen}>Filtro empresa</Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Selecioe uma Empresa</DialogTitle>
+        <DialogContent>
+          <form className={classes.container}>
+
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-dialog-select-label">Empresa</InputLabel>
+              <Select
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={age}
+                onChange={handleChange}
+                input={<Input />}
+              >
+                <MenuItem value="sem-filtro">
+                  <em>Sem filtro</em>
+                </MenuItem>
+                {
+                  empresas.map(el => {
+
+                    return (
+                      <MenuItem value={el.id}>{el.nome}</MenuItem>
+                    )
+
+                  })
+                }
+              </Select>
+            </FormControl>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleSendPesquisa} color="primary">
+            Pesquisar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
 
-
-export default observer(Empresa)

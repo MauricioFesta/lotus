@@ -11,8 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { filterRamo } from "../../../stores/vagas/api"
-import { observable } from 'mobx';
-import { observer } from "mobx-react";
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,25 +25,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Ramo(props) {
+
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = React.useState('');
+  const [ramo, setRamo] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(Number(event.target.value) || '');
+    setAge(event.target.value || '');
+    setRamo(event.target.value)
+
   };
 
   const handleClickOpen = () => {
+
+
     setOpen(true);
   };
 
   const handleSendPesquisa = async () => {
 
+    if(ramo === "sem-filtro"){
+      props.getVagas()
+      setOpen(false);
+      return ;
+    }
+
+
     setOpen(false);
-   
 
     let data = {
-      tuple: `('alimentos')`
+      tuple: `('${ramo}')`
     }
 
 
@@ -52,14 +64,12 @@ export default function Ramo(props) {
 
     props.getVagas(res)
 
-
   }
 
 
   const handleClose = () => {
     setOpen(false);
   };
-
 
 
 
@@ -80,19 +90,20 @@ export default function Ramo(props) {
                 onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem value="">
-                  <em>None</em>
+                <MenuItem value="sem-filtro">
+                  <em>Sem filtro</em>
                 </MenuItem>
                 <MenuItem value="alimenntos">Alimentos</MenuItem>
                 <MenuItem value="industria">Industria</MenuItem>
                 <MenuItem value="comercio">Comércio</MenuItem>
+
               </Select>
             </FormControl>
           </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            Cancelar
           </Button>
           <Button onClick={handleSendPesquisa} color="primary">
             Pesquisar

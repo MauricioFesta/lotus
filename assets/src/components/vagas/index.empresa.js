@@ -35,7 +35,7 @@ export default class VagasEmpresa extends React.Component {
 
 
 
-            <Container className="mt-4">
+            <div className="mt-4 ml-4 mr-4">
 
                 {this.state.redirect &&
 
@@ -87,7 +87,7 @@ export default class VagasEmpresa extends React.Component {
 
                     </Card.Group>
                 </Jumbotron>
-            </Container>
+            </div>
 
 
 
