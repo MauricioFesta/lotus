@@ -184,10 +184,6 @@ class Vagas extends React.Component {
 
                                     <Ramo empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
-                                    <Form.Text className="text-muted">
-                                        Selecione os setores para o filtro.
-                                    </Form.Text>
-
                                 </Form.Group>
                             </Col>
                             <Col>

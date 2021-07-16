@@ -89,7 +89,7 @@ defmodule LotusWeb.VagasController do
     end
 
     def filter_ramo(conn, params) do
-
+        params["tuple"] |> IO.inspect
         ret = LotusRust.Back.get_filtro_vagas_ramo(params["tuple"])
 
         new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)

@@ -23,9 +23,9 @@ pub fn get_filtro_vagas_empresa(ids: &str) -> Vec<String>  {
 
 
 #[rustler::nif]
-pub fn get_filtro_vagas_ramo(ramos: &str) -> Vec<String>  {
+pub fn get_filtro_vagas_ramo(ramo: &str) -> Vec<String>  {
 
-   let vec_user = cassandra::vagas::get_filtro_vagas_ramo_db(ramos);
+   let vec_user = cassandra::vagas::get_filtro_vagas_ramo_db(ramo);
  
    vec_user
    

@@ -1,6 +1,9 @@
 
 Tables: 
 
+
+CREATE KEYSPACE lotus_dev WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': '3'}  AND durable_writes = true;
+
 CREATE TABLE lotus_dev.user(
    id uuid,
    nome varchar,
