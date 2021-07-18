@@ -111,7 +111,7 @@ export default class CreateEmpresa extends React.Component {
 
                         <Form.Group>
                             <Form.Label>Título (obrigatório)</Form.Label>
-                            <Form.Control id="titulo" type="titulo" placeholder="Entre com seu email" />
+                            <Form.Control id="titulo" type="titulo" placeholder="título" />
                             <Form.Text className="text-muted">
                                 forneça um título para o cadastro
                         </Form.Text>

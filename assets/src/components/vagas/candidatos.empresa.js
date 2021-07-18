@@ -232,10 +232,10 @@ class CandidatosEmpresa extends React.Component {
                                                     src={"data:image/png;base64," + el.foto_base64}
                                                 />
                                                 <Card.Header>{el.nome}</Card.Header>
-                                                <Card.Meta>Friends of Elliot</Card.Meta>
+                                                {/* <Card.Meta></Card.Meta>
                                                 <Card.Description>
                                                     Steve wants to add you to the group <strong>best friends</strong>
-                                                </Card.Description>
+                                                </Card.Description> */}
                                             </Card.Content>
                                             <Card.Content extra>
                                                 <div className='ui two buttons'>

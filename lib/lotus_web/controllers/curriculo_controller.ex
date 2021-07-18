@@ -73,6 +73,7 @@ defmodule LotusWeb.CurriculoController do
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, [{"uuid", id_curriculo}])
         {:ok, _base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+        _base |> IO.inspect
      
         if page |> Enum.at(0) != nil do
 
