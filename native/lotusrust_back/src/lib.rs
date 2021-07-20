@@ -2,6 +2,7 @@
 pub mod cassandra{
     pub mod vagas;
     pub mod connect;
+    pub mod user;
     
 }
 
@@ -40,6 +41,14 @@ pub fn get_list_vagas() -> Vec<String> {
    
 }
 
+#[rustler::nif]
+pub fn update_notificacoes_vencidas() {
+
+   let vec_user = cassandra::user::update_notificacoes_vencidas();
 
 
-rustler::init!("Elixir.LotusRust.Back", [add, get_filtro_vagas_empresa, get_list_vagas, get_filtro_vagas_ramo]);
+}
+
+
+
+rustler::init!("Elixir.LotusRust.Back", [add, get_filtro_vagas_empresa, get_list_vagas, get_filtro_vagas_ramo, update_notificacoes_vencidas]);

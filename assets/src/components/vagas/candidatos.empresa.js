@@ -212,7 +212,7 @@ class CandidatosEmpresa extends React.Component {
         return (
 
 
-            <Container className="mt-4">
+            <div className="mt-4 ml-4 mt-4 mr-4">
 
                 <Jumbotron className="mt-4">
 
@@ -265,7 +265,7 @@ class CandidatosEmpresa extends React.Component {
                     </Card.Group>
 
                 </Jumbotron>
-            </Container>
+            </div>
 
 
 

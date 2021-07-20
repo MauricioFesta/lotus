@@ -11,6 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ListIcon from '@material-ui/icons/List';
 import socket from '../socket';
 import Cookies from 'universal-cookie';
+import Notificacoes from "./notificacoes/index"
 const cookies = new Cookies();
 
 export default class NavbarEmpresa extends React.Component {
@@ -73,9 +74,9 @@ export default class NavbarEmpresa extends React.Component {
             <input className="bp3-input" placeholder="Search files..." type="text" />
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><ListIcon/>&nbsp; Vagas cadastradas</button>
-            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon/>&nbsp;  Cadastrar Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddIcon/>&nbsp;  Cadastrar Postagem</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><ListIcon />&nbsp; Vagas cadastradas</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Vagas</button>
+            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Postagem</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2
@@ -83,7 +84,7 @@ export default class NavbarEmpresa extends React.Component {
               usePortal={false}
               content={
 
-                <Example className={Classes.POPOVER2_DISMISS}  options={true} {...this.props}>
+                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
 
                   <Menu className={Classes.ELEVATION_1 + " layout-default"} >
                     <MenuDivider title="Conta" />
@@ -109,13 +110,11 @@ export default class NavbarEmpresa extends React.Component {
 
                 <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
 
-                  <Menu className={Classes.ELEVATION_1 + " layout-default"}>
+                  <Menu className={Classes.ELEVATION_1} className="layout-default">
                     <MenuDivider title="Notificações" />
-                    <MenuItem icon="align-left" text="Visualizar" />
-                    <MenuItem icon="align-left" text="Config">
-                      <MenuItem icon="align-left" text="Desabilitar" />
-                      <MenuItem icon="align-center" text="Programar" />
-                    </MenuItem>
+
+                    <Notificacoes />
+
                   </Menu>
                 </Example>
 

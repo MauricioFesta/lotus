@@ -41,6 +41,7 @@ defmodule Lotus.Vagas do
         |> Map.put_new(:foto_base64, foto_base64)
         |> Map.put_new(:aprovado, true)
         |> Map.put_new(:notify, "Empresa #{nome} #{descripition}")
+        |> Map.put_new(:inserted_at, DateTime.utc_now |> DateTime.add(-10800))
     
         {:ok, data} = JSON.encode(new_map) 
         

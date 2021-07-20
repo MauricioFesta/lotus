@@ -174,7 +174,16 @@ defmodule LotusWeb.VagasController do
         cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_user}'] + candidatos WHERE id = #{params["id"]} AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
          
         case Xandra.execute(CassPID, cql, _params = []) do
-            {:ok, _} -> json(conn, %{Ok: true})
+            {:ok, _} -> 
+                
+                case Vagas.notificacao_user_aprovado(empresa_id,params["id"], "enviu uma candidatura para uma vaga") do
+
+                    true -> json(conn, %{Ok: true})
+        
+                    _ ->  json(conn, %{Ok: false})
+                end
+                
+                # json(conn, %{Ok: true})
             _ -> json(conn, %{Ok: false})
         end
 
