@@ -28,6 +28,16 @@ pub struct RowStructUser {
   
 }
 
+#[derive(RustcDecodable, RustcEncodable)]
+pub struct Notificacao  {
+    notify: String,
+    id: String
+  
+}
+
+
+
+
 
 pub fn update_notificacoes_vencidas()  {
 
@@ -43,38 +53,54 @@ pub fn update_notificacoes_vencidas()  {
         .into_rows()
         .expect("into rows");
 
-        let mut arr_vec = Vec::new();
+        // let mut arr_vec = Vec::new();
 
         for row in rows {
     
             let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct");
-
-       
-          
-            // let encoded = json::decode(&my_row).unwrap();
-
-            arr_vec.push(my_row.notificacoes);
             
-            
+            let mut new_vec = Vec::new();
+
+            for notify_arr in my_row.notificacoes{
+
+                let json_str: &str = &notify_arr;
+
+                let decoded: Notificacao = json::decode(json_str).unwrap();
+
+                println!("{}", decoded.notify);
+
+                     //VALIDAR A DATA AQUI
+                    if decoded.notify == "Empresa 123 enviu uma candidatura para uma vaga"{
+                        
+                        println!("{}", "Data vencida");
+                        
+                        
+                    }else{
+                        new_vec.push(json::encode(&decoded).unwrap());
+                    }
+                   
+
+            }
+
+            println!("{:?}", new_vec);
+            // println!("{:?}", my_row.id_tmp);
+
+                
         }
-        // let str_: &str = arr_vec[0][0];
-        // println!("{}", str_);
-        // json::decode(&str_).unwrap();
+
+        
+}
 
 
+fn insert_new_notify(id: &str){
 
+    // let update_struct_cql = "UPDATE test_ks.my_test_table SET user = ? WHERE key = ?";
+    // let upd_user = RowStructUser {
+    //     username: "Marry".to_string(),
+    // };
+    // let user_key = 1i32;
+    // session
+    //     .query_with_values(update_struct_cql, query_values!(upd_user, user_key))
+    //     .expect("update");
 
-        // for row in rows {
-    
-        //     let my_row: RowStructVagas = RowStructVagas::try_from_row(row).expect("into RowStruct");
-        //     let encoded = json::encode(&my_row).unwrap();
-
-        //     arr_vec.push(encoded);
-            
-            
-        // }
-
-
-        // arr_vec
-      
 }
