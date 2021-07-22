@@ -21,9 +21,7 @@ use super::connect;
 
 #[derive(RustcDecodable, RustcEncodable,Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
 pub struct RowStructUser {
-
-    
-    // pub id_tmp: String,
+    // pub id: String,
     pub notificacoes: Vec<String>
   
 }
@@ -34,6 +32,14 @@ pub struct Notificacao  {
     id: String
   
 }
+
+#[derive(RustcDecodable, RustcEncodable,Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
+pub struct RowStructUpdateList {
+   
+    pub notificacoes: Vec<String>
+  
+}
+
 
 
 
@@ -53,7 +59,6 @@ pub fn update_notificacoes_vencidas()  {
         .into_rows()
         .expect("into rows");
 
-        // let mut arr_vec = Vec::new();
 
         for row in rows {
     
@@ -61,7 +66,7 @@ pub fn update_notificacoes_vencidas()  {
             
             let mut new_vec = Vec::new();
 
-            for notify_arr in my_row.notificacoes{
+            for notify_arr in &my_row.notificacoes{
 
                 let json_str: &str = &notify_arr;
 
@@ -73,6 +78,8 @@ pub fn update_notificacoes_vencidas()  {
                     if decoded.notify == "Empresa 123 enviu uma candidatura para uma vaga"{
                         
                         println!("{}", "Data vencida");
+                        println!("{:?}", my_row);
+                        new_vec.push("json::encode(&decoded).unwrap()".to_string());
                         
                         
                     }else{
@@ -82,8 +89,7 @@ pub fn update_notificacoes_vencidas()  {
 
             }
 
-            println!("{:?}", new_vec);
-            // println!("{:?}", my_row.id_tmp);
+            insert_new_notify(new_vec);
 
                 
         }
@@ -92,15 +98,21 @@ pub fn update_notificacoes_vencidas()  {
 }
 
 
-fn insert_new_notify(id: &str){
+fn insert_new_notify(new_list: Vec<std::string::String>){
 
-    // let update_struct_cql = "UPDATE test_ks.my_test_table SET user = ? WHERE key = ?";
-    // let upd_user = RowStructUser {
-    //     username: "Marry".to_string(),
+    println!("Nova Lista {:?}", new_list);
+
+    // let no_compression = connect::conn();
+
+    // let cql = "UPDATE lotus_dev.user SET notificacoes = ? WHERE email = ?";
+    // let data = RowStructUpdateList {
+    //     notificacoes: new_list
     // };
-    // let user_key = 1i32;
-    // session
-    //     .query_with_values(update_struct_cql, query_values!(upd_user, user_key))
+    // let email = "555".to_string();
+    
+    // no_compression
+    //     .query_with_values(cql, query_values!(data, email))
     //     .expect("update");
 
 }
+
