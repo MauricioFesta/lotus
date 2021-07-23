@@ -33,7 +33,7 @@ pub struct RowStruct {
 pub struct RowStructVagas {
 
     
-    pub id_tmp: String,
+    pub id: String,
     pub descricao: String,
     pub empresa_id: String,
     pub valor: i32,

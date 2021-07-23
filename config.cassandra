@@ -5,7 +5,7 @@ Tables:
 CREATE KEYSPACE lotus_dev WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': '3'}  AND durable_writes = true;
 
 CREATE TABLE lotus_dev.user(
-   id uuid,
+   id varchar,
    nome varchar,
    email varchar,
    senha varchar,
@@ -21,9 +21,9 @@ CREATE TABLE lotus_dev.user(
    /PRIMARY KEY (id)
 
 CREATE TABLE lotus_dev.curriculo(
-   id uuid PRIMARY KEY,
+   id varchar PRIMARY KEY,
    file_base64 text,
-   id_usuario uuid,
+   id_usuario varchar,
    principal boolean,
    descricao text,
    inserted_at timestamp,
@@ -32,8 +32,7 @@ CREATE TABLE lotus_dev.curriculo(
 );
 
 CREATE TABLE lotus_dev.vagas(
-   id uuid,
-   id_tmp varchar,
+   id varchar,
    titulo varchar,
    descricao varchar,
    empresa_id varchar,
@@ -52,7 +51,7 @@ CREATE TABLE lotus_dev.vagas(
    );
 
 CREATE TABLE lotus_dev.postagens(
-   id uuid,
+   id varchar,
    descricao text,
    PRIMARY KEY (id)
 

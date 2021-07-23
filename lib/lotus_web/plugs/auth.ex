@@ -18,8 +18,8 @@ defmodule LotusWeb.Plugs.Auth do
           case Token.verify(conn, "va^4S^u!b%@RlTrb", token) do
             {:ok, user_id} when is_binary(user_id) ->
 
-            statement = "SELECT id FROM lotus_dev.user WHERE id = ?"
-            {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, [{"uuid", user_id}])
+            statement = "SELECT id FROM lotus_dev.user WHERE id = '#{user_id}'"
+            {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
                 
             if page |> Enum.at(0) != nil do
                 

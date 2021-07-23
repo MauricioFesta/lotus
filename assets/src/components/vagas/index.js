@@ -222,7 +222,7 @@ class Vagas extends React.Component {
                                         return (
 
                                             <Card className="vagas-cards" key={index}>
-                                                {!this.handleCandidatoAprovado(el2.id_tmp) &&
+                                                {!this.handleCandidatoAprovado(el2.id) &&
 
                                                     <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
                                                         Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
@@ -243,21 +243,21 @@ class Vagas extends React.Component {
                                                             variant="contained"
                                                             color="primary"
                                                             endIcon={<SendIcon />}
-                                                            onClick={() => this.candidatarSeVaga(el2.id_tmp, el2.empresa_id)}
+                                                            onClick={() => this.candidatarSeVaga(el2.id, el2.empresa_id)}
                                                         >
                                                             Candidatar-se
                                                         </Mui.Button>
 
                                                         :
 
-                                                        this.handleCandidatoAprovado(el2.id_tmp) &&
+                                                        this.handleCandidatoAprovado(el2.id) &&
 
                                                         <Mui.Button
                                                             size="small"
                                                             variant="contained"
                                                             color="secondary"
                                                             endIcon={<DeleteIcon />}
-                                                            onClick={() => this.excluirCandidaturaVaga(el2.id_tmp)}
+                                                            onClick={() => this.excluirCandidaturaVaga(el2.id)}
                                                         >
                                                             Excluir
                                                         </Mui.Button>

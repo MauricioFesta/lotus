@@ -21,7 +21,7 @@ use super::connect;
 
 #[derive(RustcDecodable, RustcEncodable,Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
 pub struct RowStructUser {
-    // pub id: String,
+    pub id: String,
     pub notificacoes: Vec<String>
   
 }
@@ -89,7 +89,7 @@ pub fn update_notificacoes_vencidas()  {
 
             }
 
-            insert_new_notify(new_vec);
+            insert_new_notify(new_vec, my_row.id);
 
                 
         }
@@ -98,9 +98,9 @@ pub fn update_notificacoes_vencidas()  {
 }
 
 
-fn insert_new_notify(new_list: Vec<std::string::String>){
+fn insert_new_notify(new_list: Vec<std::string::String>, id: String){
 
-    println!("Nova Lista {:?}", new_list);
+    println!("Nova Lista {:?}", id);
 
     // let no_compression = connect::conn();
 

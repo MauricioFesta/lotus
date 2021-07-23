@@ -12,17 +12,17 @@ defmodule LotusWeb.PerfilController do
            
             file64 =  File.read!(params["file_base64"].path) |> Base.encode64();
 
-            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = ?"
+            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user}}'"
 
             else
 
-           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = ?"
+           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user}}'"
 
 
         end
 
 
-        case Xandra.execute(CassPID, query , [{"uuid", id_user}]) do
+        case Xandra.execute(CassPID, query , _params = []) do
             {:ok, _} -> json(conn, %{Ok: true})
             _ -> json(conn, %{Ok: false})
         
@@ -34,7 +34,7 @@ defmodule LotusWeb.PerfilController do
     def lista_notificacoes(conn,params) do
         id_user =  get_session(conn, "idUser");
 
-        cql = "SELECT notificacoes FROM lotus_dev.user WHERE id = #{id_user}"
+        cql = "SELECT notificacoes FROM lotus_dev.user WHERE id = '#{id_user}'"
         
         {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = []) 
 
@@ -45,9 +45,9 @@ defmodule LotusWeb.PerfilController do
 
         id_user =  get_session(conn, "idUser");
 
-        sql =  "SELECT email, nome, senha, foto_base64 FROM lotus_dev.user WHERE id = ?"
+        sql =  "SELECT email, nome, senha, foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}'"
 
-        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, sql, [{"uuid", id_user}]) 
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, sql,  _params = []) 
 
         if page |> Enum.at(0) != nil do
         
