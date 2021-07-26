@@ -181,7 +181,7 @@ defmodule LotusWeb.VagasController do
         case Xandra.execute(CassPID, cql, _params = []) do
             {:ok, _} -> 
                 
-                case Vagas.notificacao_user_aprovado(empresa_id,params["id"], "enviu uma candidatura para uma vaga") do
+                case Vagas.notificacao_user(empresa_id,params["id"], "enviu uma candidatura para uma vaga", false) do
 
                     true -> json(conn, %{Ok: true})
         
@@ -210,8 +210,8 @@ defmodule LotusWeb.VagasController do
 
        new_list = Enum.reject(candidato, fn x -> x == id_user end) 
 
-       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = #{_id} AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
-         
+       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{_id}' AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
+      
        case Xandra.execute(CassPID, cql, _params = []) do
            {:ok, _} -> json(conn, %{Ok: true})
            _ -> json(conn, %{Ok: false})
@@ -227,7 +227,7 @@ defmodule LotusWeb.VagasController do
 
             true -> 
 
-                case Vagas.notificacao_user_aprovado(params["id_user"],params["id_vaga"], "aprovou seu currículo") do
+                case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "aprovou seu currículo", true) do
                     true -> json(conn, %{Ok: true})
         
                     _ ->  json(conn, %{Ok: false})
@@ -253,9 +253,9 @@ defmodule LotusWeb.VagasController do
 
         new_list|> IO.inspect
         
-        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = #{params["id"]}"
+        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}'"
          
-        case Vagas.notificacao_user_aprovado(params["id"],params["id_vaga"], "desaprovou seu currículo :(") do
+        case Vagas.notificacao_user(params["id"],params["id_vaga"], "desaprovou seu currículo :(", false) do
             true -> 
 
                 case Xandra.execute(CassPID, cql, _params = []) do

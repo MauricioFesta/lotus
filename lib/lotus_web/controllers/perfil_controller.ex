@@ -12,11 +12,11 @@ defmodule LotusWeb.PerfilController do
            
             file64 =  File.read!(params["file_base64"].path) |> Base.encode64();
 
-            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user}}'"
+            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user}'"
 
             else
 
-           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user}}'"
+           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user}'"
 
 
         end

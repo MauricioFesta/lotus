@@ -99,6 +99,8 @@ class CandidatosEmpresa extends React.Component {
 
         const validaSelecionado = (arr_vagas) => {
 
+            console.log(arr_vagas, " Candidatos", this.obs.id_vaga)
+
             return arr_vagas.indexOf(this.obs.id_vaga) === -1
         }
 

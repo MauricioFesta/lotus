@@ -16,7 +16,7 @@ CREATE TABLE lotus_dev.user(
    vagas_aprovadas list<text>,
    inserted_at timestamp,
    updated_at timestamp,
-   PRIMARY KEY (id, email)
+   PRIMARY KEY (id)
    );
    /PRIMARY KEY (id)
 
