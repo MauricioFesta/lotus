@@ -42,9 +42,6 @@ pub struct RowStructUpdateList {
 
 
 
-
-
-
 pub fn update_notificacoes_vencidas()  {
 
     let no_compression = connect::conn();
@@ -74,8 +71,8 @@ pub fn update_notificacoes_vencidas()  {
 
                 println!("{}", decoded.notify);
 
-                     //VALIDAR A DATA AQUI
-                    if decoded.notify == "Empresa 123 enviu uma candidatura para uma vaga"{
+                     //VALIDAR A DATA AQUI DATA
+                    if decoded.notify == "Empresa Joaquim aprovou seu currículo"{
                         
                         println!("{}", "Data vencida");
                         println!("{:?}", my_row);
@@ -100,19 +97,20 @@ pub fn update_notificacoes_vencidas()  {
 
 fn insert_new_notify(new_list: Vec<std::string::String>, id: String){
 
-    println!("Nova Lista {:?}", id);
+    // println!("Nova Lista {:?}", new_list);
+    // println!("id {:?}", id);
 
-    // let no_compression = connect::conn();
+    let no_compression = connect::conn();
 
-    // let cql = "UPDATE lotus_dev.user SET notificacoes = ? WHERE email = ?";
+    let cql = "UPDATE lotus_dev.user SET notificacoes = ? WHERE id = ?";
     // let data = RowStructUpdateList {
     //     notificacoes: new_list
     // };
-    // let email = "555".to_string();
+    let id = id;
     
-    // no_compression
-    //     .query_with_values(cql, query_values!(data, email))
-    //     .expect("update");
+    no_compression
+        .query_with_values(cql, query_values!(new_list, id))
+        .expect("update");
 
 }
 
