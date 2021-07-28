@@ -28,6 +28,10 @@ defmodule Lotus.Vagas do
 
     def notificacao_user(id_user, id_vaga, descripition, aprovado) do
 
+        date = DateTime.utc_now();
+
+        date_new = Integer.to_string(date.day) <> "/" <> Integer.to_string(date.month) <> "/" <> Integer.to_string(date.year)
+
         cql1 = "SELECT id, nome,foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}' ALLOW FILTERING"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
@@ -41,8 +45,8 @@ defmodule Lotus.Vagas do
         |> Map.put_new(:foto_base64, foto_base64)
         |> Map.put_new(:aprovado, aprovado)
         |> Map.put_new(:notify, "Empresa #{nome} #{descripition}")
-        # |> Map.put_new(:inserted_at, DateTime.utc_now |> DateTime.add(-10800))
-    
+        |> Map.put_new(:date, date_new)
+       
         {:ok, data} = JSON.encode(new_map) 
 
         id |> IO.inspect(label: "ID user")
