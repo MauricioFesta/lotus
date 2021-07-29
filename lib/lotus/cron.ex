@@ -10,4 +10,11 @@ defmodule Lotus.Cron do
 
     end
 
+    @spec clear_notificacoes() :: keyword() | :noop
+    def clear_notificacoes do
+
+        LotusRust.Back.update_notificacoes_vencidas()
+        
+    end
+
   end

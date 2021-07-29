@@ -30,7 +30,7 @@ defmodule Lotus.Vagas do
 
         date = DateTime.utc_now();
 
-        date_new = Integer.to_string(date.day) <> "/" <> Integer.to_string(date.month) <> "/" <> Integer.to_string(date.year)
+        date_new = Integer.to_string(date.year)  <> "-" <> Integer.to_string(date.month) <> "-" <> Integer.to_string(date.day)
 
         cql1 = "SELECT id, nome,foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}' ALLOW FILTERING"
 
@@ -41,6 +41,7 @@ defmodule Lotus.Vagas do
         foto_base64 = page |> Enum.to_list |> Enum.at(0) |> Map.get("foto_base64")
 
         new_map = %{} |> Map.put_new(:id, id) 
+        
         |> Map.put_new(:nome, nome)
         |> Map.put_new(:foto_base64, foto_base64)
         |> Map.put_new(:aprovado, aprovado)
