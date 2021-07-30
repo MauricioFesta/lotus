@@ -42,26 +42,30 @@ class Notificacoes extends React.Component {
 
                             this.obs.itens_notificacoes.map(el => {
 
+                                if(el != ''){
 
+                                    let json = JSON.parse(el)
 
-                                let json = JSON.parse(el)
+                                    return (
+    
+                                        <Feed.Event>
+                                            <Feed.Label>
+                                                <Mui.Avatar alt="Remy Sharp" src={"data:image/png;base64," + json.foto_base64} />
+    
+                                            </Feed.Label>
+                                            <Feed.Content>
+                                                <Feed.Date content='1 day ago' />
+                                                <Feed.Summary>
+                                                    {json.notify}
+                                                </Feed.Summary>
+                                            </Feed.Content>
+                                        </Feed.Event>
+                                    )
+    
 
-                                return (
+                                }
 
-                                    <Feed.Event>
-                                        <Feed.Label>
-                                            <Mui.Avatar alt="Remy Sharp" src={"data:image/png;base64," + json.foto_base64} />
-
-                                        </Feed.Label>
-                                        <Feed.Content>
-                                            <Feed.Date content='1 day ago' />
-                                            <Feed.Summary>
-                                                {json.notify}
-                                            </Feed.Summary>
-                                        </Feed.Content>
-                                    </Feed.Event>
-                                )
-
+                         
 
 
 
