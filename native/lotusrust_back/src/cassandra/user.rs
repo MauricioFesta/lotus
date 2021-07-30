@@ -64,35 +64,41 @@ pub fn update_notificacoes_vencidas()  {
     
             let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct user");
 
-            if !&my_row.notificacoes.is_empty() {
+            let mut new_vec = Vec::new();
 
-                let mut new_vec = Vec::new();
-
+            if &my_row.notificacoes[0] != ""{
                 for notify_arr in &my_row.notificacoes{
 
-                    let json_str: &str = &notify_arr;
+                   
 
-                    let decoded: Notificacao = json::decode(json_str).unwrap();
+                        let json_str: &str = &notify_arr;
 
-                    let date_now = Local::now();
-
-                    let mut date_str = String::from(&date_now.to_string());
-                        
-                    let beta_offset = date_str.find(' ').unwrap_or(date_str.len());
-                        
-                    date_str.replace_range(beta_offset.., "");
-                    
-                    if decoded.date == date_str {
-
-                        new_vec.push(json::encode(&decoded).unwrap());
-                    }
+                        let decoded: Notificacao = json::decode(json_str).unwrap();
+    
+                        let date_now = Local::now();
+    
+                        let mut date_str = String::from(&date_now.to_string());
                             
+                        let beta_offset = date_str.find(' ').unwrap_or(date_str.len());
+                            
+                        date_str.replace_range(beta_offset.., "");
+                        
+                        if decoded.date == date_str {
+    
+                            new_vec.push(json::encode(&decoded).unwrap());
+                        }
+                                
+    
 
-                }
+                    }
+
+                 
+              
 
                 insert_new_notify(new_vec, my_row.id);
 
             }
+
 
                 
         }

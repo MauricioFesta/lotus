@@ -36,7 +36,7 @@ defmodule LotusWeb.LoginController do
       new_params = params 
     
       |> Map.put(:vagas_aprovadas, [UUID.uuid4()])
-      # |> Map.put(:notificacoes, ["12"])
+      |> Map.put(:notificacoes, [""])
      
       {:ok, data} = JSON.encode(new_params) 
 

@@ -50,7 +50,6 @@ pub struct RowStructVagas {
 }
 
 
-
 pub fn get_filtro_vagas_empresa_db(empresa: &str) -> Vec<String>  {
 
    
@@ -87,8 +86,6 @@ pub fn get_filtro_vagas_ramo_db(ramo: &str) -> Vec<String>  {
 
    
     let no_compression = connect::conn();
-
-    println!("{}", ramo);
 
     let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE ramo in {} ALLOW FILTERING", ramo);
 
