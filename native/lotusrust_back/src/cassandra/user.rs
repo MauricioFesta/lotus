@@ -10,6 +10,8 @@ pub use cdrs::types::from_cdrs::FromCDRSByName;
 pub use cdrs::types::{IntoRustByIndex, IntoRustByName};
 pub use cdrs::types::value::{Bytes, Value};
 pub use cdrs::types::prelude::*;
+use chrono::*;
+use std::str::*;
 
 
 use rustc_serialize::json::{self, ToJson, Json};
@@ -29,7 +31,8 @@ pub struct RowStructUser {
 #[derive(RustcDecodable, RustcEncodable)]
 pub struct Notificacao  {
     notify: String,
-    id: String
+    id: String,
+    date: String
   
 }
 
@@ -60,33 +63,36 @@ pub fn update_notificacoes_vencidas()  {
         for row in rows {
     
             let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct");
-            
-            let mut new_vec = Vec::new();
 
-            for notify_arr in &my_row.notificacoes{
+            if !&my_row.notificacoes.is_empty() {
 
-                let json_str: &str = &notify_arr;
+                let mut new_vec = Vec::new();
 
-                let decoded: Notificacao = json::decode(json_str).unwrap();
+                for notify_arr in &my_row.notificacoes{
 
-                println!("{}", decoded.notify);
+                    let json_str: &str = &notify_arr;
 
-                     //VALIDAR A DATA AQUI DATA
-                    if decoded.notify == "Empresa Joaquim aprovou seu currículo"{
+                    let decoded: Notificacao = json::decode(json_str).unwrap();
+
+                    let date_now = Local::now();
+
+                    let mut date_str = String::from(&date_now.to_string());
                         
-                        println!("{}", "Data vencida");
-                        println!("{:?}", my_row);
-                        new_vec.push("json::encode(&decoded).unwrap()".to_string());
+                    let beta_offset = date_str.find(' ').unwrap_or(date_str.len());
                         
-                        
-                    }else{
+                    date_str.replace_range(beta_offset.., "");
+                    
+                    if decoded.date == date_str {
+
                         new_vec.push(json::encode(&decoded).unwrap());
                     }
-                   
+                            
+
+                }
+
+                insert_new_notify(new_vec, my_row.id);
 
             }
-
-            insert_new_notify(new_vec, my_row.id);
 
                 
         }
