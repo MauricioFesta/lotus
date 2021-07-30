@@ -62,7 +62,7 @@ pub fn update_notificacoes_vencidas()  {
 
         for row in rows {
     
-            let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct");
+            let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct user");
 
             if !&my_row.notificacoes.is_empty() {
 
