@@ -148,7 +148,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send", { body: "Candidato desaprovado" })
+                channel.push("notify_send:"+ id, { body: "Candidato desaprovado" })
 
                 this.componentDidMount() 
 
@@ -187,7 +187,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send", { body: "Candidato aceito" })
+                channel.push("notify_send:" + id, { body: "Candidato aceito" })
 
                 this.componentDidMount() 
 

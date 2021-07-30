@@ -118,6 +118,7 @@ defmodule LotusWeb.VagasController do
 
         end
     end
+    
 
     def list_vagas_candidatos(conn, %{"id" => id_vaga}) do
 
@@ -129,9 +130,11 @@ defmodule LotusWeb.VagasController do
 
         page_new["candidatos"] |> IO.inspect
   
-        # formated =  Enum.join(page_new["candidatos"], ",") |> IO.inspect
+        formated =  Enum.join(page_new["candidatos"], "','") 
 
-        cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{page_new["candidatos"] |> hd}')"
+        formated |> IO.inspect(label: "Formatados")
+
+        cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
 
         {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
 

@@ -13,8 +13,9 @@ defmodule LotusWeb.NotificacaoChannel do
     end
 
 
-    def handle_in("notify_send", %{"body" => body}, socket) do
-      broadcast!(socket, "notify_send", %{body: body})
+
+    def handle_in("notify_send:"<> _id, %{"body" => body}, socket) do
+      broadcast!(socket, "notify_send:"<> _id, %{body: body})
       {:noreply, socket}
     end
 

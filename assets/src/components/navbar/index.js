@@ -13,6 +13,7 @@ import BusinessIcon from '@material-ui/icons/Business';
 import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import socket from '../socket';
 import Cookies from 'universal-cookie';
+import {idMaster} from '../login/auth'
 const cookies = new Cookies();
 require("./css/index.scss")
 
@@ -37,7 +38,7 @@ export default class Navbar extends React.Component {
       })
 
 
-    channel.on("notify_send", payload => {
+    channel.on("notify_send:"+ idMaster(), payload => {
       alert(payload.body)
 
     })
