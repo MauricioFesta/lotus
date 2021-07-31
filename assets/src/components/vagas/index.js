@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardDeck, Row, Form, Col } from 'react-bootstrap';
+import { Button, Card, CardDeck, Row, Form, Col, Modal } from 'react-bootstrap';
 import Navbar from "../navbar/index"
 import { listVagas, listVagasAprovadas } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
@@ -16,11 +16,12 @@ import socket from '../socket';
 import Alert from '@material-ui/lab/Alert';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
-
 import FilterLocation from "./filters/location"
 import Ramo from "./filters/ramo"
 import Empresa from "./filters/empresa"
 import { allEmpresas } from "../../stores/vagas/api"
+import { Spinner } from "@blueprintjs/core";
+
 
 
 const id_master = idMaster()
@@ -35,11 +36,12 @@ class Vagas extends React.Component {
         super(props);
         this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
         this.teste = 10
-        
+
         this.obs = observable({
             candidato_vagas: [],
             is_curriculo: false,
-            data_empresas: []
+            data_empresas: [],
+            open_spinner: false
 
         })
 
@@ -49,18 +51,19 @@ class Vagas extends React.Component {
 
         this.getVagas()
         let res = await allEmpresas()
-        
+
         this.obs.data_empresas = res.data
 
     }
 
     getVagas = async (new_data) => {
 
+        this.obs.open_spinner = true
 
         let tmp = 0, array = [], array2 = [];
 
         let res = await listVagas()
-      
+
         let res2 = await listVagasAprovadas()
         let res3 = await getCurriculo()
 
@@ -68,7 +71,7 @@ class Vagas extends React.Component {
             this.obs.is_curriculo = true
         }
 
-        if(new_data){
+        if (new_data) {
 
             res = new_data
 
@@ -76,8 +79,8 @@ class Vagas extends React.Component {
 
         this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
 
-       
-       
+
+
 
         if (Array.isArray(res.data)) {
 
@@ -99,6 +102,8 @@ class Vagas extends React.Component {
             this.setState({ vagas: array2 })
 
         }
+
+        this.obs.open_spinner = false
 
     }
 
@@ -171,8 +176,17 @@ class Vagas extends React.Component {
 
         return (
 
-            <div>
+            <>
 
+                <Modal show={this.obs.open_spinner}>
+
+                    <Modal.Body>
+
+                        <Spinner size={80} value={null} />
+
+                    </Modal.Body>
+
+                </Modal>
                 <div className="ml-4 mr-4 mt-4 scroll-card">
 
 
@@ -201,7 +215,7 @@ class Vagas extends React.Component {
                                     <FilterLocation size="small" />
                                     <Form.Text className="text-muted">
                                         Selecione estado ou cidade para o filtro.
-                                </Form.Text>
+                                    </Form.Text>
 
                                 </Form.Group>
                             </Col>
@@ -287,7 +301,7 @@ class Vagas extends React.Component {
                     }
                 </div>
 
-            </div >
+            </ >
 
         );
     }
