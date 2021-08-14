@@ -43,8 +43,6 @@ pub struct RowStructUpdateList {
   
 }
 
-
-
 pub fn update_notificacoes_vencidas()  {
 
     let no_compression = connect::conn();
@@ -59,65 +57,62 @@ pub fn update_notificacoes_vencidas()  {
         .into_rows()
         .expect("into rows");
 
-
         for row in rows {
+           
     
             let my_row: RowStructUser = RowStructUser::try_from_row(row).expect("into RowStruct user");
 
             let mut new_vec = Vec::new();
+         
+                    for notify_arr in &my_row.notificacoes{
 
-            if &my_row.notificacoes[0] != ""{
-                for notify_arr in &my_row.notificacoes{
-
-                   
-
-                        let json_str: &str = &notify_arr;
-
-                        let decoded: Notificacao = json::decode(json_str).unwrap();
+                            if !&notify_arr.is_empty() {
     
-                        let date_now = Local::now();
-    
-                        let mut date_str = String::from(&date_now.to_string());
-                            
-                        let beta_offset = date_str.find(' ').unwrap_or(date_str.len());
-                            
-                        date_str.replace_range(beta_offset.., "");
-                        
-                        if decoded.date == date_str {
-    
-                            new_vec.push(json::encode(&decoded).unwrap());
-                        }
-                                
-    
+                                let is_json: bool = my_row.notificacoes.is_empty();
 
-                    }
+                                if !is_json {
 
-                 
-              
+                                    let json_str: &str = &notify_arr;
 
-                insert_new_notify(new_vec, my_row.id);
-
-            }
-
-
+                                    let decoded: Notificacao = json::decode(json_str).unwrap();
                 
-        }
+                                    let date_now = Local::now();
+                
+                                    let mut date_str = String::from(&date_now.to_string());
+                                        
+                                    let beta_offset = date_str.find(' ').unwrap_or(date_str.len());
+                                        
+                                    date_str.replace_range(beta_offset.., "");
+                                    
+                                    if decoded.date == date_str {
+                
+                                        new_vec.push(json::encode(&decoded).unwrap());
+                                    }
 
+                             }
+
+                        }
+                    }
+                
+                                
+            insert_new_notify(new_vec, my_row.id);
+
+            
+        }
         
 }
 
 
-fn insert_new_notify(new_list: Vec<std::string::String>, id: String){
+fn insert_new_notify(mut new_list: Vec<std::string::String>, id: String){
 
-    // println!("Nova Lista {:?}", new_list);
-    // println!("id {:?}", id);
+    if new_list.len() == 0 {
+        new_list.push("".to_string())
+    }
 
     let no_compression = connect::conn();
 
     let cql = "UPDATE lotus_dev.user SET notificacoes = ? WHERE id = ?";
-    // let data = RowStructUpdateList {
-    //     notificacoes: new_list
-    // };
+  
     let id = id;
     
     no_compression

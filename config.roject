@@ -9,7 +9,7 @@ https://www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9
 Node Version: 10.19.0
 Npm
 Git
-rustc 1.53.0
+rustc 1.54.0
 
 Dependencias LINUX:
 Python3,
