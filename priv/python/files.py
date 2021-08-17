@@ -1,5 +1,4 @@
 import camelot
-import mysql.connector
 import os, glob
 
 

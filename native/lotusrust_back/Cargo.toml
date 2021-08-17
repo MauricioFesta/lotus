@@ -16,6 +16,7 @@ cdrs_helpers_derive = "0.4.0"
 maplit = "1.0.2"
 rustc-serialize = "0.3.24"
 chrono = "0.4"
+redis = "0.21.0"
 
 
 uuid = { version = "0.2", features = ["rustc-serialize"] }

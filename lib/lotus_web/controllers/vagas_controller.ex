@@ -35,6 +35,9 @@ defmodule LotusWeb.VagasController do
 
 
          cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
+
+        ret = LotusRust.Back.get_list_vagas()
+        set_cache_vagas(ret)
         
        case Xandra.execute(CassPID,cql, params = [])  do
            {:ok, _} -> json(conn, %{"Ok": true})
@@ -49,12 +52,39 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas(conn, _) do
 
-        ret = LotusRust.Back.get_list_vagas()
+        query = list_vagas_cache
 
-        new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
+        new_ret = Enum.map(query, fn x -> x |> JSON.decode! end)
 
         json(conn, new_ret)
 
+    end
+
+    def list_vagas_cache do
+
+        redis = LotusRust.Back.get_vagas_cache()
+        
+        if redis |> Enum.count > 0 do
+            IO.puts("Cacheeeeeeeeeeeeeeee")
+            redis
+            
+        else  
+            
+            ret = LotusRust.Back.get_list_vagas() 
+            set_cache_vagas(ret)
+            ret
+
+        end
+        
+    end
+
+    def set_cache_vagas(list) do
+
+        ret = LotusRust.Back.get_list_vagas()
+    
+        LotusRust.Back.set_vagas_cache(list)
+        
+        
     end
 
     def lista_all_empresas(conn, _) do
@@ -89,7 +119,7 @@ defmodule LotusWeb.VagasController do
     end
 
     def filter_ramo(conn, params) do
-        params["tuple"] |> IO.inspect
+        
         ret = LotusRust.Back.get_filtro_vagas_ramo(params["tuple"])
 
         new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
@@ -128,17 +158,11 @@ defmodule LotusWeb.VagasController do
 
         page_new = page |> Enum.to_list |> hd
 
-        page_new["candidatos"] |> IO.inspect
-  
         formated =  Enum.join(page_new["candidatos"], "','") 
-
-        formated |> IO.inspect(label: "Formatados")
 
         cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
 
         {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
-
-        page_candidatos |> IO.inspect
 
         json(conn, page_candidatos |> Enum.to_list) 
         
@@ -207,7 +231,7 @@ defmodule LotusWeb.VagasController do
         sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{_id}' ALLOW FILTERING"
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, _params = [] ) 
          
-        {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos") |> IO.inspect
+        {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
         {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
         {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
 
@@ -253,8 +277,6 @@ defmodule LotusWeb.VagasController do
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("vagas_aprovadas")
       
         new_list = Enum.reject(candidato, fn x -> x == params["id_vaga"] end) 
-
-        new_list|> IO.inspect
         
         cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}'"
          

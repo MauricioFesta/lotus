@@ -26,6 +26,8 @@ defmodule Lotus.Vagas do
      
     end
 
+  
+
     def notificacao_user(id_user, id_vaga, descripition, aprovado) do
 
         date = DateTime.utc_now();
