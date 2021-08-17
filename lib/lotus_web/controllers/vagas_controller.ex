@@ -65,7 +65,6 @@ defmodule LotusWeb.VagasController do
         redis = LotusRust.Back.get_vagas_cache()
         
         if redis |> Enum.count > 0 do
-            IO.puts("Cacheeeeeeeeeeeeeeee")
             redis
             
         else  
@@ -78,10 +77,18 @@ defmodule LotusWeb.VagasController do
         
     end
 
+    def set_cache_vagas do
+
+        #LotusWeb.VagasController.set_cache_vagas
+        ret = ["Www"]
+    
+        LotusRust.Back.set_vagas_cache(ret)
+        
+        
+    end
+
     def set_cache_vagas(list) do
 
-        ret = LotusRust.Back.get_list_vagas()
-    
         LotusRust.Back.set_vagas_cache(list)
         
         
