@@ -62,9 +62,23 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas_cache do
 
-        redis = LotusRust.Back.get_vagas_cache()
+        #LotusWeb.VagasController.list_vagas_cache
+
+        redis = try do
+            
+            LotusRust.Back.get_vagas_cache()
+
+         rescue e ->
+           
+           LotusRust.Back.get_list_vagas() 
+           
+         end
+       
         
         if redis |> Enum.count > 0 do
+
+            IO.puts("Entrou no CACHE")
+
             redis
             
         else  
@@ -74,16 +88,6 @@ defmodule LotusWeb.VagasController do
             ret
 
         end
-        
-    end
-
-    def set_cache_vagas do
-
-        #LotusWeb.VagasController.set_cache_vagas
-        ret = ["Www"]
-    
-        LotusRust.Back.set_vagas_cache(ret)
-        
         
     end
 
@@ -214,6 +218,10 @@ defmodule LotusWeb.VagasController do
          
         case Xandra.execute(CassPID, cql, _params = []) do
             {:ok, _} -> 
+
+                ret = LotusRust.Back.get_list_vagas()
+                
+                set_cache_vagas(ret)
                 
                 case Vagas.notificacao_user(empresa_id,params["id"], "enviu uma candidatura para uma vaga", false) do
 
@@ -247,7 +255,12 @@ defmodule LotusWeb.VagasController do
        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{_id}' AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
       
        case Xandra.execute(CassPID, cql, _params = []) do
-           {:ok, _} -> json(conn, %{Ok: true})
+           {:ok, _} -> 
+
+            ret = LotusRust.Back.get_list_vagas()
+            set_cache_vagas(ret)
+
+            json(conn, %{Ok: true})
            _ -> json(conn, %{Ok: false})
        end
 
@@ -260,6 +273,10 @@ defmodule LotusWeb.VagasController do
         case Vagas.aprovar_candidato_vaga(params["id_user"],params["id_vaga"]) do
 
             true -> 
+
+                ret = LotusRust.Back.get_list_vagas()
+
+                set_cache_vagas(ret)
 
                 case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "aprovou seu currículo", true) do
                     true -> json(conn, %{Ok: true})
@@ -289,6 +306,10 @@ defmodule LotusWeb.VagasController do
          
         case Vagas.notificacao_user(params["id"],params["id_vaga"], "desaprovou seu currículo :(", false) do
             true -> 
+
+                ret = LotusRust.Back.get_list_vagas()
+                
+                set_cache_vagas(ret)
 
                 case Xandra.execute(CassPID, cql, _params = []) do
                     {:ok, _} -> json(conn, %{Ok: true})
