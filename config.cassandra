@@ -23,6 +23,7 @@ CREATE TABLE lotus_dev.user(
 CREATE TABLE lotus_dev.curriculo(
    id varchar PRIMARY KEY,
    file_base64 text,
+   image_base64 text,
    id_usuario varchar,
    principal boolean,
    descricao text,

@@ -53,6 +53,7 @@ defmodule Lotus.MixProject do
       {:xandra, "~> 0.13.1"},
       {:rustler, "~> 0.22.0"},
       {:distillery, "~> 2.1"},
+      {:ex_crypto, "~> 0.10.0"}
     
     ]
   end

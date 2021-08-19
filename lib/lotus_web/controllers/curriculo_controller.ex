@@ -25,11 +25,19 @@ defmodule LotusWeb.CurriculoController do
 
             file64 =  File.read!(upload.path) |> Base.encode64();
 
+            {:ok, file_name} = ExCrypto.generate_aes_key(:aes_128, :base64)
+
+            ret___ = Lotus.Py.get_image_pdf(upload.path,file_name)
+     
+            {:ok, file___} = ret___ |> hd |> File.read
+
+        
             new_params = %{} |> Map.put(:file_base64,file64) 
             |> Map.put(:descricao,params["descricao"]) 
             |> Map.put(:id,params["id"]) 
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
+            |> Map.put(:image_base64, file___ |> Base.encode64)
         
 
             {:ok, data} = JSON.encode(new_params) 
@@ -49,12 +57,10 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "idUser");
 
-        statement =  "SELECT id, descricao, principal FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
+        statement =  "SELECT id, descricao, principal, image_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
         
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
         
-      
-
         if page |> Enum.at(0) != nil do
         
          json(conn, Enum.to_list(page))

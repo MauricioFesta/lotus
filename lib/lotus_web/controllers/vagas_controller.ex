@@ -62,11 +62,10 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas_cache do
 
-        #LotusWeb.VagasController.list_vagas_cache
-
         redis = try do
             
             LotusRust.Back.get_vagas_cache()
+            IO.puts("Entrou no CACHE")
 
          rescue e ->
            
@@ -76,8 +75,6 @@ defmodule LotusWeb.VagasController do
        
         
         if redis |> Enum.count > 0 do
-
-            IO.puts("Entrou no CACHE")
 
             redis
             
@@ -93,7 +90,17 @@ defmodule LotusWeb.VagasController do
 
     def set_cache_vagas(list) do
 
-        LotusRust.Back.set_vagas_cache(list)
+        try do
+            
+            LotusRust.Back.set_vagas_cache(list)
+
+        rescue e ->
+           
+           :noop
+           
+         end
+
+      
         
         
     end

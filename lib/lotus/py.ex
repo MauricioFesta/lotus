@@ -13,6 +13,34 @@ defmodule Lotus.Py do
         end
     end
 
+    def call_python(cmd, path, arguments) do
+
+        case System.cmd(cmd, [path | arguments]) do
+          {output, 0} ->
+            output
+     
+          {_, 1} -> {:error, "Python code / call error"}
+        end
+     
+    end
+     
+    def path_python do
+     
+         path = [
+           :code.priv_dir(:lotus),
+           "python"
+         ] |> Path.join()
+     
+    end
+
+    def get_image_pdf(path_pdf, filename) do
+        
+        res = call_python("python3", path_python() <> "/get_image_for_pdf.py", [path_pdf,"/tmp/" <>filename])
+
+        res |> String.split("\n")
+
+    end
+
     def teste do
         
         # LotusRust.Back.add(12, 12) |> IO.inspect
