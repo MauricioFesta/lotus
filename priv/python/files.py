@@ -1,4 +1,3 @@
-import camelot
 import os, glob
 
 

@@ -3,8 +3,12 @@ Dependencias proeto:
 Elixir Version: 1.12.0,
 Erlang Version: 24,
 Terminal Version: erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell
-Cassandra Version: 4.0 https://tecnstuff.net/how-to-install-apache-cassandra-on-debian-10/
+Cassandra Version: 4.0   ->>> https://tecnstuff.net/how-to-install-apache-cassandra-on-debian-10/
 https://www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9
+
+python dependencias:
+    fitz
+    
 
 Node Version: 10.19.0
 Npm

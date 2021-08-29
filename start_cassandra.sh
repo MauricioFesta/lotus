@@ -1,1 +1,1 @@
-cd /home/mauricio/Documents/cassandra/apache-cassandra-3.11.11 && sudo bin/cassandra -f -R
+cd /home/mauri42/Documents/cassandra/apache-cassandra-4.0.0 && sudo bin/cassandra -f -R

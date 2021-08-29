@@ -1,1 +1,1 @@
-cd /home/mauricio/Documents/cassandra/apache-cassandra-3.11.11 && bin/cqlsh
+cd /home/mauri42/Documents/cassandra/apache-cassandra-4.0.0 && bin/cqlsh
