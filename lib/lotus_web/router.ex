@@ -15,15 +15,15 @@ defmodule LotusWeb.Router do
     plug LotusWeb.Plugs.Auth
   end
 
-   scope "/", LotusWeb do
+   scope "/public", LotusWeb do
      pipe_through :browser
 
      post "/login-login_valida", LoginController, :login_valida
      post "/login-cadastro", LoginController, :cadastro_login
 
   #   get "/", PageController, :index
-    
-  
+
+
     end
 
 
@@ -55,13 +55,13 @@ defmodule LotusWeb.Router do
     post "/vagas-filter-empresa", VagasController, :filter_empresa
     post "/vagas-filter-ramo", VagasController, :filter_ramo
     get "/lista-notificacoes", PerfilController, :lista_notificacoes
-  
 
-    
-  
-    
-   
-   
+
+
+
+
+
+
 
   end
 
