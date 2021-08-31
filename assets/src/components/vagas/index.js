@@ -64,23 +64,26 @@ class Vagas extends React.Component {
 
         let res = await listVagas()
 
-        let res2 = await listVagasAprovadas()
-        let res3 = await getCurriculo()
+        listVagasAprovadas().then(result => {
 
-        if (res3.data.length > 0) {
-            this.obs.is_curriculo = true
-        }
+            this.obs.candidato_vagas = [...result.data[0].vagas_aprovadas]
+
+        })
+
+
+        getCurriculo().then(result => {
+
+            if (result.data.length > 0) {
+                this.obs.is_curriculo = true
+            }
+
+        })
 
         if (new_data) {
 
             res = new_data
 
         }
-
-        this.obs.candidato_vagas = [...res2.data[0].vagas_aprovadas]
-
-
-
 
         if (Array.isArray(res.data)) {
 

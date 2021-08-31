@@ -126,9 +126,9 @@ function Login_view(props) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="cadastro" variant="body2">
+                {/* <Link href="cadastro" variant="body2">
                   {"Não tenho conta ainda ? Cadastre-se"}
-                </Link>
+                </Link> */}
               </Grid>
             </Grid>
             <Box mt={5}>
