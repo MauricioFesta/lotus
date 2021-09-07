@@ -21,12 +21,11 @@ export class Cadastro extends React.Component {
     let formData = new FormData();
 
     let file = document.querySelector('#file');
-
+   
     formData.append("id", uuidv4());
     formData.append("principal", true);
     formData.append("file", file.files[0]);
     formData.append("descricao", $("#curriculotext").val());
-
 
     let config = {
       headers: {

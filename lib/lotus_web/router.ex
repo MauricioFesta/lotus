@@ -35,6 +35,7 @@ defmodule LotusWeb.Router do
     get "/get-perfil", PerfilController, :get_perfil
     put "/perfil-alterar", PerfilController, :alterar_perfil
     post "/curriculo-cadastro", CurriculoController, :cadastro_curriculo
+    post "/curriculo-cadastro-base64", CurriculoController, :cadastro_curriculo_base64
     delete "/curriculo-excluir/:id", CurriculoController, :excluir_curriculo
     get "/curriculo-consulta", CurriculoController, :consulta_curriculo
     get "/curriculo-download/:id", CurriculoController, :download_curriculo

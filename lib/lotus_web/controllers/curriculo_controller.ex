@@ -1,26 +1,34 @@
 defmodule LotusWeb.CurriculoController do
     use LotusWeb, :controller
+
+    def valida_principal_curriculo(conn) do   
+
+        id_user =  get_session(conn, "idUser");
+
+        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true ALLOW FILTERING"
  
-    def cadastro_curriculo(conn, params) do 
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
 
-       id_user =  get_session(conn, "idUser");
+          bol = if Enum.count(page) < 1  do
 
-       cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true ALLOW FILTERING"
-
-       {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
-        
-      bol = if Enum.count(page) < 1  do
-
-                     true
+                    true
   
                 else
             
                     false
   
-            end
-           
+                 end
 
-    
+          bol
+           
+    end
+ 
+    def cadastro_curriculo(conn, params) do 
+
+        id_user =  get_session(conn, "idUser");
+
+        bol = valida_principal_curriculo(conn) |> IO.inspect
+        
         if upload = params["file"] do
 
             file64 =  File.read!(upload.path) |> Base.encode64();
@@ -38,7 +46,6 @@ defmodule LotusWeb.CurriculoController do
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
             |> Map.put(:image_base64, file___ |> Base.encode64)
-        
 
             {:ok, data} = JSON.encode(new_params) 
          
@@ -49,6 +56,32 @@ defmodule LotusWeb.CurriculoController do
                 _ -> json(conn, "Error")
             end
          
+        end
+
+
+    end 
+
+    def cadastro_curriculo_base64(conn, params) do 
+
+        id_user =  get_session(conn, "idUser");
+
+        bol = valida_principal_curriculo(conn)
+
+        new_params = %{} |> Map.put(:file_base64,params["base64"]) 
+        |> Map.put(:descricao,params["descricao"]) 
+        |> Map.put(:id,params["id"]) 
+        |> Map.put(:id_usuario, id_user)
+        |> Map.put(:principal, bol)
+        |> Map.put(:image_base64, "react native")
+    
+
+        {:ok, data} = JSON.encode(new_params) 
+     
+        statement = "INSERT INTO lotus_dev.curriculo JSON '#{data}'"
+    
+        case Xandra.execute!(CassPID, statement, _params = []) do
+            {:ok, _res} -> json(conn, "OK")
+            _ -> json(conn, "Error")
         end
 
     end 

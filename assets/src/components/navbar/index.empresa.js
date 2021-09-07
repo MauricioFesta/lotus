@@ -22,7 +22,6 @@ export default class NavbarEmpresa extends React.Component {
 
   }
 
-
   componentDidMount() {
     let channel = socket.channel("notify:open");
 
@@ -37,8 +36,8 @@ export default class NavbarEmpresa extends React.Component {
 
 
     channel.on("notify_send", payload => {
-      console.log("chegouuu")
-      // alert(payload.body)
+
+      alert(payload.body)
 
     })
   }
