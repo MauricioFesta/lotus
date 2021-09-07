@@ -41,6 +41,7 @@ defmodule Lotus.Py do
 
     end
 
+  
     def teste do
         
         # LotusRust.Back.add(12, 12) |> IO.inspect

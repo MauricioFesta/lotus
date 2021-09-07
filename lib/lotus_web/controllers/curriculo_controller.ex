@@ -67,12 +67,36 @@ defmodule LotusWeb.CurriculoController do
 
         bol = valida_principal_curriculo(conn)
 
+        {:ok, file_name} = ExCrypto.generate_aes_key(:aes_128, :base64)
+
+        new_file_name = file_name <> ".pdf"
+
+        params["base64"] |> Base.decode64 |> IO.inspect
+
+        File.write("/tmp/" <> new_file_name,params["base64"] |> Base.decode64) |> IO.inspect
+
+        file___  = case params["base64"] |> Base.decode64 do
+
+            {:ok, decoded} -> if File.write!("/tmp/" <> new_file_name, decoded) == :ok do
+
+                ret___ = Lotus.Py.get_image_pdf("/tmp/" <> new_file_name, new_file_name)
+
+                {:ok, file___} = ret___ |> hd |> File.read
+
+                file___
+
+            end
+            _->  ""
+
+       end
+
+    
         new_params = %{} |> Map.put(:file_base64,params["base64"]) 
         |> Map.put(:descricao,params["descricao"]) 
         |> Map.put(:id,params["id"]) 
         |> Map.put(:id_usuario, id_user)
         |> Map.put(:principal, bol)
-        |> Map.put(:image_base64, "react native")
+        |> Map.put(:image_base64, file___ |> Base.encode64)
     
 
         {:ok, data} = JSON.encode(new_params) 
@@ -111,14 +135,14 @@ defmodule LotusWeb.CurriculoController do
         statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}'"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
-        {:ok, _base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
-        _base |> IO.inspect
+        {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+        base |> IO.inspect
      
         if page |> Enum.at(0) != nil do
 
             file_name = UUID.uuid4() <> ".pdf"
 
-           case Base.decode64(_base) do
+           case Base.decode64(base) do
 
                 {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
                      json(conn, file_name)
