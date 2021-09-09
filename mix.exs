@@ -21,7 +21,7 @@ defmodule Lotus.MixProject do
   def application do
     [
       mod: {Lotus.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :pdf_generator]
     ]
   end
 
@@ -53,7 +53,8 @@ defmodule Lotus.MixProject do
       {:xandra, "~> 0.13.1"},
       {:rustler, "~> 0.22.0"},
       {:distillery, "~> 2.1"},
-      {:ex_crypto, "~> 0.10.0"}
+      {:ex_crypto, "~> 0.10.0"},
+      {:pdf_generator, "~> 0.6.2"}
     
     ]
   end

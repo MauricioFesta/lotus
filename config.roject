@@ -9,6 +9,10 @@ https://www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9
 python dependencias:
     fitz
     PyMuPDF
+
+linux dependencias:
+    apt-get install pdftk
+    apt-get install wkhtmltopdf
     
 
 Node Version: 10.19.0

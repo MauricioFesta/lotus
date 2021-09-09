@@ -88,9 +88,6 @@ export default class NavbarEmpresa extends React.Component {
                   <Menu className={Classes.ELEVATION_1 + " layout-default"} >
                     <MenuDivider title="Conta" />
                     <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="align-left" text="Perfil" />
-                    <MenuItem icon="align-left" text="Config">
-                      <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="clipboard" text="Alaterar foto" />
-                    </MenuItem>
                   </Menu>
                 </Example>
 
