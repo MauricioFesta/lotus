@@ -1,5 +1,6 @@
 defmodule LotusWeb.CurriculoController do
     use LotusWeb, :controller
+    alias Lotus.Curriculo
 
     def valida_principal_curriculo(conn) do   
 
@@ -109,6 +110,38 @@ defmodule LotusWeb.CurriculoController do
         end
 
     end 
+
+    def cadastro_curriculo_form(conn, params) do   
+
+        id_user =  get_session(conn, "idUser");
+
+        bol = valida_principal_curriculo(conn)
+
+        path_pdf = Curriculo.generate_pdf(params)
+
+        file64 =  File.read!(path_pdf ) |> Base.encode64();
+
+        new_params = %{} 
+            |> Map.put(:file_base64,file64) 
+            |> Map.put(:descricao,params["descricao"]) 
+            |> Map.put(:id,params["id"]) 
+            |> Map.put(:id_usuario, id_user)
+            |> Map.put(:principal, bol)
+            |> Map.put(:image_base64, "react native")
+
+        {:ok, data} = JSON.encode(new_params) 
+     
+        statement = "INSERT INTO lotus_dev.curriculo JSON '#{data}'"
+
+    
+        case Xandra.execute!(CassPID, statement, _params = []) do
+            {:ok, _res} -> json(conn, "OK")
+            {:error, _res} -> json(conn, "Error")
+            _ -> json(conn, "OK")
+        end
+
+
+    end
 
     def consulta_curriculo(conn, %{}) do
 
