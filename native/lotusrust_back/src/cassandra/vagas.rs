@@ -44,6 +44,8 @@ pub struct RowStructVagas {
     pub disponibilidade_viajar: bool,
     pub planejamento_futuro: bool,
     pub candidatos: Vec<String>,
+    pub ramo: String,
+    pub titulo: String
     // pub inserted_at : i64,
     // pub updated_at: i64,
   

@@ -18,14 +18,14 @@ defmodule LotusWeb.VagasController do
 
         id_user =  get_session(conn, "idUser");
 
-        {_valor, _} = Integer.parse(params["valor"])
+        {n_valor, _} = Integer.parse(params["valor"])
 
 
         new_params = params
         |> Map.delete("file")
         |> Map.delete("valor")
         |> Map.put(:imagem_base64, file64)
-        |> Map.put(:valor, _valor)
+        |> Map.put(:valor, n_valor)
         |> Map.put(:empresa_id, id_user)
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
@@ -36,11 +36,14 @@ defmodule LotusWeb.VagasController do
 
          cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
 
-        ret = LotusRust.Back.get_list_vagas()
-        set_cache_vagas(ret)
-
+       
        case Xandra.execute(CassPID,cql, params = [])  do
-           {:ok, _} -> json(conn, %{"Ok": true})
+           {:ok, _} ->
+
+            ret = LotusRust.Back.get_list_vagas()
+            set_cache_vagas(ret)
+
+            json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})
        end
 
@@ -53,7 +56,7 @@ defmodule LotusWeb.VagasController do
     def list_vagas(conn, _) do
 
         query = list_vagas_cache
-
+        
         new_ret = Enum.map(query, fn x -> x |> JSON.decode! end)
 
         json(conn, new_ret)

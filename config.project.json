@@ -59,6 +59,14 @@
 
         }
 
+    },
+
+    {
+        "cassandra prod":{
+            "usuario": "lotus_root",
+            "senha": "nuOTbtK$B8G%#0I$w7@"
+        }
+
     }
 ]
 
