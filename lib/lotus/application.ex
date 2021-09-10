@@ -18,13 +18,13 @@ defmodule Lotus.Application do
       
       Lotus.Scheduler,
 
-      {Xandra, name: CassPID, nodes: ["127.0.0.1:9042"],
-          # authentication: {Xandra.Authenticator.Password, 
-          #   [
-          #     username: "", 
-          #     password: ""
-          #   ]},
-          # my_keyspace: "lotus_dev",
+      {Xandra, name: CassPID, nodes: ["137.184.9.0:9042"],
+          authentication: {Xandra.Authenticator.Password, 
+            [
+              username: "lotus_root", 
+              password: "nuOTbtK$B8G%#0I$w7@"
+            ]},
+          my_keyspace: "lotus_dev",
           pool: DBConnection.Poolboy,
           pool_size: 10}
          

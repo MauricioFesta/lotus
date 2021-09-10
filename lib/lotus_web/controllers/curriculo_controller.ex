@@ -169,7 +169,6 @@ defmodule LotusWeb.CurriculoController do
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
-        base |> IO.inspect
      
         if page |> Enum.at(0) != nil do
 
@@ -193,13 +192,13 @@ defmodule LotusWeb.CurriculoController do
         statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_candidato}' AND principal = true ALLOW FILTERING"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
-        {:ok, _base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+        {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
      
         if page |> Enum.at(0) != nil do
 
             file_name = UUID.uuid4() <> ".pdf"
 
-           case Base.decode64(_base) do
+           case Base.decode64(base) do
 
                 {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
                      json(conn, file_name)
