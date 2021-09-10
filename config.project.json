@@ -1,0 +1,64 @@
+[
+    {
+        "Dependencias Projeto": {
+            "Elixir Version": "1.12.0",
+            "Erlang Version": 24,
+            "Cassandra Version": 4.0,
+            "Python version": 3,
+            "Node Version": "10.19.0",
+            "rustc": "1.54.0",
+            "redis":  "6.2.5",
+            "npm": true,
+            "git": true,
+            "Dependencias Python": {
+
+                "fitz": true,
+                "PyMuPDF": true
+
+
+            },
+            "Linux Dependencias": {
+                "pdftk": true,
+                "wkhtmltopdf": true
+
+            }
+        }
+    },
+
+    {
+        "Dependencias Python": {
+            "Elixir Version": "1.12.0",
+            "Erlang Version": 24,
+            "Cassandra Version": 4.0
+        }
+    },
+
+
+    {
+        "CLI":
+
+        {
+            "get erlang version": "erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell"
+        }
+
+
+
+    },
+
+
+    {
+
+        "utils": {
+            "prod elixir": "PORT=4000 ./bin/lotus start",
+            "install cassandra links": ["https: //tecnstuff.net/how-to-install-apache-cassandra-on-debian-10/", "https: //www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9"],
+            "Install especific version for Elixir in windows": "https: //chocolatey.org/install  https://www.erlang-solutions.com/downloads/",
+            "Install especific version for Elixir and Erlang in windows and Linux": "https: //www.erlang-solutions.com/downloads/",
+            "Windows error rust": ["rustup toolchain install stable-x86_64-pc-windows-gnu","rustup default stable-x86_64-pc-windows-gnu"]
+
+            
+
+        }
+
+    }
+]
+
