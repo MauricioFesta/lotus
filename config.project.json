@@ -6,7 +6,7 @@
             "Cassandra Version": 4.0,
             "Python version": 3,
             "Node Version": "10.19.0",
-            "rustc": "1.54.0",
+            "rustc": "1.55.0",
             "redis":  "6.2.5",
             "npm": true,
             "git": true,
