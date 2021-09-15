@@ -14,7 +14,7 @@ import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
 import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert'; 
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
-import { data } from 'jquery';
+import {perfil_image_default} from '../../others/global_values'
 require("./css/style.scss")
 
 const styleButomDelete = {
@@ -206,9 +206,9 @@ export default class Curriculo extends React.Component {
                   return (
 
                     <Card className="mt-4">
-                      <Image src={'data:image/jpeg;base64,' + el.image_base64} wrapped ui={false} />
+                      <Image src={el.image_base64 === "" || !el.image_base64 ? perfil_image_default : 'data:image/jpeg;base64,' + el.image_base64} wrapped ui={false} />
                       <Card.Content>
-                        <Card.Header>{el.descricao}</Card.Header>
+                        {/* <Card.Header>{el.id}</Card.Header> */}
                         <Card.Meta>Cadastrado em 2021</Card.Meta>
                         <Card.Description>
                           {el.descricao}

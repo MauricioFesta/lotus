@@ -7,6 +7,9 @@ defmodule Lotus.Curriculo do
 
         #Lotus.Curriculo.generate_pdf
 
+
+        form |> IO.inspect
+
         html_path = [
             :code.priv_dir(:lotus),
             "/html/pdf_curriculo.html"
@@ -15,9 +18,10 @@ defmodule Lotus.Curriculo do
           {:ok, html} = File.read(html_path)
 
 
-        new_html = html |> String.replace("{nome_completo}", form["nome"]) |> String.replace("{cidade}", form["cidade"])
+        new_html = html |> String.replace("{nome_completo}", form["nome"]) 
             |> String.replace("{rua}", form["rua"]) |> String.replace("{descricao}", form["descricao"]) |> String.replace("{telefone}", form["telefone"])
             |> String.replace("{formacao_academica}", form["ensinomedio"])
+            |> String.replace("{cidade}", form["cidade"])
 
         total_count_cer = Utils.caracteres_especiais_list |> Enum.count
 

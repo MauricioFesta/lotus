@@ -128,7 +128,6 @@ export default class CreateEmpresa extends React.Component {
                             <Form.Group as={Col}>
                                 <Form.Label>Turno: (obrigatório)</Form.Label>
                                 <Form.Control id="turno" as="select" defaultValue="Choose...">
-                                    <option>Selecione</option>
                                     <option>Diurmo</option>
                                     <option>Noturno</option>
                                 </Form.Control>
@@ -137,18 +136,18 @@ export default class CreateEmpresa extends React.Component {
                             <Form.Group as={Col}>
                                 <Form.Label>Cidade: (obrigatório)</Form.Label>
                                 <Form.Control id="cidade" as="select" defaultValue="Choose...">
-                                    <option>Selecione</option>
                                     <option>Bento Gonçalves</option>
-                                    <option>São paulo</option>
+                                    <option>Garibaldi</option>
+                                    <option>Carlos Barbosa</option>
+                                    <option>Monte Belo</option>
+                                    <option>Monte Belo do Sul</option>
                                 </Form.Control>
                             </Form.Group>
 
                             <Form.Group as={Col}>
                                 <Form.Label>Estado: (obrigatório)</Form.Label>
                                 <Form.Control id="estado" as="select" defaultValue="Choose...">
-                                    <option>Selecione</option>
                                     <option>RS</option>
-                                    <option>SP</option>
                                 </Form.Control>
                             </Form.Group>
 

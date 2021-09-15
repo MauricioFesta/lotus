@@ -32,6 +32,7 @@
     "react-confirm-alert": "^2.7.0",
     "react-datepicker": "^4.1.1",
     "react-dom": "^16.14.0",
+    "react-input-mask": "^2.0.4",
     "react-intl-currency-input": "^0.2.6",
     "react-redux": "^7.2.4",
     "react-redux-form": "^1.16.14",

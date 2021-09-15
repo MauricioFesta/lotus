@@ -16,8 +16,8 @@ config :lotus, Lotus.Scheduler,
   overlap: false,
   jobs: [
 
-    {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_pdf_tmp, []}},
-    {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_notificacoes, []}}
+    # {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_pdf_tmp, []}},
+    # {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_notificacoes, []}}
 
   ]
 

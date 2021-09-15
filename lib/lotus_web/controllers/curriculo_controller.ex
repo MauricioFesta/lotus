@@ -116,6 +116,14 @@ defmodule LotusWeb.CurriculoController do
         id_user =  get_session(conn, "idUser");
 
         bol = valida_principal_curriculo(conn)
+        
+        base64_foto =  case is_binary(params["foto_curriculo"]) do   
+
+            true ->  ""
+
+            _ -> File.read!(params["foto_curriculo"].path) |> Base.encode64
+
+        end
 
         path_pdf = Curriculo.generate_pdf(params)
 
@@ -127,7 +135,7 @@ defmodule LotusWeb.CurriculoController do
             |> Map.put(:id,params["id"]) 
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
-            |> Map.put(:image_base64, "react native")
+            |> Map.put(:image_base64, base64_foto)
 
         {:ok, data} = JSON.encode(new_params) 
      

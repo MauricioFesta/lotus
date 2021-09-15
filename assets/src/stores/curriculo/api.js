@@ -2,9 +2,13 @@ import api from "../../others/api_default"
 
 export const postCurriculo = async (json) => {
 
-    console.log(json.formData, "Data")
-
     return await api.post("/api/curriculo-cadastro", json.formData, json.config);
+    
+}
+
+export const postCurriculoForm = async (data) => {
+
+    return await api.post("/api/curriculo-cadastro-form", data);
     
 }
 

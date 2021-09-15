@@ -1,0 +1,3 @@
+UPDATE system.local SET cluster_name = 'lotus_' where key='local';
+
+CREATE ROLE lotus_root with SUPERUSER = true AND LOGIN = true and PASSWORD = 'nuOTbtK$B8G%#0I$w7@';
