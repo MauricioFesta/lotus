@@ -20,7 +20,7 @@ export const getCurriculo = async () => {
 
 export const getDownload = async (id) => {
 
-    return await api.get(`/api/curriculo-download/${id}`)
+    return await api.get(`/api/curriculo-download/${id}`, {responseType: 'blob'})
 }
 
 export const postExcluir = async (id) => {

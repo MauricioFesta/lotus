@@ -12,9 +12,9 @@ import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
 import CheckIcon from '@material-ui/icons/Check';
-import { confirmAlert } from 'react-confirm-alert'; 
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
-import {perfil_image_default} from '../../others/global_values'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { perfil_image_default } from '../../others/global_values'
 require("./css/style.scss")
 
 const styleButomDelete = {
@@ -50,7 +50,7 @@ export default class Curriculo extends React.Component {
   render() {
 
     const confirmExcluirCurriculo = (id) => {
-     
+
       confirmAlert({
         title: 'Alerta',
         message: 'Deseja excluir este Currículo ?',
@@ -61,14 +61,14 @@ export default class Curriculo extends React.Component {
           },
           {
             label: 'Não',
-            onClick: () => {}
+            onClick: () => { }
           }
         ]
       });
     };
 
     const confirmPrincipal = (id) => {
-      
+
       confirmAlert({
         title: 'Currículo',
         message: 'Deseja tornar este como principal ?',
@@ -87,7 +87,7 @@ export default class Curriculo extends React.Component {
 
 
     const confirmNotPrincipal = (id) => {
-    
+
       confirmAlert({
         title: 'Currículo',
         message: 'Deseja remover este como principal ?',
@@ -119,14 +119,19 @@ export default class Curriculo extends React.Component {
     }
     async function download_Pdf(el) {
 
-      let res = await getDownload(el)
+      let response = await getDownload(el)
 
-      window.open(`/pdf_tmp/${res.data}`, false)
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.pdf'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
 
 
     }
 
-   const tornar_principal = async  (id, bol) => {
+    const tornar_principal = async (id, bol) => {
 
       let data = {
         boolean: bol,
@@ -135,15 +140,15 @@ export default class Curriculo extends React.Component {
 
       let res = await setPrincipal(id, data)
 
-      if(res.data === "Ok"){
+      if (res.data === "Ok") {
         AppToaster.show({ message: "Prioridade alterada com sucesso", intent: "success" });
         this.componentDidMount()
-       
-      }else{
-        AppToaster.show({message: "Não foi possível alterar a prioridade", intent: "warning" });
+
+      } else {
+        AppToaster.show({ message: "Não foi possível alterar a prioridade", intent: "warning" });
       }
 
-    
+
 
 
     }
@@ -151,21 +156,21 @@ export default class Curriculo extends React.Component {
 
     function tornarPrincipal(id) {
       return (
-      
-          <Mui.IconButton onClick={() => confirmPrincipal(id)} color="primary" aria-label="upload picture" component="span">
-            <CheckIcon />
-          </Mui.IconButton>
+
+        <Mui.IconButton onClick={() => confirmPrincipal(id)} color="primary" aria-label="upload picture" component="span">
+          <CheckIcon />
+        </Mui.IconButton>
 
       )
     }
 
     function curriculoPrincipal(id) {
       return (
-       
-          <Mui.IconButton style={styleButomPrincipal} onClick={() => confirmNotPrincipal(id)} color="primary" aria-label="upload picture" component="span">
-            <DoneAllIcon />
-          </Mui.IconButton>
-    
+
+        <Mui.IconButton style={styleButomPrincipal} onClick={() => confirmNotPrincipal(id)} color="primary" aria-label="upload picture" component="span">
+          <DoneAllIcon />
+        </Mui.IconButton>
+
       )
     }
 
@@ -193,54 +198,54 @@ export default class Curriculo extends React.Component {
 
       <>
 
-      
-          <Jumbotron className="ml-4 mr-4 mt-4">
+
+        <Jumbotron className="ml-4 mr-4 mt-4">
 
 
-            <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
-            <Card.Group>
-              {this.state.showItems ?
+          <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
+          <Card.Group>
+            {this.state.showItems ?
 
-                this.state.dataCurriculo.map(el => {
+              this.state.dataCurriculo.map(el => {
 
-                  return (
+                return (
 
-                    <Card className="mt-4">
-                      <Image src={el.image_base64 === "" || !el.image_base64 ? perfil_image_default : 'data:image/jpeg;base64,' + el.image_base64} wrapped ui={false} />
-                      <Card.Content>
-                        {/* <Card.Header>{el.id}</Card.Header> */}
-                        <Card.Meta>Cadastrado em 2021</Card.Meta>
-                        <Card.Description>
-                          {el.descricao}
-                        </Card.Description>
-                      </Card.Content>
+                  <Card className="mt-4">
+                    <Image src={el.image_base64 === "" || !el.image_base64 ? perfil_image_default : 'data:image/jpeg;base64,' + el.image_base64} wrapped ui={false} />
+                    <Card.Content>
+                      {/* <Card.Header>{el.id}</Card.Header> */}
+                      <Card.Meta>Cadastrado em 2021</Card.Meta>
+                      <Card.Description>
+                        {el.descricao}
+                      </Card.Description>
+                    </Card.Content>
 
-                      <Card.Content extra>
-                        {downloadFormatter(el.id)}
-                        {excluirFormatter(el.id)}
-                        {el.principal ?
-                          curriculoPrincipal(el.id) :
-                          tornarPrincipal(el.id)}
-                      </Card.Content>
-                    </Card>
+                    <Card.Content extra>
+                      {downloadFormatter(el.id)}
+                      {excluirFormatter(el.id)}
+                      {el.principal ?
+                        curriculoPrincipal(el.id) :
+                        tornarPrincipal(el.id)}
+                    </Card.Content>
+                  </Card>
 
 
 
-                  )
-                })
+                )
+              })
 
-                :
+              :
 
-                <Alert variant="info" className="mt-4">
-                  Não há curriculos cadastrados!
+              <Alert variant="info" className="mt-4">
+                Não há curriculos cadastrados!
                 <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
-                </Alert>
+              </Alert>
 
-              }
+            }
 
-            </Card.Group>
+          </Card.Group>
 
-          </Jumbotron>
+        </Jumbotron>
 
 
       </>
