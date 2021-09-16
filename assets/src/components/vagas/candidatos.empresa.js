@@ -2,7 +2,7 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, Image } from 'semantic-ui-react'
 import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
-import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar,candidatoDesaprovar } from "../../stores/vagas/api"
+import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar, candidatoDesaprovar } from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CheckIcon from '@material-ui/icons/Check';
@@ -90,9 +90,14 @@ class CandidatosEmpresa extends React.Component {
 
         async function download_Pdf(el) {
 
-            let res = await downloadCurriculoCandidato(el)
+            let response  = await downloadCurriculoCandidato(el)
 
-            window.open(`/pdf_tmp/${res.data}`, false)
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'curriculo.pdf'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
 
 
         }
@@ -148,9 +153,9 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:"+ id, { body: "Candidato desaprovado" })
+                channel.push("notify_send:" + id, { body: "Candidato desaprovado" })
 
-                this.componentDidMount() 
+                this.componentDidMount()
 
                 AppToaster.show({ message: "Candidato desaprovado com sucesso", intent: "success" });
 
@@ -189,7 +194,7 @@ class CandidatosEmpresa extends React.Component {
 
                 channel.push("notify_send:" + id, { body: "Candidato aceito" })
 
-                this.componentDidMount() 
+                this.componentDidMount()
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });
 

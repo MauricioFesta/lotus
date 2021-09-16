@@ -215,8 +215,13 @@ defmodule LotusWeb.CurriculoController do
 
            case Base.decode64(base) do
 
-                {:ok, decoded} -> if File.write!("assets/public/pdf_tmp/" <> file_name, decoded) == :ok do
-                     json(conn, file_name)
+                {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
+                     
+                    conn 
+                    |> put_resp_content_type("application/*")
+                    |> put_resp_header("content-disposition", "attachment; filename=\"#{file_name}\"")
+                    |> send_resp(200, File.read!("/tmp/#{file_name}"))
+                    
                 end
                 _-> json(conn, "Error")
 
@@ -225,7 +230,6 @@ defmodule LotusWeb.CurriculoController do
         end
         
     end
-
 
     def excluir_curriculo(conn, %{"id" => id_curriculo}) do
 
