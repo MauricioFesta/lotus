@@ -21,11 +21,13 @@ import Ramo from "./filters/ramo"
 import Empresa from "./filters/empresa"
 import { allEmpresas } from "../../stores/vagas/api"
 import { Spinner } from "@blueprintjs/core";
-
-
+import { vagaView } from '../../actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import history from "../../others/redirect";
+// import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const id_master = idMaster()
-
 
 require("./css/index.scss")
 
@@ -53,6 +55,14 @@ class Vagas extends React.Component {
         let res = await allEmpresas()
 
         this.obs.data_empresas = res.data
+
+
+    }
+
+    handleRedirect(path, vaga) {
+
+        this.props.vagaView({ ...vaga })
+        history.push(path);
 
     }
 
@@ -281,6 +291,25 @@ class Vagas extends React.Component {
 
                                                     }
 
+                                                    &nbsp;
+                                                    <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", el2)} color="primary" aria-label="upload picture" component="span">
+                                                        {/* <PhotoCamera /> */}
+                                                        Mais
+                                                    </Mui.IconButton>
+
+                                                    {/* <Mui.Button
+                                                        size="small"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        endIcon={<SendIcon />}
+                                                        
+                                                    >
+                                                        Teste
+                                                    </Mui.Button> */}
+
+
+
+
                                                 </Card.Body>
 
                                                 <Card.Footer>
@@ -310,4 +339,13 @@ class Vagas extends React.Component {
     }
 }
 
-export default observer(Vagas)
+
+const mapStateToProps = store => ({
+
+    vaga_one: store.vagasState.vaga_one,
+
+});
+const mapDispatchToProps = dispatch =>
+    bindActionCreators({ vagaView }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(observer(Vagas));

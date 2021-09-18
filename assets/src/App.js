@@ -16,6 +16,7 @@ import Navbar from "./components/navbar"
 import CandidatosEmpresa from "./components/vagas/candidatos.empresa"
 import NavbarEmpresa from "./components/navbar/index.empresa"
 import history from "./others/redirect"
+import Details from "./components/vagas/details"
 require("./css/style.scss")
 
 const PrivateRouteUser = ({ component: Component, ...rest }) => (
@@ -105,6 +106,7 @@ function App() {
             <PrivateRouteUser path="/postagens" exact component={Postagens} />
             <PrivateRouteEmpresa path="/postagens/cadastro" component={PostCreateEmpresa} />
             <PrivateRouteAny path="/perfil" exact component={Perfil} />
+            <PrivateRouteAny path="/vaga-details" exact component={Details} />
           </Switch>
 
         </Router>

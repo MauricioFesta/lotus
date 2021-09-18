@@ -26,12 +26,7 @@ class Perfil extends React.Component {
 
         this.setState({ perfilMODEL: perfilMODEL })
 
-
-
         this.props.perfilQuery({ foto_base64: this.state.perfilMODEL.foto_base64 })
-
-        console.log(Store.getState().perfilState.query.foto_base64)
-
 
     }
 
@@ -54,7 +49,7 @@ class Perfil extends React.Component {
 
         if (store.perfilState.form.length > 0) {
 
-            formData.append("file_base64", store.perfilState.form[0]);
+            formData.append("foto_base64", store.perfilState.form[0]);
         }
 
         formData.append("nome", this.state.nome || this.state.perfilMODEL.nome);

@@ -3,14 +3,14 @@ defmodule LotusWeb.PerfilController do
     use LotusWeb, :controller
 
     def alterar_perfil(conn, params) do
-
+        
         id_user =  get_session(conn, "idUser");
 
         params |> IO.inspect
     
-      query = if params["file_base64"] != nil do
-           
-            file64 =  File.read!(params["file_base64"].path) |> Base.encode64();
+      query = if params["foto_base64"] != nil do
+   
+            file64 =  base64_image(params["foto_base64"])
 
             "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user}'"
 
@@ -60,7 +60,10 @@ defmodule LotusWeb.PerfilController do
         end
         
     end
-    
 
+    defp base64_image(vl) when is_binary(vl), do: vl
+
+    defp base64_image(vl), do: File.read!(vl.path) |> Base.encode64();
+    
 
 end

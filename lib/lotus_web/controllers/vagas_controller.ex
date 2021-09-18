@@ -210,7 +210,7 @@ defmodule LotusWeb.VagasController do
     end
 
     def insert_vaga_user(conn, params) do
-
+       
         id_user = get_session(conn, "idUser");
 
         cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}' ALLOW FILTERING"

@@ -1,4 +1,4 @@
-import {FORM,QUERY} from '../actions/actionTypes'
+import {FORM,QUERY, VAGA_ONE} from '../actions/actionTypes'
 
 export const perfilForm = value => ({
   type: FORM,
@@ -11,5 +11,13 @@ export const perfilQuery = value => ({
   query: value,
 
 })
+
+export const vagaView = value => ({
+
+  type: VAGA_ONE,
+  vaga_one: value,
+
+})
+
 
 
