@@ -54,6 +54,7 @@ CREATE TABLE lotus_dev.vagas(
 CREATE TABLE lotus_dev.postagens(
    id varchar,
    descricao text,
+   empresa_razao text,
    PRIMARY KEY (id)
 
 );
