@@ -1,7 +1,4 @@
 
-Tables: 
-
-
 CREATE KEYSPACE lotus_dev WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': '1'}  AND durable_writes = true;
 
 CREATE TABLE lotus_dev.user(
@@ -9,16 +6,22 @@ CREATE TABLE lotus_dev.user(
    nome varchar,
    email varchar,
    senha varchar,
-   is_empresa varchar,
+   is_empresa boolean,
    foto_base64 text,
-   cnpj_cpf int,
+   cnpj_cpf bigint,
    notificacoes list<text>,
    vagas_aprovadas list<text>,
-   inserted_at timestamp,
-   updated_at timestamp,
-   PRIMARY KEY (id)
+   inserted_at bigint,
+   updated_at bigint,
+   verificado boolean,
+   PRIMARY KEY (email)
    );
-   /PRIMARY KEY (id)
+
+CREATE INDEX ON user (senha);
+CREATE INDEX ON user (id);
+CREATE INDEX ON user (is_empresa);
+
+  
 
 CREATE TABLE lotus_dev.curriculo(
    id varchar PRIMARY KEY,

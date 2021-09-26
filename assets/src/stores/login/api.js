@@ -11,3 +11,11 @@ export const postCadastroUser = async (data) => {
     let result = await axios.post("/public/login-cadastro", data)
     return result
 }
+
+export const postVerificado = async (data) => {
+
+
+  let result = await axios.post("/public/login-verificado-valida", data)
+    return result
+
+}

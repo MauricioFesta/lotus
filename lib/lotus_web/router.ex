@@ -20,6 +20,7 @@ defmodule LotusWeb.Router do
 
      post "/login-login_valida", LoginController, :login_valida
      post "/login-cadastro", LoginController, :cadastro_login
+     post "/login-verificado-valida", LoginController, :confirm_login
     
   #   get "/", PageController, :index
 

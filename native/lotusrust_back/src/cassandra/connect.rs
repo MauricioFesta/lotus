@@ -23,7 +23,8 @@ pub fn conn() -> CurrentSession {
     let user = "lotus_root";
     let password = "nuOTbtK$B8G%#0I$w7@";
     let auth = StaticPasswordAuthenticator::new(&user, &password);
-    let node = NodeTcpConfigBuilder::new("137.184.9.0:9042", auth).build();
+    // let node = NodeTcpConfigBuilder::new("137.184.9.0:9042", auth).build();
+    let node = NodeTcpConfigBuilder::new("127.0.0.1:9042", auth).build();
     let cluster_config = ClusterTcpConfig(vec![node]);
     let no_compression: CurrentSession = new_session(&cluster_config, RoundRobin::new()).expect("session should be created");
 

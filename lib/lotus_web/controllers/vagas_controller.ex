@@ -110,7 +110,7 @@ defmodule LotusWeb.VagasController do
 
     def lista_all_empresas(conn, _) do
 
-        cql = "SELECT id,nome FROM lotus_dev.user WHERE is_empresa = 'true' ALLOW FILTERING"
+        cql = "SELECT id,nome FROM lotus_dev.user WHERE is_empresa = true"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
@@ -211,8 +211,8 @@ defmodule LotusWeb.VagasController do
 
     def insert_vaga_user(conn, params) do
        
-        id_user = get_session(conn, "idUser");
-
+        id_user = get_session(conn, "idUser") 
+        
         cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}' ALLOW FILTERING"
 
         {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, _params = [])
@@ -233,7 +233,7 @@ defmodule LotusWeb.VagasController do
 
                 set_cache_vagas(ret)
 
-                case Vagas.notificacao_user(empresa_id,params["id"], "enviu uma candidatura para uma vaga", false) do
+                case Vagas.notificacao_user(empresa_id,params["id"], "enviou uma candidatura para uma vaga", false) do
 
                     true -> json(conn, %{Ok: true})
 

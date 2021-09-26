@@ -40,7 +40,17 @@ config :phoenix, :json_library, Jason
 config :pdf_generator,
   raise_on_missing_wkhtmltopdf_binary: false
 
-  
+
+ config :lotus, Lotus.Mailer,
+    adapter: Bamboo.SMTPAdapter,
+    server: "smtp.gmail.com",
+    port: 587,
+    username: "applotus.no.replay@gmail.com",
+    password: "@brasil123++@",
+    tls: :if_available, # can be `:always` or `:never`
+    ssl: false, # can be `true`
+    retries: 1
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

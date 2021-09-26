@@ -95,6 +95,7 @@ function App() {
         <Router history={history}>
           <Switch>
             <Route path="/" component={Login} exact />
+            <Route path="/login" component={Login} exact />
             <Route path="/cadastro" component={Cadastro} exact />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />

@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import $ from "jquery";
 import { getUser } from "../../stores/login/api"
 import Cookies from 'universal-cookie';
+import { AppToaster } from "../../others/toaster"
 const cookies = new Cookies();
 var jwt = require('jsonwebtoken');
 
@@ -126,9 +127,9 @@ function Login_view(props) {
                 </Link>
               </Grid>
               <Grid item>
-                {/* <Link href="cadastro" variant="body2">
+                 <Link href="cadastro" variant="body2">
                   {"Não tenho conta ainda ? Cadastre-se"}
-                </Link> */}
+                </Link> 
               </Grid>
             </Grid>
             <Box mt={5}>
@@ -146,7 +147,7 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {isOpen: false};
+    this.state = { isOpen: false };
     this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
 
   }
@@ -163,11 +164,21 @@ export default class Login extends React.Component {
 
     let res = await getUser(data)
 
+
+
     if (res.data.Ok) {
+
+      if (!res.data.verificado) {
+
+        AppToaster.show({ message: "Email não foi confirmado, se não tiver mais o código podera gerar outro cadastro somente daqui 2 horas", intent: "danger" });
+
+        return
+
+      }
 
       const secret = 'nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H';
 
-      var token = jwt.sign({ logged: true, id: res.data.id, is_empresa: (res.data.is_empresa === 'true')}, secret, { expiresIn: '1h' })
+      var token = jwt.sign({ logged: true, id: res.data.id, is_empresa: res.data.is_empresa }, secret, { expiresIn: '1h' })
 
       cookies.set('_A-T', res.data.token);
       cookies.set('_A-T-T_L', token);
@@ -176,7 +187,7 @@ export default class Login extends React.Component {
 
     } else {
 
-      this.setState({isOpen: true})
+      this.setState({ isOpen: true })
 
     }
 
@@ -188,11 +199,11 @@ export default class Login extends React.Component {
       return <MuiAlert elevation={6} variant="filled" {...props} />;
     }
 
- 
+
     return (
       <>
-        <Snackbar anchorOrigin={{  vertical: 'bottom', horizontal: 'right' }}  open={this.state.isOpen} autoHideDuration={6000} onClose={() => this.setState({isOpen: false})}>
-          <Alert onClose={() => this.setState({isOpen: false})} severity="warning">
+        <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} open={this.state.isOpen} autoHideDuration={6000} onClose={() => this.setState({ isOpen: false })}>
+          <Alert onClose={() => this.setState({ isOpen: false })} severity="warning">
             Email ou senha incorretos
           </Alert>
         </Snackbar>
