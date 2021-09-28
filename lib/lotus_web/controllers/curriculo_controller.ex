@@ -4,9 +4,9 @@ defmodule LotusWeb.CurriculoController do
 
     def valida_principal_curriculo(conn) do   
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
-        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true ALLOW FILTERING"
+        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true"
  
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
 
@@ -25,10 +25,11 @@ defmodule LotusWeb.CurriculoController do
     end
  
     def cadastro_curriculo(conn, params) do 
+        conn |> IO.inspect
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"] 
 
-        bol = valida_principal_curriculo(conn) |> IO.inspect
+        bol = valida_principal_curriculo(conn)
         
         if upload = params["file"] do
 
@@ -64,7 +65,7 @@ defmodule LotusWeb.CurriculoController do
 
     def cadastro_curriculo_base64(conn, params) do 
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
         bol = valida_principal_curriculo(conn)
 
@@ -72,9 +73,9 @@ defmodule LotusWeb.CurriculoController do
 
         new_file_name = file_name <> ".pdf"
 
-        params["base64"] |> Base.decode64 |> IO.inspect
+        params["base64"] |> Base.decode64
 
-        File.write("/tmp/" <> new_file_name,params["base64"] |> Base.decode64) |> IO.inspect
+        File.write("/tmp/" <> new_file_name,params["base64"] |> Base.decode64)
 
         file___  = case params["base64"] |> Base.decode64 do
 
@@ -113,9 +114,9 @@ defmodule LotusWeb.CurriculoController do
 
     def cadastro_curriculo_form(conn, params) do   
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
-        params |> IO.inspect
+        params
 
         bol = valida_principal_curriculo(conn)
         
@@ -155,27 +156,29 @@ defmodule LotusWeb.CurriculoController do
 
     def consulta_curriculo(conn, %{}) do
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
-        statement =  "SELECT id, descricao, principal, image_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' ALLOW FILTERING"
+         statement =  "SELECT id, descricao, principal, image_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}'"
         
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
+         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, statement, _params = [])
         
-        if page |> Enum.at(0) != nil do
+         if page |> Enum.at(0) != nil do
         
-         json(conn, Enum.to_list(page))
+          json(conn, Enum.to_list(page))
 
-        else
+         else
           
-            json(conn, [])
+             json(conn, [])
 
-        end
+         end
          
     end
 
     def download_curriculo(conn, %{"id" => id_curriculo}) do
 
-        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}'"
+        id_user =  get_session(conn, "id")["id"]
+
+        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
@@ -204,7 +207,8 @@ defmodule LotusWeb.CurriculoController do
 
     def download_curriculo_candidato(conn, %{"id" => id_candidato}) do
 
-        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_candidato}' AND principal = true ALLOW FILTERING"
+        id_user =  get_session(conn, "id")["id"]
+        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id_usuario = '#{id_candidato}' AND principal = true"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
@@ -233,7 +237,8 @@ defmodule LotusWeb.CurriculoController do
 
     def excluir_curriculo(conn, %{"id" => id_curriculo}) do
 
-        statement = "DELETE FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}'"
+        id_user =  get_session(conn, "id")["id"]
+        statement = "DELETE FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
 
         case Xandra.execute(CassPID, statement,  _params = []) do
             {:ok, _} ->  json(conn, "Ok")
@@ -245,12 +250,11 @@ defmodule LotusWeb.CurriculoController do
 
     def curriculo_principal(conn, %{"id" => id_curriculo, "boolean" => bol}) do
 
-        id_user =  get_session(conn, "idUser") |> IO.inspect
-     
-        cql = "UPDATE lotus_dev.curriculo SET principal = #{bol} WHERE id = '#{id_curriculo}'"
-        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true ALLOW FILTERING"
+        id_user =  get_session(conn, "id")["id"]     
+        cql = "UPDATE lotus_dev.curriculo SET principal = #{bol} WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
+        cql2 = "SELECT id FROM lotus_dev.curriculo WHERE id_usuario = '#{id_user}' AND principal = true"
        
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])|> IO.inspect
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql2, _params = [])
       
         if  Enum.count(page) < 1 || !bol do
  

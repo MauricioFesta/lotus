@@ -57,7 +57,7 @@ pub fn get_filtro_vagas_empresa_db(empresa: &str) -> Vec<String>  {
    
     let no_compression = connect::conn();
 
-    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE empresa_id = {} ALLOW FILTERING", empresa);
+    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE empresa_id = {}", empresa);
 
         let rows = no_compression
         .query(select_struct_cql)
@@ -89,7 +89,7 @@ pub fn get_filtro_vagas_ramo_db(ramo: &str) -> Vec<String>  {
    
     let no_compression = connect::conn();
 
-    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE ramo in {} ALLOW FILTERING", ramo);
+    let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE ramo in {}", ramo);
 
         let rows = no_compression
         .query(select_struct_cql)

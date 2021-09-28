@@ -4,7 +4,7 @@ defmodule LotusWeb.PerfilController do
 
     def alterar_perfil(conn, params) do
         
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")
 
         params |> IO.inspect
     
@@ -12,11 +12,11 @@ defmodule LotusWeb.PerfilController do
    
             file64 =  base64_image(params["foto_base64"])
 
-            "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user}'"
+            "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user["id"]}' AND email = '#{id_user["email"]}'"
 
             else
 
-           "UPDATE lotus_dev.user SET email = '#{params["email"]}', nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user}'"
+           "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user["id"]}' AND email = '#{id_user["email"]}'"
 
 
         end
@@ -32,7 +32,7 @@ defmodule LotusWeb.PerfilController do
     end
 
     def lista_notificacoes(conn,params) do
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
         cql = "SELECT notificacoes FROM lotus_dev.user WHERE id = '#{id_user}'"
         
@@ -43,7 +43,7 @@ defmodule LotusWeb.PerfilController do
 
     def get_perfil(conn, _params) do
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
         sql =  "SELECT email, nome, senha, foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}'"
 

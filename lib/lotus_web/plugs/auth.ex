@@ -15,17 +15,19 @@ defmodule LotusWeb.Plugs.Auth do
             redirect(conn, to: "/not-permission")
             
         token ->
-          case Token.verify(conn, "va^4S^u!b%@RlTrb", token) do
-            {:ok, user_id} when is_binary(user_id) ->
+          case Token.verify(conn, "gWt#4NP40zPc8k4#B@iSK2N@YSd!RUZE2$G6IphwfkEoQHED1B", token) do
 
-            statement = "SELECT id FROM lotus_dev.user WHERE id = '#{user_id}'"
-            {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
-                
-            if page |> Enum.at(0) != nil do
-                
-                put_session(conn, :idUser, user_id)
+            {:ok, user_id_email}  ->
 
-            end
+              statement = "SELECT id FROM lotus_dev.user WHERE id = '#{user_id_email["id"]}'"
+              {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement, _params = [])
+                  
+              if page |> Enum.at(0) != nil do
+                  
+                  put_session(conn, :id, user_id_email)
+                 
+
+              end
 
             #   conn
             #   |> assign(:usuario, usuario["_id"])

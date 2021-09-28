@@ -3,7 +3,7 @@ defmodule LotusWeb.PostagensController do
 
     def cadastro_postagem(conn, params) do
 
-        id_user = get_session(conn, "idUser")
+        id_user = get_session(conn, "id")["id"]
 
         cql_user = "SELECT nome FROM lotus_dev.user WHERE id = '#{id_user}'"
 

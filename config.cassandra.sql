@@ -14,26 +14,29 @@ CREATE TABLE lotus_dev.user(
    inserted_at bigint,
    updated_at bigint,
    verificado boolean,
-   PRIMARY KEY (email)
+   PRIMARY KEY (id, email)
    );
 
 CREATE INDEX ON user (senha);
-CREATE INDEX ON user (id);
 CREATE INDEX ON user (is_empresa);
 
   
 
 CREATE TABLE lotus_dev.curriculo(
-   id varchar PRIMARY KEY,
+   id varchar ,
    file_base64 text,
    image_base64 text,
    id_usuario varchar,
    principal boolean,
    descricao text,
    inserted_at timestamp,
-   updated_at timestamp
+   updated_at timestamp,
+
+   PRIMARY KEY (id_usuario, id)
    
 );
+
+CREATE INDEX ON curriculo (principal);
 
 CREATE TABLE lotus_dev.vagas(
    id varchar,
@@ -51,8 +54,11 @@ CREATE TABLE lotus_dev.vagas(
    candidatos list<text>,
    inserted_at timestamp,
    updated_at timestamp,
-   PRIMARY KEY ((id),ramo,empresa_id)
+   PRIMARY KEY (id, ramo)
    );
+
+   CREATE INDEX ON vagas (empresa_id);
+
 
 CREATE TABLE lotus_dev.postagens(
    id varchar,

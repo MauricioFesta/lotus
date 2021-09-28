@@ -93,9 +93,9 @@ class Perfil extends React.Component {
 
                             <Form.Group controlId="formEmail">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control defaultValue={this.state.perfilMODEL.email} onChange={(e) => this.setState({ email: e.target.value })} type="email" placeholder="email" />
+                                <Form.Control defaultValue={this.state.perfilMODEL.email} onChange={(e) => {}} readOnly={true} type="email" placeholder="email" />
                                 <Form.Text className="text-muted">
-                                    Preencha seu email de acesso
+                                    Email de acesso
                                     </Form.Text>
                             </Form.Group>
                             <Form.Group controlId="formNome">

@@ -6,25 +6,34 @@ defmodule LotusWeb.LoginController do
    
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
-        statement = "SELECT id, is_empresa, verificado FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}'"
-        %Xandra.Page{} = page = Xandra.execute!(CassPID, statement, _params = [])
+        statement = "SELECT id, is_empresa,email, verificado FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
        
-        if page |> Enum.at(0) != nil do
-          
-          case page |> Enum.at(0) |> Map.fetch("id") do  
-            {:ok, id_} -> 
-              put_session(conn, :idUser, id_)
-              
-              conn = assign(conn, :id, id_)
-             
-              {:ok, empresa} =  page |> Enum.at(0) |> Map.fetch("is_empresa")
-              {:ok, verificado} =  page |> Enum.at(0) |> Map.fetch("verificado")
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, statement, _params = [])
 
-              token = Token.sign(conn, "va^4S^u!b%@RlTrb", id_)
-              json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
-  
-            _ -> json(conn, %{Ok: false})
-          end
+        page = page |> Enum.to_list
+       
+        if page |> hd != nil do
+
+          {:ok, id_} = page |> hd |> Map.fetch("id")
+          {:ok, email} = page |> hd |> Map.fetch("email")
+
+          put_session(conn, :idUser, id_)
+          put_session(conn, :email, email)
+          
+          conn = assign(conn, :id, id_)
+         
+          {:ok, empresa} =  page |> hd |> Map.fetch("is_empresa")
+          {:ok, verificado} =  page |> hd |> Map.fetch("verificado")
+
+          token = Token.sign(conn, "gWt#4NP40zPc8k4#B@iSK2N@YSd!RUZE2$G6IphwfkEoQHED1B", %{"id" => id_, "email" => email})
+        
+          json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
+
+          # case page |> hd |> Map.fetch("email") do  
+          #   {:ok, id_} -> 
+            
+          #   _ -> json(conn, %{Ok: false})
+          # end
           
           else
 
@@ -56,7 +65,7 @@ defmodule LotusWeb.LoginController do
 
       statement = "INSERT INTO lotus_dev.user JSON '#{data}'" |> IO.inspect
 
-      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE email = '#{params["email"]}'"
+      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE id = '#{params["id"]}'"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
 
@@ -102,7 +111,7 @@ defmodule LotusWeb.LoginController do
 
     def confirm_login(conn, params) do  
 
-    statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE email = '#{params["email"]}'"
+    statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
 
       case Xandra.execute(CassPID, statement, _params = []) do
         

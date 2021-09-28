@@ -8,7 +8,7 @@ defmodule LotusWeb.VagasController do
 
         file64 = if params["file"] !=  "undefined" do
 
-            File.read!(params["file"].path) |> Base.encode64();
+            File.read!(params["file"].path) |> Base.encode64()
 
             else
 
@@ -16,7 +16,7 @@ defmodule LotusWeb.VagasController do
 
         end
 
-        id_user =  get_session(conn, "idUser");
+        id_user =  get_session(conn, "id")["id"]
 
         {n_valor, _} = Integer.parse(params["valor"])
 
@@ -153,9 +153,9 @@ defmodule LotusWeb.VagasController do
     def list_vagas_empresa(conn,_) do
 
 
-        id_user = get_session(conn, "idUser");
+        id_user = get_session(conn, "id")["id"]
 
-        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' ALLOW FILTERING"
+        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
@@ -173,7 +173,7 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas_candidatos(conn, %{"id" => id_vaga}) do
 
-        cql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = '#{id_vaga}' ALLOW FILTERING"
+        cql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = '#{id_vaga}'"
 
         {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql,  _paraams = [])
 
@@ -191,9 +191,9 @@ defmodule LotusWeb.VagasController do
 
     def lista_vagas_aprovadas(conn, _params) do
 
-        id_user = get_session(conn, "idUser");
+        id_user = get_session(conn, "id")["id"]
 
-        cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{id_user}' ALLOW FILTERING"
+        cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
@@ -211,19 +211,32 @@ defmodule LotusWeb.VagasController do
 
     def insert_vaga_user(conn, params) do
        
-        id_user = get_session(conn, "idUser") 
+        id_email = get_session(conn, "id")
+     
+        cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}'"
         
-        cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}' ALLOW FILTERING"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
+
+        page = page |> Enum.to_list 
+
+        nome = page |> hd |> Map.get("nome")
 
         {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, _params = [])
 
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
         {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
         {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
+   
+        email_user_cql = "SELECT email FROM lotus_dev.user WHERE id = '#{empresa_id}'"
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, email_user_cql, _params = [] )
 
-        if Enum.member?(candidato, id_user), do: json(conn, %{erro: " Candidatura já enviada"})
+        {:ok,email} = page |> Enum.to_list |> hd |> Map.fetch("email")
 
-        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_user}'] + candidatos WHERE id = '#{params["id"]}' AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
+        if Enum.member?(candidato, id_email["id"]), do: json(conn, %{erro: " Candidatura já enviada"})
+
+        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_email["id"]}'] + candidatos WHERE id = '#{params["id"]}' AND ramo = '#{ramo}'"
 
 
         case Xandra.execute(CassPID, cql, _params = []) do
@@ -233,7 +246,7 @@ defmodule LotusWeb.VagasController do
 
                 set_cache_vagas(ret)
 
-                case Vagas.notificacao_user(empresa_id,params["id"], "enviou uma candidatura para uma vaga", false) do
+                case Vagas.notificacao_user(empresa_id,params["id"], "#{nome} enviou uma candidatura para uma vaga", false, email) do
 
                     true -> json(conn, %{Ok: true})
 
@@ -249,20 +262,20 @@ defmodule LotusWeb.VagasController do
 
     def delete_candidatura_user(conn, params) do
 
-        id_user = get_session(conn, "idUser");
+        id_user = get_session(conn, "id")
 
-        %{"id" => _id} = params
+        %{"id" => id_} = params
 
-        sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{_id}' ALLOW FILTERING"
+        sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{id_}'"
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, _params = [] )
 
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
         {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
         {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
 
-       new_list = Enum.reject(candidato, fn x -> x == id_user end)
+       new_list = Enum.reject(candidato, fn x -> x == id_user["id"] end)
 
-       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{_id}' AND ramo = '#{ramo}' AND empresa_id = '#{empresa_id}'"
+       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}' AND ramo = '#{ramo}'"
 
        case Xandra.execute(CassPID, cql, _params = []) do
            {:ok, _} ->
@@ -278,7 +291,20 @@ defmodule LotusWeb.VagasController do
 
     def aprovar_candidato(conn, params) do
 
-        id_user = get_session(conn, "idUser");
+        id_email = get_session(conn, "id")
+
+        query = "SELECT email FROM lotus_dev.user WHERE id = '#{params["id"]}'"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, query, p_params = [] )
+        {:ok,email} = page |> Enum.to_list |> hd |> Map.fetch("email")
+
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
+
+        page = page |> Enum.to_list 
+
+        nome = page |> hd |> Map.get("nome")
 
         case Vagas.aprovar_candidato_vaga(params["id_user"],params["id_vaga"]) do
 
@@ -288,7 +314,7 @@ defmodule LotusWeb.VagasController do
 
                 set_cache_vagas(ret)
 
-                case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "aprovou seu currículo", true) do
+                case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "#{nome} aprovou seu currículo", true, email) do
                     true -> json(conn, %{Ok: true})
 
                     _ ->  json(conn, %{Ok: false})
@@ -304,17 +330,28 @@ defmodule LotusWeb.VagasController do
 
     def delete_candidato_aprovado(conn, params) do
 
-        sql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{params["id"]}' ALLOW FILTERING"
+        id_email = get_session(conn, "id")
+
+        sql = "SELECT vagas_aprovadas, email FROM lotus_dev.user WHERE id = '#{params["id"]}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, p_params = [] )
 
         {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("vagas_aprovadas")
+        {:ok,email} = page |> Enum.to_list |> hd |> Map.fetch("email")
 
         new_list = Enum.reject(candidato, fn x -> x == params["id_vaga"] end)
 
-        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}'"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
 
-        case Vagas.notificacao_user(params["id"],params["id_vaga"], "desaprovou seu currículo :(", false) do
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
+
+        page = page |> Enum.to_list 
+
+        nome = page |> hd |> Map.get("nome")
+
+        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}' AND email = '#{email}'"
+
+        case Vagas.notificacao_user(params["id"],params["id_vaga"], "#{nome} desaprovou seu currículo :(", false, email) do
             true ->
 
                 ret = LotusRust.Back.get_list_vagas()
