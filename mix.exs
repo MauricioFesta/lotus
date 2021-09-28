@@ -55,8 +55,9 @@ defmodule Lotus.MixProject do
       {:distillery, "~> 2.1"},
       {:ex_crypto, "~> 0.10.0"},
       {:pdf_generator, "~> 0.6.2"},
-      {:bamboo, "~> 0.7"},
-      {:bamboo_smtp, "~> 1.2.1"}
+      {:bamboo, "~> 1.7.0"},
+      {:bamboo_smtp, "~> 3.1.3"},
+      
     
     ]
   end

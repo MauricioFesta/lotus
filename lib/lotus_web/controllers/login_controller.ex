@@ -10,9 +10,9 @@ defmodule LotusWeb.LoginController do
        
         {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, statement, _params = [])
 
-        page = page |> Enum.to_list
-       
-        if page |> hd != nil do
+        page = page |> Enum.to_list  
+   
+        if page |> length != 0 do
 
           {:ok, id_} = page |> hd |> Map.fetch("id")
           {:ok, email} = page |> hd |> Map.fetch("email")
@@ -56,14 +56,14 @@ defmodule LotusWeb.LoginController do
       |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
       |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
 
-      new_params |> IO.inspect
+      new_params 
 
   
       id = params["id"]
      
       {:ok, data} = JSON.encode(new_params) 
 
-      statement = "INSERT INTO lotus_dev.user JSON '#{data}'" |> IO.inspect
+      statement = "INSERT INTO lotus_dev.user JSON '#{data}'" 
 
       query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE id = '#{params["id"]}'"
 
