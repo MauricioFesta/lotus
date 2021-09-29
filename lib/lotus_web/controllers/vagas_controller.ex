@@ -30,6 +30,8 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
         |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
         |> Map.put(:candidatos, [UUID.uuid4()])
+        |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
 
         {:ok, data} = JSON.encode(new_params)
 
@@ -41,6 +43,7 @@ defmodule LotusWeb.VagasController do
            {:ok, _} ->
 
             ret = LotusRust.Back.get_list_vagas()
+      
             set_cache_vagas(ret)
 
             json(conn, %{"Ok": true})

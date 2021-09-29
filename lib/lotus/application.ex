@@ -28,7 +28,7 @@ defmodule Lotus.Application do
     #     pool: DBConnection.Poolboy,
     #     pool_size: 10}
 
-      #Server prod
+      # Server prod
          {Xandra, name: CassPID, nodes: ["137.184.9.0:9042"],
              authentication: {Xandra.Authenticator.Password, 
                [

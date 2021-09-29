@@ -48,6 +48,8 @@ defmodule LotusWeb.CurriculoController do
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
             |> Map.put(:image_base64, file___ |> Base.encode64)
+            |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+            |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
 
             {:ok, data} = JSON.encode(new_params) 
          

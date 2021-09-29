@@ -29,8 +29,8 @@ CREATE TABLE lotus_dev.curriculo(
    id_usuario varchar,
    principal boolean,
    descricao text,
-   inserted_at timestamp,
-   updated_at timestamp,
+   inserted_at bigint,
+   updated_at bigint,
 
    PRIMARY KEY (id_usuario, id)
    
@@ -52,8 +52,8 @@ CREATE TABLE lotus_dev.vagas(
    disponibilidade_viajar boolean,
    planejamento_futuro boolean,
    candidatos list<text>,
-   inserted_at timestamp,
-   updated_at timestamp,
+   inserted_at bigint,
+   updated_at bigint,
    PRIMARY KEY (id, ramo)
    );
 

@@ -32,7 +32,6 @@ pub struct RowStruct {
 #[derive(RustcDecodable, RustcEncodable,Clone, Debug, IntoCDRSValue, TryFromRow, PartialEq)]
 pub struct RowStructVagas {
 
-    
     pub id: String,
     pub descricao: String,
     pub empresa_id: String,
@@ -45,16 +44,15 @@ pub struct RowStructVagas {
     pub planejamento_futuro: bool,
     pub candidatos: Vec<String>,
     pub ramo: String,
-    pub titulo: String
-    // pub inserted_at : i64,
-    // pub updated_at: i64,
+    pub titulo: String,
+    pub inserted_at: i64,
+    pub updated_at: i64,
   
 }
 
 
 pub fn get_filtro_vagas_empresa_db(empresa: &str) -> Vec<String>  {
 
-   
     let no_compression = connect::conn();
 
     let select_struct_cql =  format!("SELECT * FROM lotus_dev.vagas WHERE empresa_id = {}", empresa);
