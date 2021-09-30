@@ -71,7 +71,7 @@ defmodule LotusWeb.LoginController do
 
       if page |> Enum.to_list |> Enum.empty? do
 
-        id_ramdom = Login.send_email_confirm_login(new_params["email"])
+        id_ramdom = Login.send_email_confirm_login({new_params["email"],"mauricio.festa@icloud.com"})
 
         case Xandra.execute(CassPID, statement, _params = []) do
         
@@ -99,7 +99,7 @@ defmodule LotusWeb.LoginController do
 
           now - date_insert >= 86400 && verificado == false -> 
 
-            id_ramdom = Login.send_email_confirm_login(new_params["email"])
+            id_ramdom = Login.send_email_confirm_login({new_params["email"],"mauricio.festa@icloud.com"})
 
             json(conn, %{pre_cad: true, id: id_ramdom, id: id, email: params["email"], exist: false})
 
