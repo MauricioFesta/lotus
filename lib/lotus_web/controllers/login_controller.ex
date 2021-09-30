@@ -65,13 +65,13 @@ defmodule LotusWeb.LoginController do
 
       statement = "INSERT INTO lotus_dev.user JSON '#{data}'" 
 
-      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE id = '#{params["id"]}'"
+      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
 
-      id_ramdom = Login.send_email_confirm_login(new_params["email"])
-
       if page |> Enum.to_list |> Enum.empty? do
+
+        id_ramdom = Login.send_email_confirm_login(new_params["email"])
 
         case Xandra.execute(CassPID, statement, _params = []) do
         
@@ -95,9 +95,13 @@ defmodule LotusWeb.LoginController do
 
         cond  do  
 
-          now - date_insert >= 86400 && verificado == true -> json(conn, %{exist: false})
+          verificado == true -> json(conn, %{exist: true})
 
-          now - date_insert >= 86400 && verificado == false -> json(conn, %{pre_cad: true, id: id_ramdom, id: id, email: params["email"], exist: false})
+          now - date_insert >= 86400 && verificado == false -> 
+
+            id_ramdom = Login.send_email_confirm_login(new_params["email"])
+
+            json(conn, %{pre_cad: true, id: id_ramdom, id: id, email: params["email"], exist: false})
 
           now - date_insert < 86400 && verificado == false -> json(conn, %{time: true})
 
