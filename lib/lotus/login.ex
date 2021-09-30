@@ -11,6 +11,7 @@ defmodule Lotus.Login do
         new_email()
           |> to(email)
           |> from("applotus.no.replay@gmail.com")
+          |> put_header("Reply-To", "mauricio.festa@icloud.com")
           |> subject("Seja muito bem vindo(a) ao lotus!")
           |> text_body("Segue seu código de confirmação: #{random_number}") 
 
