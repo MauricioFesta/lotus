@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Modal } from 'react-bootstrap';
+import { Form, Button, Modal, Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from "jquery";
 import { postCadastroUser, postVerificado } from "../../stores/login/api"
@@ -22,12 +22,12 @@ class Cadastro extends React.Component {
     this.obs = observable({
       is_empresa: false,
       is_cod: false,
-      cod: 0,
       open_spinner: false,
       id: "",
       email: "",
       user_valid: false,
-      cnpj: ""
+      cnpj: "",
+      codigo_front: ""
 
     })
 
@@ -36,34 +36,38 @@ class Cadastro extends React.Component {
 
   async handleVerifyCod(vl) {
 
-    if (parseInt(vl.value) === this.obs.cod) {
+    this.obs.open_spinner = true
 
-      this.obs.open_spinner = true
+    let data = {
+      id: this.obs.id,
+      email: this.obs.email,
+      cod_front: this.obs.codigo_front,
+      token: this.obs.token
+      
+    }
 
+    let res = await postVerificado(data)
 
-      let data = {
-        id: this.obs.id,
-        email: this.obs.email
-      }
+    if (res.data.verificado && !res.data.invalido) {
 
-      let res = await postVerificado(data)
+      this.obs.open_spinner = false
+      AppToaster.show({ message: "Usuário validado, agora você pode se redirecionar para o Login.", intent: "success" });
+      this.obs.user_valid = true;
 
-      if (res.data.verificado) {
+    } else if (res.data.invalido) {
 
-        this.obs.open_spinner = false
-        AppToaster.show({ message: "Usuário validado, agora você pode se redirecionar para o Login.", intent: "success" });
-        this.obs.user_valid = true;
-
-      } else {
-
-        this.obs.open_spinner = false
-        AppToaster.show({ message: "Erro ao validar o Login, tente novamente em uns instantes", intent: "warning" });
-
-      }
-
-
+      this.obs.open_spinner = false
+      AppToaster.show({ message: "Código inválido, verifique e tente novamente", intent: "warning" });
 
     }
+    else {
+
+      this.obs.open_spinner = false
+      AppToaster.show({ message: "Erro ao validar o Login, tente novamente em uns instantes", intent: "warning" });
+
+    }
+
+
   }
 
   cadastrar = async () => {
@@ -90,7 +94,7 @@ class Cadastro extends React.Component {
     let res = await postCadastroUser(data)
 
 
-    if(res.data.time){
+    if (res.data.time) {
 
       AppToaster.show({ message: "Para fazer um novo cadastro e para receber um novo códifo, precisa esperar 1 dia", intent: "warning" });
 
@@ -113,9 +117,9 @@ class Cadastro extends React.Component {
 
       this.obs.open_spinner = false
       this.obs.is_cod = true
-      this.obs.cod = res.data.id_random
       this.obs.id = res.data.id
       this.obs.email = res.data.email
+      this.obs.token = res.data.id_random
 
       AppToaster.show({ message: "Foi encaminhado um código para seu email.", intent: "success" });
 
@@ -201,14 +205,27 @@ class Cadastro extends React.Component {
 
           :
 
-          <Form.Group>
 
-            <Form.Label>Código</Form.Label>
-            <Form.Control onChange={(vl) => this.handleVerifyCod(vl.target)} id="email" type="email" placeholder="cod..." />
-            <Form.Text className="text-muted">
-              Forneça o código recebido no email
-            </Form.Text>
-          </Form.Group>
+          <>
+
+            <Form.Group as={Col}>
+
+              <Form.Label>Código</Form.Label>
+              <Form.Control onChange={(vl) => this.obs.codigo_front = vl.target.value} id="email" type="email" placeholder="cod..." />
+              <Form.Text className="text-muted">
+                Forneça o código recebido no email
+              </Form.Text>
+
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Button onClick={() => this.handleVerifyCod()} variant="success" type="button">
+                Validar código
+              </Button>
+            </Form.Group>
+
+
+          </>
 
         }
 

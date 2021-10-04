@@ -122,7 +122,7 @@ function Login_view(props) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/redefinicao-senha" variant="body2">
                   Esqueceu a senha?
                 </Link>
               </Grid>

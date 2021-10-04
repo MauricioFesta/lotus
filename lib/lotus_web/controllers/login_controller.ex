@@ -71,13 +71,15 @@ defmodule LotusWeb.LoginController do
 
       if page |> Enum.to_list |> Enum.empty? do
 
-        id_ramdom = Login.send_email_confirm_login(new_params["email"])
+        id_random = Login.send_email_confirm_login(new_params["email"])
 
         case Xandra.execute(CassPID, statement, _params = []) do
         
           {:ok, result} -> 
+
+            token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", id_random)
           
-            json(conn, %{pre_cad: true, id_random: id_ramdom, id: id, email: params["email"], exist: false})
+            json(conn, %{pre_cad: true, id_random: token, id: id, email: params["email"], exist: false})
      
   
           {:error, err} ->
@@ -99,9 +101,9 @@ defmodule LotusWeb.LoginController do
 
           now - date_insert >= 86400 && verificado == false -> 
 
-            id_ramdom = Login.send_email_confirm_login(new_params["email"])
+            id_random = Login.send_email_confirm_login(new_params["email"])
 
-            json(conn, %{pre_cad: true, id: id_ramdom, id: id, email: params["email"], exist: false})
+            json(conn, %{pre_cad: true, id: id_random, id: id, email: params["email"], exist: false})
 
           now - date_insert < 86400 && verificado == false -> json(conn, %{time: true})
 
@@ -113,28 +115,136 @@ defmodule LotusWeb.LoginController do
  
     end
 
-    def confirm_login(conn, params) do  
+    def confirm_login(conn, params) do 
 
-    statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
+      if confirm_cod_token(params) do  
 
-      case Xandra.execute(CassPID, statement, _params = []) do
-        
-        {:ok, result} -> 
-                    
-          json(conn, %{verificado: true})
+        statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
 
-        {:error, err} ->
+        case Xandra.execute(CassPID, statement, _params = []) do
           
-          json(conn, %{verificado: false})
+          {:ok, result} -> 
+                      
+            json(conn, %{verificado: true, invalido: false})
+  
+          {:error, err} ->
+            
+            json(conn, %{verificado: false, invalido: false})
+  
+        end
+        
 
-      end
+      else  
 
 
+        json(conn, "err")
+
+      
+      end 
+      
     end 
 
     defp valid_bol(bol) when bol == "true", do: true
     defp valid_bol(bol) when bol == "false", do: false
 
-    
+    def password_reset(conn, params) do 
 
+      params |> IO.inspect  
+
+      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
+
+      {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
+
+  
+      if page |> Enum.to_list |> Enum.empty? do
+
+        json(conn, %{exist: false})
+
+      else  
+
+        id = page |> Enum.to_list |> hd
+
+        id_random = Login.send_email_confirm_login(params["email"])
+
+        token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", id_random)
+        json(conn, %{id_random: token, id: id, email: params["email"], exist: true})
+
+      end 
+
+    end 
+
+    def confirm_token_reset_password(conn, params) do 
+
+      if confirm_cod_token(params) do 
+
+        json(conn, %{confirmado: true, id: params["id"], email: params["email"]}) 
+
+      else  
+
+        json(conn, %{confirmado: false})
+
+      end 
+
+    end 
+
+    def alterar_password(conn, params) do 
+
+      params |> IO.inspect(label: "aqui")
+
+      cqls = "UPDATE lotus_dev.user SET senha = '#{params["password"]}' WHERE id = '#{params["id"]["id"]}' AND email = '#{params["email"]}'"
+
+      if confirm_cod_token(params) do 
+
+        IO.puts("okok")
+        cqls |> IO.inspect  
+
+        case Xandra.execute(CassPID, cqls, _params = []) do
+          
+          {:ok, result} -> 
+                      
+            json(conn, %{ok: true})
+  
+          {:error, err} ->
+            
+            json(conn, %{ok: false})
+  
+        end
+
+      else  
+
+        json(conn, %{confirmado: false})
+
+      end 
+
+
+    end 
+
+    defp confirm_cod_token(params) do  
+
+      params["token"] |> IO.inspect 
+
+      case Token.verify(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", params["token"]) do
+
+        {:ok, compare}  ->
+
+          if compare == params["cod_front"] |> String.to_integer do 
+
+            true
+
+          else  
+
+            false
+
+          end 
+
+         
+        {:error, _} ->
+
+          false
+
+      end
+
+    end 
+
+ 
   end

@@ -72,7 +72,7 @@ export default class Navbar extends React.Component {
         <div styles="margin: 0 auto; width: 480px;">
           <div className="bp3-navbar-group bp3-align-left">
             <div className="bp3-navbar-heading">Lotus</div>
-            <input className="bp3-input" placeholder="Search files..." type="text" />
+            {/* <input className="bp3-input" placeholder="Search files..." type="text" /> */}
           </div>
           <div className="bp3-navbar-group bp3-align-right">
             <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal"> <AssignmentIndIcon />&nbsp;Meus Curriculos</button>

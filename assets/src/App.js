@@ -17,6 +17,8 @@ import CandidatosEmpresa from "./components/vagas/candidatos.empresa"
 import NavbarEmpresa from "./components/navbar/index.empresa"
 import history from "./others/redirect"
 import Details from "./components/vagas/details"
+import ResetPassword from "./components/login/password-reset"
+
 require("./css/style.scss")
 
 const PrivateRouteUser = ({ component: Component, ...rest }) => (
@@ -96,7 +98,8 @@ function App() {
           <Switch>
             <Route path="/" component={Login} exact />
             <Route path="/login" component={Login} exact />
-            <Route path="/cadastro" component={Cadastro} exact />
+            <Route path="/cadastro" component={Cadastro} />
+            <Route path="/redefinicao-senha" component={ResetPassword} />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />
             <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />

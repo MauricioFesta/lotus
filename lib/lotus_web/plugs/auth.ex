@@ -26,7 +26,6 @@ defmodule LotusWeb.Plugs.Auth do
                   
                   put_session(conn, :id, user_id_email)
                  
-
               end
 
             #   conn
