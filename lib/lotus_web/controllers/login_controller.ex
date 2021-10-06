@@ -25,7 +25,7 @@ defmodule LotusWeb.LoginController do
           {:ok, empresa} =  page |> hd |> Map.fetch("is_empresa")
           {:ok, verificado} =  page |> hd |> Map.fetch("verificado")
 
-          token = Token.sign(conn, "gWt#4NP40zPc8k4#B@iSK2N@YSd!RUZE2$G6IphwfkEoQHED1B", %{"id" => id_, "email" => email})
+          token = Token.sign(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", %{"id" => id_, "email" => email})
         
           json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
 

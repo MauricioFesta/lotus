@@ -233,8 +233,8 @@ class ResetPassword extends React.Component {
 
                     <Callout title="Redefinição de senha">
                         Para redefinir sua senha você precisa informar seu email e solicitar o envio do código.
-                        Você recebera o códido no email , após isso basta <Code>{"digita-lo no campo CÓDIGO"}</Code>{"  "}
-                        que será libeado após a confirmação do e-mail.
+                        Você recebera o códido no email, após isso basta digita-lo no campo CÓDIGO
+                        e clicar em verificar, que será liberado após a confirmação do e-mail.
                         Após a confirmação do mesmo iremos liberar o campo para preencher a nova senha, se caso algo der errado você pode
                         reiniciar o processo.
                     </Callout>

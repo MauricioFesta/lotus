@@ -15,7 +15,7 @@ defmodule LotusWeb.Plugs.Auth do
             redirect(conn, to: "/not-permission")
             
         token ->
-          case Token.verify(conn, "gWt#4NP40zPc8k4#B@iSK2N@YSd!RUZE2$G6IphwfkEoQHED1B", token) do
+          case Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", token) do
 
             {:ok, user_id_email}  ->
 

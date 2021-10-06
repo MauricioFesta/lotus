@@ -68,9 +68,15 @@
                 "1":{
 
                     "ex": "export TOKEN_PASSWORD_LOTUS='nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H'",
-                    "oobs": "Add in etc/bash.bahsrc "
+                    "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
 
-                } 
+                } ,
+
+                "2":{
+
+                    "ex": "export TOKEN_LOGIN_LOTUS='v%5EMEfENbFpT8g!1m$jdPk7D8lj!KZjTg%is3ku$mus7&l%40tmOOPm*%lQCdJ6&tnd9QWV1gW3bWYfvJyIknO$75zUuM6RrKMm%L@hc0/#yNrF1AadqW6HgPiTAd6a1U9F#hLkVLB^dL9QlF4cTUxM24F'",
+                    "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
+                }
 
             } 
         ]
