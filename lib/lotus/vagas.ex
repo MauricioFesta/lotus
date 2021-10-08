@@ -1,4 +1,6 @@
 defmodule Lotus.Vagas do
+
+    alias LotusWeb.VagasController
   
     def aprovar_candidato_vaga(id_candidato, id_vaga) do
        
@@ -67,5 +69,12 @@ defmodule Lotus.Vagas do
         end
 
     end
+
+    def update_cache do 
+
+        ret = LotusRust.Back.get_list_vagas()
+        VagasController.set_cache_vagas(ret)
+
+    end 
  
 end

@@ -2,6 +2,7 @@ defmodule Lotus.Cron do
     use Ecto.Schema
     import Ecto.Changeset
     alias Lotus.Py
+    alias LotusWeb.VagasController
 
     @spec clear_pdf_tmp() :: keyword() | :noop
     def clear_pdf_tmp() do
@@ -16,5 +17,12 @@ defmodule Lotus.Cron do
         LotusRust.Back.update_notificacoes_vencidas()
         
     end
+
+    @spec update_cache() :: keyword() | :noop
+    def update_cache do 
+
+        VagasController.update_cache
+
+    end 
 
   end

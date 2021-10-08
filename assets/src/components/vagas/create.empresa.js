@@ -10,9 +10,6 @@ import { postCadastroVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { v4 as uuidv4 } from 'uuid';
 
-
-
-import { ReactReduxContext } from 'react-redux';
 const currencyConfig = {
     locale: "pt-BR",
     formats: {
