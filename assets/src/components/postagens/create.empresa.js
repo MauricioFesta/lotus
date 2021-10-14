@@ -1,7 +1,7 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button} from 'react-bootstrap';
-import {postCreatePostagem} from "../../stores/postagens/api"
+import { Form, Button, Jumbotron } from 'react-bootstrap';
+import { postCreatePostagem } from "../../stores/postagens/api"
 import $, { param } from "jquery";
 import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,11 +12,11 @@ export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {image: "/images/alert-sucsses.gif"};
+        this.state = { image: "/images/alert-sucsses.gif" };
 
     }
 
-  
+
     getMin() {
 
         let date = new Date();
@@ -31,20 +31,20 @@ export default class PostCreateEmpresa extends React.Component {
         let descricao = $("#descricao").val()
 
         let params = {
-            id:uuidv4(),
+            id: uuidv4(),
             descricao
 
         }
-  
+
         let res = await postCreatePostagem(params);
 
         if (res.data.Ok) {
 
-            AppToaster.show({message: "Postagem cadastrada com sucesso!", intent: "success" });
+            AppToaster.show({ message: "Postagem cadastrada com sucesso!", intent: "success" });
 
 
         } else {
-            AppToaster.show({message: "Não foi possível, tente novamente mais tarde", intent: "danger" });
+            AppToaster.show({ message: "Não foi possível, tente novamente mais tarde", intent: "danger" });
 
         }
     }
@@ -58,18 +58,22 @@ export default class PostCreateEmpresa extends React.Component {
 
                 <div className="container mt-4">
 
-                   
-                    <Form>
-                    
-                        <Form.Group>
-                            <Form.Label>Descrição: (obrigatório)</Form.Label>
-                            <Form.Control id="descricao" as="textarea" rows={3} />
-                        </Form.Group>
+                    <Jumbotron className="mt-4">
 
-                        <Button onClick={this.cadastrar} variant="primary" type="button">
-                            Cadastrar
-                        </Button>
-                    </Form>
+
+                        <Form>
+
+                            <Form.Group>
+                                <Form.Label>Descrição: (obrigatório)</Form.Label>
+                                <Form.Control id="descricao" as="textarea" rows={3} />
+                            </Form.Group>
+
+                            <Button onClick={this.cadastrar} variant="primary" type="button">
+                                Cadastrar
+                            </Button>
+                        </Form>
+
+                    </Jumbotron>
 
                 </div>
 

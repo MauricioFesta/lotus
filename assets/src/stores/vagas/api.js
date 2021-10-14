@@ -32,6 +32,13 @@ export const listVagasEmpresa = async () => {
     return result
 }
 
+export const listVagasEmpresaFechado = async () => {
+
+    let result = await api.get("/api/vagas-lista-empresa-fechado")
+    return result
+}
+
+
 export const listVagasEmpresaId = async (id) => {
 
     let result = await api.get(`/api/vagas-lista-candidatos/${id}`)
@@ -41,13 +48,19 @@ export const listVagasEmpresaId = async (id) => {
 
 export const downloadCurriculoCandidato = async (id) => {
 
-    return  await api.get(`/api/curriculo-download-candidato/${id}`, {responseType: 'blob'})
+    return await api.get(`/api/curriculo-download-candidato/${id}`, { responseType: 'blob' })
 }
 
 
 export const candidatoAprovar = async (id, data) => {
 
     let result = await api.put(`/api/vagas-arovar-candidato/${id}`, data, config)
+    return result
+}
+
+export const updateVaga = async (data) => {
+
+    let result = await api.post(`/api/update-vaga/`, data)
     return result
 }
 

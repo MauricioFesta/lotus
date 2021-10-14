@@ -32,6 +32,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put(:candidatos, [UUID.uuid4()])
         |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        |> Map.put("ativo", true)
 
         {:ok, data} = JSON.encode(new_params)
 
@@ -93,6 +94,25 @@ defmodule LotusWeb.VagasController do
         end
 
     end
+    
+    def update_vaga(conn, params) do 
+
+
+        {:ok, data} = JSON.encode(params)
+
+        data |> IO.inspect
+
+        cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
+
+        case Xandra.execute(CassPID, cql, _params = []) do
+
+            {:ok, _} -> json(conn, %{"ok" => true})
+
+            _ ->   json(conn, %{"ok" => false})
+                   
+        end
+
+    end 
 
     def set_cache_vagas(list) do
 
@@ -158,7 +178,7 @@ defmodule LotusWeb.VagasController do
 
         id_user = get_session(conn, "id")["id"]
 
-        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}'"
+        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = true ALLOW FILTERING"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
@@ -172,6 +192,27 @@ defmodule LotusWeb.VagasController do
 
         end
     end
+
+    def list_vagas_empresa_fechado(conn,_) do
+
+
+        id_user = get_session(conn, "id")["id"]
+
+        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = false ALLOW FILTERING"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+
+        if page |> Enum.at(0)  != nil do
+
+         json(conn, Enum.to_list(page))
+
+        else
+
+            json(conn, "Nenhuma vaga encontrada")
+
+        end
+    end
+
 
 
     def list_vagas_candidatos(conn, %{"id" => id_vaga}) do

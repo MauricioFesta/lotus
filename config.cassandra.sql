@@ -54,10 +54,12 @@ CREATE TABLE lotus_dev.vagas(
    candidatos list<text>,
    inserted_at bigint,
    updated_at bigint,
+   ativo boolean,
    PRIMARY KEY (id, ramo)
    );
 
    CREATE INDEX ON vagas (empresa_id);
+   CREATE INDEX ON vagas (ativo);
 
 
 CREATE TABLE lotus_dev.postagens(

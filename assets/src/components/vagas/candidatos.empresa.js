@@ -42,8 +42,6 @@ class CandidatosEmpresa extends React.Component {
 
         let res = await listVagasEmpresaId(url[3])
 
-        console.log(res)
-
         this.obs.id_vaga = url[3]
 
         this.setState({ candidatos: res.data })
@@ -104,8 +102,6 @@ class CandidatosEmpresa extends React.Component {
 
         const validaSelecionado = (arr_vagas) => {
 
-            console.log(arr_vagas, " Candidatos", this.obs.id_vaga)
-
             return arr_vagas.indexOf(this.obs.id_vaga) === -1
         }
 
@@ -153,7 +149,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Candidato desaprovado" })
+                channel.push("notify_send:" + id, { body: "Você foi desaprovado, :( em uma vaga." })
 
                 this.componentDidMount()
 
@@ -192,7 +188,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Candidato aceito" })
+                channel.push("notify_send:" + id, { body: "Parabéns você foi aprovado em uma vaga, verifique..." })
 
                 this.componentDidMount()
 

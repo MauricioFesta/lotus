@@ -53,6 +53,7 @@ defmodule LotusWeb.Router do
     post "/vagas-cadastro", VagasController, :cadastro_vagas
     get "/vagas-lista", VagasController, :list_vagas
     get "/vagas-lista-empresa", VagasController, :list_vagas_empresa
+    get "/vagas-lista-empresa-fechado", VagasController, :list_vagas_empresa_fechado
     get "/vagas-lista-candidatos/:id", VagasController, :list_vagas_candidatos
     post "/vagas-candidatar-se", VagasController, :insert_vaga_user
     delete "/vagas-delete-candidatura/:id", VagasController, :delete_candidatura_user
@@ -62,6 +63,7 @@ defmodule LotusWeb.Router do
     get "/vagas-all-empresas", VagasController, :lista_all_empresas
     post "/vagas-filter-empresa", VagasController, :filter_empresa
     post "/vagas-filter-ramo", VagasController, :filter_ramo
+    post "/update-vaga", VagasController, :update_vaga
     get "/lista-notificacoes", PerfilController, :lista_notificacoes
 
 

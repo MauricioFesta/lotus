@@ -18,6 +18,8 @@ import NavbarEmpresa from "./components/navbar/index.empresa"
 import history from "./others/redirect"
 import Details from "./components/vagas/details"
 import ResetPassword from "./components/login/password-reset"
+import VagasEmpresaEditar from "./components/vagas/editar-cadastradas.empresa"
+import VagasFechadoEmpresa from "./components/vagas/index-fechado.empresa"
 
 require("./css/style.scss")
 
@@ -102,7 +104,8 @@ function App() {
             <Route path="/redefinicao-senha" component={ResetPassword} />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />
-            <PrivateRouteEmpresa path="/vagas/cadastradas" component={VagasEmpresa} />
+            <PrivateRouteEmpresa path="/vagas/cadastradas" exact component={VagasEmpresa} />
+            <PrivateRouteEmpresa path="/vagas/cadastradas/fechado" component={VagasFechadoEmpresa} />
             <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
             <PrivateRouteEmpresa path="/vagas/candidatos/:id" component={CandidatosEmpresa} />
             <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
@@ -111,6 +114,7 @@ function App() {
             <PrivateRouteEmpresa path="/postagens/cadastro" component={PostCreateEmpresa} />
             <PrivateRouteAny path="/perfil" exact component={Perfil} />
             <PrivateRouteAny path="/vaga-details" exact component={Details} />
+            <PrivateRouteAny path="/vaga-edit" exact component={VagasEmpresaEditar} />
           </Switch>
 
         </Router>

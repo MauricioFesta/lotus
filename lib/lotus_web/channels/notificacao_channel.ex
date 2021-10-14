@@ -21,5 +21,4 @@ defmodule LotusWeb.NotificacaoChannel do
 
 
 
-
   end

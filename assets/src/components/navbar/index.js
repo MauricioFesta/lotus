@@ -37,8 +37,8 @@ export default class Navbar extends React.Component {
         console.log("Error", resp)
       })
 
-
-    channel.on("notify_send:"+ idMaster(), payload => {
+    channel.on("notify_send:" + idMaster(), payload => {
+      console.log("Chegouuu das empresa")
       alert(payload.body)
 
     })

@@ -8,10 +8,13 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "./css/index.scss"
 import history from "../../others/redirect";
 import AddIcon from '@material-ui/icons/Add';
-import ListIcon from '@material-ui/icons/List';
 import socket from '../socket';
 import Cookies from 'universal-cookie';
 import Notificacoes from "./notificacoes/index"
+import { idMaster } from '../login/auth';
+import CloseIcon from '@mui/icons-material/Close';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 const cookies = new Cookies();
 
 export default class NavbarEmpresa extends React.Component {
@@ -35,8 +38,8 @@ export default class NavbarEmpresa extends React.Component {
       })
 
 
-    channel.on("notify_send", payload => {
-
+    channel.on("notify_send:" + idMaster(), payload => {
+      console.log("Chegouuu do usuario")
       alert(payload.body)
 
     })
@@ -73,9 +76,11 @@ export default class NavbarEmpresa extends React.Component {
             {/* <input className="bp3-input" placeholder="Search files..." type="text" /> */}
           </div>
           <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><ListIcon />&nbsp; Vagas cadastradas</button>
+
+            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><MenuOpenIcon />&nbsp; Vagas em Aberto</button>
+            <button onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} className="bp3-button bp3-minimal e"><CloseIcon />&nbsp; Vagas Fechadas</button>
             <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Postagem</button>
+            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddBoxIcon />&nbsp;  Cadastrar Postagem</button>
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

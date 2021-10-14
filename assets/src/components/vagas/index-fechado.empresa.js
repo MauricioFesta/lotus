@@ -2,22 +2,21 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Jumbotron, Container, Button } from 'react-bootstrap';
 import { Card, Icon } from 'semantic-ui-react'
-import { listVagasEmpresa } from "../../stores/vagas/api"
+import { listVagasEmpresaFechado } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom"
 import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import history from "../../others/redirect";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 
-class VagasEmpresa extends React.Component {
+class VagasFechadoEmpresa extends React.Component {
 
     constructor(props) {
 
@@ -28,7 +27,7 @@ class VagasEmpresa extends React.Component {
 
     async componentDidMount() {
 
-        let resp = await listVagasEmpresa()
+        let resp = await listVagasEmpresaFechado()
 
         if (Array.isArray(resp.data)) {
 
@@ -80,11 +79,15 @@ class VagasEmpresa extends React.Component {
                                     <>
                                         <Card>
 
+
+
                                             <Card.Content header={el.titulo} />
 
-                                            <Card.Content description={el.descricao.slice(0, 180) + "..."} />
-                                            <Card.Content extra>
+                                            <Card.Content ><Alert severity="error">Vaga desativada!!</Alert> </Card.Content>
 
+                                            <Card.Content description={el.descricao.slice(0, 180) + "..."} />
+
+                                            <Card.Content extra>
                                                 {el.candidatos.length > 1 ?
 
                                                     <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
@@ -116,9 +119,10 @@ class VagasEmpresa extends React.Component {
 
                             :
 
+
                             <Alert severity="info">
-                                <AlertTitle>Vagas em aberto</AlertTitle>
-                                Nenhuma vaga em aberto até o momento.
+                                <AlertTitle>Vagas desativadas</AlertTitle>
+                                Nenhuma vaga esta desativada até o momento.
                             </Alert>
 
                         }
@@ -141,4 +145,4 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = dispatch =>
     bindActionCreators({ vagaView }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(observer(VagasEmpresa));
+export default connect(mapStateToProps, mapDispatchToProps)(observer(VagasFechadoEmpresa));

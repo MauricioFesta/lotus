@@ -1,15 +1,10 @@
 import React from 'react';
-import NavbarEmpresa from "../navbar/index.empresa"
 import { Button, Card, CardDeck, Row, Form, Col, Modal } from 'react-bootstrap';
 import $ from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import { postCadastroVaga } from "../../stores/vagas/api"
-import { AppToaster } from "../../others/toaster"
-import { v4 as uuidv4 } from 'uuid';
 import { observable } from 'mobx';
-import { observer } from "mobx-react";
 import { Store } from "../../store";
 import history from "../../others/redirect";
 

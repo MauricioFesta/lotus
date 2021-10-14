@@ -43,7 +43,8 @@ class Vagas extends React.Component {
             candidato_vagas: [],
             is_curriculo: false,
             data_empresas: [],
-            open_spinner: false
+            open_spinner: false,
+            principal_curriculo: false
 
         })
 
@@ -83,8 +84,21 @@ class Vagas extends React.Component {
 
         getCurriculo().then(result => {
 
+            this.obs.principal_curriculo = false   
+
             if (result.data.length > 0) {
                 this.obs.is_curriculo = true
+            }
+
+            for(let i = 0; i < result.data.length; i++){
+
+                if(result.data[i].principal){
+
+                    this.obs.principal_curriculo = true
+                    break
+
+                }
+
             }
 
         })
@@ -128,6 +142,13 @@ class Vagas extends React.Component {
             return
         }
 
+        if(!this.obs.principal_curriculo){
+
+            AppToaster.show({ message: "Você precia por um curriculo como principal, para se candidatar", intent: "warning" });
+            return
+
+        }
+
         let channel = socket.channel("notify:open");
 
         channel.join()
@@ -149,7 +170,7 @@ class Vagas extends React.Component {
 
         if (res.data.Ok) {
 
-            channel.push("notify_send", { body: "Candidado se cadastrou na vaga x" })
+            channel.push("notify_send:" + empresa_id, { body: "Candidado se cadastrou na vaga, verifique..." })
 
             AppToaster.show({ message: "Candidatura enviada com sucesso", intent: "success" });
             this.componentDidMount()
@@ -206,13 +227,13 @@ class Vagas extends React.Component {
                     <Form className="mt-4">
 
                         <Form.Row>
-                            <Col>
+                            {/* <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
                                     <Ramo empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
                                 </Form.Group>
-                            </Col>
+                            </Col> */}
                             <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
@@ -220,7 +241,7 @@ class Vagas extends React.Component {
 
                                 </Form.Group>
                             </Col>
-                            <Col>
+                            {/* <Col>
                                 <Form.Group as={Col} controlId="formLocation">
 
                                     <Form.Label>Endereço</Form.Label>
@@ -231,7 +252,7 @@ class Vagas extends React.Component {
                                     </Form.Text>
 
                                 </Form.Group>
-                            </Col>
+                            </Col> */}
                         </Form.Row>
 
                     </Form>
@@ -261,7 +282,7 @@ class Vagas extends React.Component {
 
                                                     <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? 'vagas-cards-title' : "candidatura-enviada vagas-cards-title"}>{el2.cidade}</Card.Title>
                                                     <Card.Text className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>
-                                                        {el2.descricao}
+                                                        {el2.descricao.slice(0, 180) + "..."}
                                                     </Card.Text>
 
                                                     {this.handleValidaCandidato(el2.candidatos) ?

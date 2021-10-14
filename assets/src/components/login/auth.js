@@ -20,7 +20,7 @@ export const isAuthenticatedUser = () => {
 
 
     } catch (err) {
-        console.log(err)
+       
         return false
 
     }
@@ -40,7 +40,7 @@ export const isAuthenticated = () => {
         return decoded.logged
 
     } catch (err) {
-        console.log(err)
+        
         return false
 
     }
@@ -66,7 +66,7 @@ export const isAuthenticatedEmpresa = () => {
 
 
     } catch (err) {
-        console.log(err)
+        
         return false
 
     }
@@ -85,7 +85,7 @@ export const idMaster = () => {
         return decoded.id
 
     } catch (err) {
-        console.log(err)
+       
         return false
 
     }
@@ -102,7 +102,7 @@ export const isEmpresa = () => {
         return decoded.is_empresa
 
     } catch (err) {
-        console.log(err)
+       
         return false
 
     }
