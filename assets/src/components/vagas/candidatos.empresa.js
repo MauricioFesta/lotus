@@ -1,7 +1,7 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Button, Card, Image } from 'semantic-ui-react'
-import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
+import { Card, Image } from 'semantic-ui-react'
+import {Jumbotron, Modal } from 'react-bootstrap';
 import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar, candidatoDesaprovar } from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -13,6 +13,7 @@ import socket from '../socket';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import { Spinner } from "@blueprintjs/core";
 
 const styleButomPrincipal = {
     color: '#32CD32',
@@ -30,7 +31,9 @@ class CandidatosEmpresa extends React.Component {
         this.state = { candidatos: false };
 
         this.obs = observable({
-            id_vaga: 0
+            id_vaga: 0,
+            open_spinner: false
+
 
         })
 
@@ -40,11 +43,15 @@ class CandidatosEmpresa extends React.Component {
 
         let url = window.location.pathname.split("/")
 
+        this.obs.open_spinner = true
+
         let res = await listVagasEmpresaId(url[3])
 
         this.obs.id_vaga = url[3]
 
         this.setState({ candidatos: res.data })
+
+        this.obs.open_spinner = false
 
 
     }
@@ -88,7 +95,7 @@ class CandidatosEmpresa extends React.Component {
 
         async function download_Pdf(el) {
 
-            let response  = await downloadCurriculoCandidato(el)
+            let response = await downloadCurriculoCandidato(el)
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
@@ -214,61 +221,75 @@ class CandidatosEmpresa extends React.Component {
 
         return (
 
+            <>
 
-            <div className="mt-4 ml-4 mt-4 mr-4">
+                <Modal show={this.obs.open_spinner}>
 
-                <Jumbotron className="mt-4">
+                    <Modal.Body>
+
+                        <Spinner size={80} value={null} />
+
+                    </Modal.Body>
+
+                </Modal>
 
 
-                    <Card.Group>
-                        {this.state.candidatos &&
+                <div className="mt-4 ml-4 mt-4 mr-4">
 
-                            this.state.candidatos.map(el => {
-                                return (
-                                    <>
+                    <Jumbotron className="mt-4">
 
-                                        <Card>
-                                            <Card.Content>
-                                                <Image
-                                                    floated='right'
-                                                    size='mini'
-                                                    src={"data:image/png;base64," + el.foto_base64}
-                                                />
-                                                <Card.Header>{el.nome}</Card.Header>
-                                                {/* <Card.Meta></Card.Meta>
+
+                        <Card.Group>
+                            {this.state.candidatos &&
+
+                                this.state.candidatos.map(el => {
+                                    return (
+                                        <>
+
+                                            <Card>
+                                                <Card.Content>
+                                                    <Image
+                                                        floated='right'
+                                                        size='mini'
+                                                        src={"data:image/png;base64," + el.foto_base64}
+                                                    />
+                                                    <Card.Header>{el.nome}</Card.Header>
+                                                    {/* <Card.Meta></Card.Meta>
                                                 <Card.Description>
                                                     Steve wants to add you to the group <strong>best friends</strong>
                                                 </Card.Description> */}
-                                            </Card.Content>
-                                            <Card.Content extra>
-                                                <div className='ui two buttons'>
+                                                </Card.Content>
+                                                <Card.Content extra>
+                                                    <div className='ui two buttons'>
 
-                                                    {downloadFormatter(el.id)}
-                                                    {validaSelecionado(el.vagas_aprovadas) ?
-                                                        tornarSelecionado(el.id)
-                                                        :
-                                                        candidatoSelecionado(el.id)
-                                                    }
-
-
-
-                                                </div>
-                                            </Card.Content>
-                                        </Card>
-                                    </>
-
-                                )
+                                                        {downloadFormatter(el.id)}
+                                                        {validaSelecionado(el.vagas_aprovadas) ?
+                                                            tornarSelecionado(el.id)
+                                                            :
+                                                            candidatoSelecionado(el.id)
+                                                        }
 
 
 
-                            })
+                                                    </div>
+                                                </Card.Content>
+                                            </Card>
+                                        </>
 
-                        }
+                                    )
 
-                    </Card.Group>
 
-                </Jumbotron>
-            </div>
+
+                                })
+
+                            }
+
+                        </Card.Group>
+
+                    </Jumbotron>
+                </div>
+
+            </>
 
 
 

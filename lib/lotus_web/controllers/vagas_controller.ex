@@ -106,7 +106,13 @@ defmodule LotusWeb.VagasController do
 
         case Xandra.execute(CassPID, cql, _params = []) do
 
-            {:ok, _} -> json(conn, %{"ok" => true})
+            {:ok, _} -> 
+                
+                ret = LotusRust.Back.get_list_vagas()
+      
+                set_cache_vagas(ret)
+                
+                json(conn, %{"ok" => true})
 
             _ ->   json(conn, %{"ok" => false})
                    
