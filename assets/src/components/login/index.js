@@ -183,7 +183,13 @@ export default class Login extends React.Component {
       cookies.set('_A-T', res.data.token);
       cookies.set('_A-T-T_L', token);
 
-      window.location.href = "/home"
+      if(!res.data.is_empresa){
+        window.location.href = "/vagas"
+      }else{
+        window.location.href = "/vagas/cadastradas"
+      }
+
+     
 
     } else {
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Jumbotron, Container, Button } from 'react-bootstrap';
+import { Jumbotron, Container, Button, Modal } from 'react-bootstrap';
 import { Card, Icon } from 'semantic-ui-react'
 import { listVagasEmpresa } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
+import { Spinner } from "@blueprintjs/core";
 
 
 class VagasEmpresa extends React.Component {
@@ -22,11 +23,13 @@ class VagasEmpresa extends React.Component {
     constructor(props) {
 
         super(props);
-        this.state = { vagas: false, redirect: false, path: "" };
+        this.state = { vagas: false, redirect: false, path: "", open_spinner: false };
 
     }
 
     async componentDidMount() {
+
+        this.setState({ open_spinner: true })
 
         let resp = await listVagasEmpresa()
 
@@ -35,6 +38,9 @@ class VagasEmpresa extends React.Component {
             this.setState({ vagas: resp.data })
 
         }
+
+        this.setState({ open_spinner: false })
+        
 
     }
 
@@ -60,77 +66,93 @@ class VagasEmpresa extends React.Component {
 
         return (
 
+            <>
+
+                <Modal show={this.state.open_spinner}>
+
+                    <Modal.Body>
+
+                        <Spinner size={80} value={null} />
+
+                    </Modal.Body>
+
+                </Modal>
 
 
-            <div className="mt-4 ml-4 mr-4">
 
-                {this.state.redirect &&
+                <div className="mt-4 ml-4 mr-4">
 
-                    <Redirect to={{ pathname: this.state.path }} />
-                }
+                    {this.state.redirect &&
 
-                <Jumbotron className="mt-4">
-                    <Card.Group>
-                        {this.state.vagas ?
+                        <Redirect to={{ pathname: this.state.path }} />
+                    }
 
-                            this.state.vagas.map(el => {
+                    <Jumbotron className="mt-4">
+                        <Card.Group>
+                            {this.state.vagas ?
 
-                                return (
+                                this.state.vagas.map(el => {
 
-                                    <>
-                                        <Card>
+                                    return (
 
-                                            <Card.Content header={el.titulo} />
+                                        <>
+                                            <Card>
 
-                                            <Card.Content description={el.descricao.slice(0, 180) + "..."} />
-                                            <Card.Content extra>
+                                                <Card.Content header={el.titulo} />
 
-                                                {el.candidatos.length > 1 ?
+                                                <Card.Content description={el.descricao.slice(0, 180) + "..."} />
+                                                <Card.Content extra>
 
-                                                    <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
-                                                        <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                    </a>
+                                                    {el.candidatos.length > 1 ?
 
-                                                    :
+                                                        <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
+                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                        </a>
 
-                                                    <a>
-                                                        <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                    </a>
+                                                        :
 
-
-                                                }
-
-                                                <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
-                                                    <EditIcon />
-                                                </IconButton>
-
-                                            </Card.Content>
-                                        </Card>
-
-                                    </>
-
-                                )
-
-                            })
+                                                        <a>
+                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                        </a>
 
 
-                            :
+                                                    }
 
-                            <Alert severity="info">
-                                <AlertTitle>Vagas em aberto</AlertTitle>
-                                Nenhuma vaga em aberto até o momento.
-                            </Alert>
+                                                    <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
+                                                        <EditIcon />
+                                                    </IconButton>
 
-                        }
+                                                </Card.Content>
+                                            </Card>
 
-                    </Card.Group>
-                </Jumbotron>
-            </div>
+                                        </>
+
+                                    )
+
+                                })
+
+
+                                :
+
+                                <Alert severity="info">
+                                    <AlertTitle>Vagas em aberto</AlertTitle>
+                                    Nenhuma vaga em aberto até o momento.
+                                </Alert>
+
+                            }
+
+                        </Card.Group>
+                    </Jumbotron>
+                </div>
+
+            </>
 
 
 
         );
     }
+
+
 }
 
 const mapStateToProps = store => ({
