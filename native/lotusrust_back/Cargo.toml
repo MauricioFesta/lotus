@@ -11,14 +11,14 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rustler = "0.22.0"
-cdrs = { version = "2.2.1"}
-cdrs_helpers_derive = "0.4.0"
-maplit = "1.0.2"
-rustc-serialize = "0.3.24"
 chrono = "0.4"
 redis = "0.21.0"
+cdrs-tokio = "5.0.0"
+tokio = { version = "1", features = ["net", "io-util", "rt", "sync", "macros", "rt-multi-thread", "time"] }
+maplit = "1.0.2"
+cdrs-tokio-helpers-derive = "3.1.0"
+serde = { version = "1.0.126", features = ["derive"] }
+serde_json = "1.0.64"
 
-
-uuid = { version = "0.2", features = ["rustc-serialize"] }
 
 
