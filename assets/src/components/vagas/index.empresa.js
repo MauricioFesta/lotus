@@ -100,7 +100,7 @@ class VagasEmpresa extends React.Component {
 
                                                 <Card.Content header={el.titulo} />
 
-                                                <Card.Content description={el.descricao.slice(0, 180) + "..."} />
+                                                <Card.Content description={el.descricao.slice(0, 110) + "..."} />
                                                 <Card.Content extra>
 
                                                     {el.candidatos.length > 1 ?
