@@ -5,9 +5,10 @@ pub mod cassandra{
     
 }
 
-pub mod redis_{
-   pub mod vagas_;
-   pub mod connect_;
+pub mod redis{
+   // pub mod vagas_;
+   // pub mod connect_;
+   pub mod main;
 }
 
 
@@ -51,29 +52,59 @@ pub async fn get_list_vagas() -> Vec<std::string::String> {
 }
 
 
-
+#[tokio::main]
 #[rustler::nif]
-pub fn get_vagas_cache() -> Vec<std::string::String>  {
+pub async fn get_vagas_cache() -> Vec<std::string::String>  {
 
-   let vec_user = redis_::vagas_::get_vagas();
+   let vec_user = redis::main::Db::new().get_vagas().await;
+
+
+   match vec_user {
+
+      Ok(vec_user) => vec_user,
+
+      Err(_) => vec!["Lista vazia".to_string()]
+
+   }
    
 
-   vec_user
-
 }
 
 
-
+#[tokio::main]
 #[rustler::nif]
-pub fn set_vagas_cache(list: Vec<std::string::String>) -> bool {
+pub async fn set_vagas_cache(list: Vec<&str>) -> bool {
 
-   let ret: bool = redis_::vagas_::set_vagas(list);
+   // let _clear = redis::main::Db::new().clear_cache().await;
 
-   ret
+   let ret = redis::main::Db::new().set_vagas(list).await;
+
+   match ret {
+
+      Ok(_ret) => true,
+
+      Err(_) => false,
+   }
+
+
+}
+
+#[tokio::main]
+#[rustler::nif]
+pub async fn building_cache() -> bool {
+
+   let list = cassandra::main::Db::new().get_vagas_db().await;
+
+   let ret = redis::main::Db::new().reset_cache(list).await;
+
+   match ret {
+
+      Ok(_ret) => true,
+      Err(_) => false,
+   }
 
 }
 
 
 
-
-rustler::init!("Elixir.LotusRust.Back", [add, get_filtro_vagas_empresa, get_list_vagas, get_filtro_vagas_ramo,get_vagas_cache, set_vagas_cache]);
+rustler::init!("Elixir.LotusRust.Back", [add,building_cache, get_filtro_vagas_empresa, get_list_vagas, get_filtro_vagas_ramo,get_vagas_cache, set_vagas_cache]);

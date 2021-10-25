@@ -36,16 +36,12 @@ defmodule LotusWeb.VagasController do
 
         {:ok, data} = JSON.encode(new_params)
 
+        cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
 
-         cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
-
-       
        case Xandra.execute(CassPID,cql, params = [])  do
            {:ok, _} ->
 
-            ret = LotusRust.Back.get_list_vagas()
-      
-            set_cache_vagas(ret)
+            set_cache_vagas([data])
 
             json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})
@@ -71,7 +67,7 @@ defmodule LotusWeb.VagasController do
 
         redis = try do
 
-            IO.puts("Entrou no CACHE")
+            IO.puts("Entrou no cache")
             LotusRust.Back.get_vagas_cache()
 
          rescue e ->
@@ -80,15 +76,18 @@ defmodule LotusWeb.VagasController do
 
          end
 
-
+     
         if redis |> Enum.count > 0 do
+
+            IO.puts("Tem valor em cache")
 
             redis
 
         else
 
             ret = LotusRust.Back.get_list_vagas()
-            set_cache_vagas(ret)
+            IO.puts("Não tem valor em cache")
+            # set_cache_vagas(ret)
             ret
 
         end
@@ -100,17 +99,13 @@ defmodule LotusWeb.VagasController do
 
         {:ok, data} = JSON.encode(params)
 
-        data |> IO.inspect
-
         cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
 
         case Xandra.execute(CassPID, cql, _params = []) do
 
             {:ok, _} -> 
                 
-                ret = LotusRust.Back.get_list_vagas()
-      
-                set_cache_vagas(ret)
+                LotusRust.Back.building_cache()
                 
                 json(conn, %{"ok" => true})
 
@@ -121,7 +116,7 @@ defmodule LotusWeb.VagasController do
     end 
 
     def set_cache_vagas(list) do
-
+    
         try do
 
             LotusRust.Back.set_vagas_cache(list)
@@ -131,9 +126,6 @@ defmodule LotusWeb.VagasController do
            :noop
 
          end
-
-
-
 
     end
 
@@ -149,7 +141,7 @@ defmodule LotusWeb.VagasController do
 
         else
 
-            json(conn, "Nenhuma empesa cadastrada")
+            json(conn, "Nenhuma empresa cadastrada")
 
         end
 
@@ -292,9 +284,7 @@ defmodule LotusWeb.VagasController do
         case Xandra.execute(CassPID, cql, _params = []) do
             {:ok, _} ->
 
-                ret = LotusRust.Back.get_list_vagas()
-
-                set_cache_vagas(ret)
+                LotusRust.Back.building_cache()
 
                 case Vagas.notificacao_user(empresa_id,params["id"], "#{nome} enviou uma candidatura para uma vaga", false, email) do
 
@@ -330,8 +320,7 @@ defmodule LotusWeb.VagasController do
        case Xandra.execute(CassPID, cql, _params = []) do
            {:ok, _} ->
 
-            ret = LotusRust.Back.get_list_vagas()
-            set_cache_vagas(ret)
+            LotusRust.Back.building_cache()
 
             json(conn, %{Ok: true})
            _ -> json(conn, %{Ok: false})
@@ -360,9 +349,7 @@ defmodule LotusWeb.VagasController do
 
             true ->
 
-                ret = LotusRust.Back.get_list_vagas()
-
-                set_cache_vagas(ret)
+                LotusRust.Back.building_cache()
 
                 case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "#{nome} aprovou seu currículo", true, email) do
                     true -> json(conn, %{Ok: true})
@@ -404,9 +391,7 @@ defmodule LotusWeb.VagasController do
         case Vagas.notificacao_user(params["id"],params["id_vaga"], "#{nome} desaprovou seu currículo :(", false, email) do
             true ->
 
-                ret = LotusRust.Back.get_list_vagas()
-
-                set_cache_vagas(ret)
+                LotusRust.Back.building_cache()
 
                 case Xandra.execute(CassPID, cql, _params = []) do
                     {:ok, _} -> json(conn, %{Ok: true})

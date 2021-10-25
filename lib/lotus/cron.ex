@@ -25,4 +25,11 @@ defmodule Lotus.Cron do
 
     end 
 
+    @spec update_cache() :: keyword() | :noop
+    def building_cache do   
+
+        LotusRust.Back.building_cache
+
+    end
+
   end

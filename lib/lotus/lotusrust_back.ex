@@ -9,6 +9,10 @@ defmodule LotusRust.Back do
     def update_notificacoes_vencidas(), do: :erlang.nif_error(:nif_not_loaded)
     def get_vagas_cache(), do: :erlang.nif_error(:nif_not_loaded)
     def set_vagas_cache(_list), do: :erlang.nif_error(:nif_not_loaded)
+    def building_cache(), do: :erlang.nif_error(:nif_not_loaded)
+
+    
+    
 
 
 end
