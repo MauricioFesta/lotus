@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Card, CardDeck, Row, Form, Col, Modal } from 'react-bootstrap';
-import Navbar from "../navbar/index"
 import { listVagas, listVagasAprovadas } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { postCandidatarseVaga, deleteCandidatarseVaga } from "../../stores/vagas/api"
@@ -16,7 +15,6 @@ import socket from '../socket';
 import Alert from '@material-ui/lab/Alert';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
-import FilterLocation from "./filters/location"
 import Ramo from "./filters/ramo"
 import Empresa from "./filters/empresa"
 import { allEmpresas } from "../../stores/vagas/api"

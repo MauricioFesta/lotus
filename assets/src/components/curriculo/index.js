@@ -1,5 +1,4 @@
 import React from 'react';
-import { Col, Alert } from 'react-bootstrap';
 import { getCurriculo, getDownload, postExcluir, setPrincipal } from "../../stores/curriculo/api";
 import { Link } from 'react-router-dom';
 import { AppToaster } from "../../others/toaster"
@@ -7,10 +6,11 @@ import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import { Card, Icon, Image } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
+import { Spinner } from "@blueprintjs/core";
 import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
+import { Jumbotron, Alert, Modal } from 'react-bootstrap';
 import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -32,16 +32,20 @@ export default class Curriculo extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { showItems: false, dataCurriculo: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false };
+    this.state = { showItems: false, dataCurriculo: [], variant: "primary", msg_text: "", msg_title: "", close_msg: false, open_spinner: false };
   }
 
   async componentDidMount() {
+
+    this.setState({open_spinner: true})
 
     let res = await getCurriculo()
 
     if (res.data.length > 0) {
       this.setState({ showItems: true, dataCurriculo: res.data })
     }
+
+    this.setState({open_spinner: false})
 
 
   }
@@ -197,6 +201,16 @@ export default class Curriculo extends React.Component {
     return (
 
       <>
+
+        <Modal show={this.state.open_spinner}>
+
+          <Modal.Body>
+
+            <Spinner size={80} value={null} />
+
+          </Modal.Body>
+
+        </Modal>
 
 
         <Jumbotron className="ml-4 mr-4 mt-4">
