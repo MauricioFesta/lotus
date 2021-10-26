@@ -50,6 +50,7 @@ defmodule LotusWeb.Router do
     put "/curriculo-principal-set/:id", CurriculoController, :curriculo_principal
     post "/postagens-cadastro", PostagensController, :cadastro_postagem
     get "/postagens-listar", PostagensController, :list_postagens
+    get "/postagens-listar-empresa", PostagensController, :list_postagens_empresa
     post "/vagas-cadastro", VagasController, :cadastro_vagas
     get "/vagas-lista", VagasController, :list_vagas
     get "/vagas-lista-empresa", VagasController, :list_vagas_empresa

@@ -108,7 +108,7 @@ class Perfil extends React.Component {
 
                             <Form.Group controlId="formSenha">
                                 <Form.Label>Senha</Form.Label>
-                                <Form.Control defaultValue={this.state.perfilMODEL.senha} onChange={(e) => this.setState({ senha: e.target.value })} type="text" placeholder="senha" />
+                                <Form.Control type="password" defaultValue={this.state.perfilMODEL.senha} onChange={(e) => this.setState({ senha: e.target.value })} placeholder="senha" />
                                 <Form.Text className="text-muted">
                                     Preencha a senha de acesso
                                     </Form.Text>

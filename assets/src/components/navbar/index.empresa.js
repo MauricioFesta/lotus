@@ -15,6 +15,7 @@ import { idMaster } from '../login/auth';
 import CloseIcon from '@mui/icons-material/Close';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
 const cookies = new Cookies();
 
 export default class NavbarEmpresa extends React.Component {
@@ -81,6 +82,8 @@ export default class NavbarEmpresa extends React.Component {
             <button onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} className="bp3-button bp3-minimal e"><CloseIcon />&nbsp; Vagas Fechadas</button>
             <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Vagas</button>
             <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddBoxIcon />&nbsp;  Cadastrar Postagem</button>
+            <button onClick={() => this.handleRedirect("/postagens/view")} className="bp3-button bp3-minimal"><AllInboxIcon />&nbsp;  Visualizar Postagem</button>
+
             <span className="bp3-navbar-divider"></span>
 
             <Popover2

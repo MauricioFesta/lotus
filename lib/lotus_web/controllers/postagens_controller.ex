@@ -11,7 +11,9 @@ defmodule LotusWeb.PostagensController do
 
         nome_empresa =  page |> Enum.to_list |> hd |> Map.get("nome")
         
-        params_new = params |> Map.put_new("empresa_razao", nome_empresa)
+        params_new = params |> Map.put_new("empresa_razao", nome_empresa) 
+
+        |> Map.put_new("empresa_id", id_user)
 
         {:ok, data} = JSON.encode(params_new ) 
     
@@ -40,6 +42,31 @@ defmodule LotusWeb.PostagensController do
 
 
     end
+
+    def list_postagens_empresa(conn, params) do 
+
+        id_user = get_session(conn, "id")["id"]
+
+        sql = "SELECT * FROM lotus_dev.postagens WHERE empresa_id = '#{id_user}'";
+
+        %Xandra.Page{} = page = Xandra.execute!(CassPID, sql, _params = [])
+
+        if page |> Enum.at(0) != nil do
+            
+            json(conn, Enum.to_list(page))
+        else
+
+            json(conn, "Nenhuma postagem cadastrada")
+        end
+
+    end 
+
+    def update_postagens(conn, params) do   
+
+        id_user = get_session(conn, "id")["id"]
+
+    end 
+
 
 
 

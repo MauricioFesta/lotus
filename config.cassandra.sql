@@ -66,6 +66,9 @@ CREATE TABLE lotus_dev.postagens(
    id varchar,
    descricao text,
    empresa_razao text,
+   empresa_id text,
    PRIMARY KEY (id)
 
 );
+
+CREATE INDEX ON postagens (empresa_id);

@@ -15,3 +15,11 @@ export const getPostagensAll = () => {
     return result
 
 }
+
+export const getPostagensEmpresaAll = () => {
+
+    let result = api.get("/api/postagens-listar-empresa")
+
+    return result
+
+}

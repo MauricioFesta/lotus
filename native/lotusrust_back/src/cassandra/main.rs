@@ -50,7 +50,7 @@ impl Db {
         let auth = StaticPasswordAuthenticatorProvider::new(&user, &password);
             
         let node = NodeTcpConfigBuilder::new("137.184.9.0:9042", Arc::new(auth)).build();
-        // let node = NodeTcpConfigBuilder::new("127.0.0.1:9042", Arc::new(auth)).build(); 
+        //let node = NodeTcpConfigBuilder::new("127.0.0.1:9042", Arc::new(auth)).build(); 
         
         let cluster_config = ClusterTcpConfig(vec![node]);
             
