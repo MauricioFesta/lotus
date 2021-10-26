@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Modal } from 'react-bootstrap';
 import { getPostagensEmpresaAll } from "../../stores/postagens/api"
 import { postagemOne } from '../../actions';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import { observer } from "mobx-react";
 import history from "../../others/redirect";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import { Spinner } from "@blueprintjs/core";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
@@ -19,10 +20,13 @@ class PostagensEmpresa extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { data: [] }
+        this.state = { data: [],open_spinner: false }
+        
     }
 
     async componentDidMount() {
+
+        this.setState({open_spinner: true})
 
         let res = await getPostagensEmpresaAll()
 
@@ -32,6 +36,8 @@ class PostagensEmpresa extends React.Component {
         } else {
             this.setState({ data: [] })
         }
+
+        this.setState({open_spinner: false})
 
 
     }
@@ -58,6 +64,16 @@ class PostagensEmpresa extends React.Component {
         return (
 
             <div>
+
+                <Modal show={this.state.open_spinner}>
+
+                    <Modal.Body>
+
+                        <Spinner size={80} value={null} />
+
+                    </Modal.Body>
+
+                </Modal>
 
                 <div className="ml-4 mr-4 mt-4 scroll-card">
 
