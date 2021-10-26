@@ -1,9 +1,10 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button, Jumbotron } from 'react-bootstrap';
+import { Form, Jumbotron } from 'react-bootstrap';
 import { postCreatePostagem } from "../../stores/postagens/api"
 import $, { param } from "jquery";
 import { AppToaster } from "../../others/toaster"
+import { Button } from "@blueprintjs/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -13,7 +14,7 @@ export default class PostCreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { image: "/images/alert-sucsses.gif" };
+        this.state = { image: "/images/alert-sucsses.gif",isLoading: false };
 
     }
 
@@ -37,6 +38,8 @@ export default class PostCreateEmpresa extends React.Component {
 
         }
 
+        this.setState({isLoading: true})
+
         let res = await postCreatePostagem(params);
 
         if (res.data.Ok) {
@@ -48,6 +51,8 @@ export default class PostCreateEmpresa extends React.Component {
             AppToaster.show({ message: "Não foi possível, tente novamente mais tarde", intent: "danger" });
 
         }
+
+        this.setState({isLoading: false})
     }
 
 
@@ -69,9 +74,9 @@ export default class PostCreateEmpresa extends React.Component {
                                 <Form.Control id="descricao" as="textarea" rows={3} />
                             </Form.Group>
 
-                            <Button onClick={this.cadastrar} variant="primary" type="button">
-                                Cadastrar
-                            </Button>
+                        
+                            <Button loading={this.state.isLoading}  intent="success" onClick={() => this.cadastrar()} text="Cadastrar" />
+
                         </Form>
 
                     </Jumbotron>

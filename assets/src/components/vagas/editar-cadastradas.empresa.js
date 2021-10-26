@@ -1,8 +1,6 @@
 import React from 'react';
-import NavbarEmpresa from "../navbar/index.empresa"
-import { Jumbotron, Form, Col, Button } from 'react-bootstrap';
-import { Card, Icon } from 'semantic-ui-react'
-import Alert from '@material-ui/lab/Alert';
+import { Jumbotron, Form, Col } from 'react-bootstrap';
+import { Button } from "@blueprintjs/core";
 import { Store } from "../../store";
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
@@ -10,6 +8,9 @@ import IntlCurrencyInput from "react-intl-currency-input"
 import history from "../../others/redirect";
 import { updateVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
+
+
+
 
 const currencyConfig = {
     locale: "pt-BR",
@@ -36,7 +37,8 @@ class VagasEmpresaEditar extends React.Component {
 
             vaga: Store.getState().vagasState.vaga_one,
             disable_all: false,
-            valor_ref: Store.getState().vagasState.vaga_one.valor
+            valor_ref: Store.getState().vagasState.vaga_one.valor,
+            isLoading: false
 
         })
 
@@ -66,6 +68,8 @@ class VagasEmpresaEditar extends React.Component {
             return
         }
 
+        this.obs.isLoading = true
+
 
         if(typeof(this.obs.valor_ref) == "string"){
 
@@ -86,6 +90,7 @@ class VagasEmpresaEditar extends React.Component {
         }
 
         console.log(this.obs.vaga, "Teste")
+        this.obs.isLoading = false
     }
 
     render() {
@@ -214,9 +219,10 @@ class VagasEmpresaEditar extends React.Component {
 
                             </Form.Row>
 
-                            <Button onClick={() => this.handleSendEditVaga()} variant="primary" type="button">
-                                Alterar Cadastro
-                            </Button>
+                        
+                            <Button loading={this.obs.isLoading}  intent="success" onClick={() => this.handleSendEditVaga()} text="Alterar Cadastro" />
+
+                            
                         </Form>
 
                     </div>

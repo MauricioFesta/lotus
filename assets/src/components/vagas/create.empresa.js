@@ -1,8 +1,8 @@
 import React from 'react';
-import NavbarEmpresa from "../navbar/index.empresa"
-import { Form, Button, Alert, Col, Toast, Jumbotron } from 'react-bootstrap';
+import { Form, Alert, Col, Toast, Jumbotron } from 'react-bootstrap';
 import IntlCurrencyInput from "react-intl-currency-input"
 import $ from "jquery";
+import { Button } from "@blueprintjs/core";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
@@ -28,6 +28,8 @@ export default class CreateEmpresa extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {isLoading: false}
     }
 
     closeToasts() {
@@ -75,6 +77,8 @@ export default class CreateEmpresa extends React.Component {
 
         }
 
+        this.setState({ isLoading: true})
+
         let res = await postCadastroVaga(formData, config);
 
         if (res.data.Ok) {
@@ -83,6 +87,7 @@ export default class CreateEmpresa extends React.Component {
         } else {
             AppToaster.show({ message: "Não foi possível cadastrar a vaga", intent: "danger" });
         }
+        this.setState({ isLoading: false})
     }
 
 
@@ -189,9 +194,9 @@ export default class CreateEmpresa extends React.Component {
 
                             </Form.Row>
 
-                            <Button onClick={this.cadastrar} variant="primary" type="button">
-                                Cadastrar
-                            </Button>
+                          
+                            <Button loading={this.state.isLoading}  intent="success" onClick={() => this.cadastrar()} text="Cadastrar vaga" />
+
                         </Form>
 
                     </Jumbotron>

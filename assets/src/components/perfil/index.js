@@ -15,7 +15,7 @@ class Perfil extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '' }
+        this.state = { perfilMODEL, retornoBanco: {}, email: '', nome: '', senha: '', isLoading: false }
 
     }
 
@@ -56,6 +56,8 @@ class Perfil extends React.Component {
         formData.append("senha", this.state.senha || this.state.perfilMODEL.senha);
         formData.append("email", this.state.email || this.state.perfilMODEL.email)
 
+        this.setState({isLoading: true})
+
         let res = await putPerfil(formData)
 
 
@@ -66,6 +68,8 @@ class Perfil extends React.Component {
         } else {
             AppToaster.show({ message: "Não foi possível alterar o perfil", intent: "danger" });
         }
+
+        this.setState({isLoading: false})
 
     }
 
@@ -85,7 +89,7 @@ class Perfil extends React.Component {
 
                             <PerfilFoto />
 
-                            <Button small="true" intent="success" onClick={this.alterarPerfil} text="Salvar alterações" />
+                            <Button loading={this.state.isLoading} small="true" intent="success" onClick={this.alterarPerfil} text="Salvar alterações" />
                         </Form>
 
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

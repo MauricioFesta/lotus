@@ -61,14 +61,6 @@ defmodule LotusWeb.PostagensController do
 
     end 
 
-    def update_postagens(conn, params) do   
-
-        id_user = get_session(conn, "id")["id"]
-
-    end 
-
-
-
 
 
 end
