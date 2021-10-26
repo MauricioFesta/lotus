@@ -13,7 +13,7 @@ import Link from '@material-ui/core/Link';
 const InputMask = require('react-input-mask');
 
 
-class Cadastro extends React.Component {
+class CadastroLogin extends React.Component {
 
   constructor(props) {
     super(props);
@@ -242,4 +242,4 @@ class Cadastro extends React.Component {
   }
 }
 
-export default observer(Cadastro)
+export default observer(CadastroLogin)

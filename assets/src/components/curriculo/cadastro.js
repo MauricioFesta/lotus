@@ -9,27 +9,36 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Mui from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CadastroNotPDF from './cadastro_not_pdf'
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 
 
 
 
-export class Cadastro extends React.Component {
+class Cadastro extends React.Component {
 
   constructor(props) {
     super(props);
-    this.cadastrar = this.cadastrar.bind(this);
 
+    this.obs = observable({
+
+      isLoading: {bol: false}
+
+  })
+
+  this.cadastrar = this.cadastrar.bind(this);
+  
   }
 
   cadastrar = async (form) => {
-
-   
 
     let res;
 
     let formData = new FormData();
 
     let file = document.querySelector('#file');
+
+  
 
     if (file.files.length > 0) {
 
@@ -49,6 +58,8 @@ export class Cadastro extends React.Component {
         config
       }
 
+      
+
       res = await postCurriculo(json)
 
     }else{
@@ -63,8 +74,11 @@ export class Cadastro extends React.Component {
     } else {
       AppToaster.show({ message: "Não foi possível cadastrar o currículo", intent: "danger" });
     }
+
+    this.obs.isLoading.bol = false
   }
 
+  
   getMin() {
 
     let date = new Date();
@@ -100,14 +114,14 @@ export class Cadastro extends React.Component {
             </Mui.Button>
           </Form.Group>
 
-          <CadastroNotPDF cadastrar={this.cadastrar} />
+          <CadastroNotPDF loading={this.obs.isLoading} cadastrar={this.cadastrar} />
 
         </Form>
-
-
 
       </>
 
     );
   }
 }
+
+export default observer(Cadastro)

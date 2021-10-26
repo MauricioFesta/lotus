@@ -1,9 +1,9 @@
 import React from 'react';
 import Login from "./components/login/index";
-import Cadastro from "./components/login/cadastro";
+import CadastroLogin from "./components/login/cadastro";
 import Home from "./components/home/index";
 import Curriculo from "./components/curriculo/index";
-import { Cadastro as cadastro_curriculo } from "./components/curriculo/cadastro"
+import  Cadastro  from "./components/curriculo/cadastro"
 import VagasEmpresa from "./components/vagas/index.empresa"
 import Vagas from "./components/vagas/index"
 import Postagens from "./components/postagens/index"
@@ -102,7 +102,7 @@ function App() {
           <Switch>
             <Route path="/" component={Login} exact />
             <Route path="/login" component={Login} exact />
-            <Route path="/cadastro" component={Cadastro} />
+            <Route path="/cadastro" component={CadastroLogin} />
             <Route path="/redefinicao-senha" component={ResetPassword} />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />
@@ -111,7 +111,7 @@ function App() {
             <PrivateRouteEmpresa path="/vagas/cadastro" component={CreateEmpresa} />
             <PrivateRouteEmpresa path="/vagas/candidatos/:id" component={CandidatosEmpresa} />
             <PrivateRouteUser path="/curriculo" component={Curriculo} exact />
-            <PrivateRouteUser path="/curriculo/cadastro" component={cadastro_curriculo} />
+            <PrivateRouteUser path="/curriculo/cadastro" component={Cadastro} />
             <PrivateRouteUser path="/postagens" exact component={Postagens} />
             <PrivateRouteEmpresa path="/postagens/cadastro" component={PostCreateEmpresa} />
             <PrivateRouteEmpresa path="/postagens/editar" component={PostEditEmpresa} />

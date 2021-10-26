@@ -1,12 +1,15 @@
 import React from 'react';
-import { Form, Button, Alert, Col, Toast } from 'react-bootstrap';
+import { Form} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from "jquery";
 import * as Mui from '@material-ui/core';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { green } from '@material-ui/core/colors';
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
 import { v4 as uuidv4 } from 'uuid';
+import { Button } from "@blueprintjs/core";
 const InputMask = require('react-input-mask');
 
 const theme = createTheme({
@@ -16,12 +19,19 @@ const theme = createTheme({
 });
 
 
-export default class CadastroNotPDF extends React.Component {
+class CadastroNotPDF extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.cadastrar = props.cadastrar;
+        this.obs = observable({
+
+            isLoading: props.loading
+
+        })
+
+        this.cadastrar = props.cadastrar
+       
         this.curriculoForm = {}
         this.curriculoForm.cidade = "Bento Gonçalves"
         this.curriculoForm.ensinomedio = "Não"
@@ -31,6 +41,8 @@ export default class CadastroNotPDF extends React.Component {
     handleGetFoto(){
 
         let formData = new FormData();
+
+        this.obs.isLoading.bol = true
 
         let file = document.querySelector('#file_foto');
         
@@ -132,12 +144,17 @@ export default class CadastroNotPDF extends React.Component {
 
                 </Form.Row>
 
-                <Mui.Button className="mb-4" onClick={() => this.handleGetFoto()} variant="contained" color="primary">
+                {/* <Mui.Button className="mb-4" onClick={() => this.handleGetFoto()} variant="contained" color="primary">
                     Cadastrar
-                </Mui.Button>
+                </Mui.Button> */}
+
+                <Button className="mb-4" loading={this.obs.isLoading.bol}  intent="success" onClick={() => this.handleGetFoto()} text="Cadastrar curriculo" />
+
 
             </>
 
         );
     }
 }
+
+export default observer(CadastroNotPDF)
