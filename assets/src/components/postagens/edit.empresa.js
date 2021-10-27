@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Jumbotron } from 'react-bootstrap';
+import { Form, Jumbotron } from 'react-bootstrap';
 import { postCreatePostagem } from "../../stores/postagens/api"
 import $, { param } from "jquery";
 import { AppToaster } from "../../others/toaster"
@@ -11,6 +11,7 @@ import { Store } from "../../store";
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import history from "../../others/redirect";
+import { Button } from "@blueprintjs/core";
 
 
 class PostEditEmpresa extends React.Component {
@@ -22,7 +23,8 @@ class PostEditEmpresa extends React.Component {
         this.obs = observable({
 
             postagem: Store.getState().postagemState.postagem_one,
-            descricao: Store.getState().postagemState.postagem_one.descricao
+            descricao: Store.getState().postagemState.postagem_one.descricao,
+            isLoading: false
 
         })
 
@@ -50,6 +52,8 @@ class PostEditEmpresa extends React.Component {
 
         }
 
+        this.obs.isLoading = true
+
         let res = await postCreatePostagem(params);
 
         if (res.data.Ok) {
@@ -61,6 +65,8 @@ class PostEditEmpresa extends React.Component {
             AppToaster.show({ message: "Não foi possível, tente novamente mais tarde", intent: "danger" });
 
         }
+
+        this.obs.isLoading = false
     }
 
 
@@ -82,9 +88,8 @@ class PostEditEmpresa extends React.Component {
                                 <Form.Control value={this.obs.descricao} onChange={(vl) => this.obs.descricao = vl.target.value} as="textarea" rows={3} />
                             </Form.Group>
 
-                            <Button onClick={() => this.alterar()} variant="primary" type="button">
-                                Alterar
-                            </Button>
+                            <Button loading={this.obs.isLoading}  intent="success" onClick={() => this.alterar()} text="Alterar Cadastro" />
+
                         </Form>
 
                     </Jumbotron>
