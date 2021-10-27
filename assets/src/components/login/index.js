@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://i.pinimg.com/564x/66/cd/5f/66cd5f6e109a082583891f363fa3f1c8.jpg)',
+    backgroundImage: 'url(images/logo-back.jpg)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -78,7 +78,7 @@ function Login_view(props) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+             <LockOutlinedIcon /> 
           </Avatar>
           <Typography component="h1" variant="h5">
             Entrar
