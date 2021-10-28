@@ -46,7 +46,7 @@ export default class Details extends React.Component {
 
             <>
 
-                <CardDeck className="mt-4 detail" key={this.obs.vagas.id}>
+                <CardDeck className="mt-4 detail ml-4 mr-41" key={this.obs.vagas.id}>
 
                     <Card className="vagas-cards" key={this.obs.vagas.id}>
 

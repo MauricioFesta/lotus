@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardDeck, Row, Form, Col, Modal } from 'react-bootstrap';
+import { CardDeck, Form, Modal } from 'react-bootstrap';
 import { listVagas, listVagasAprovadas } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { postCandidatarseVaga, deleteCandidatarseVaga } from "../../stores/vagas/api"
@@ -23,6 +23,16 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardFooter,
+    Badge,
+    Button
+} from "shards-react";
 // import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const id_master = idMaster()
@@ -42,7 +52,8 @@ class Vagas extends React.Component {
             is_curriculo: false,
             data_empresas: [],
             open_spinner: false,
-            principal_curriculo: false
+            principal_curriculo: false,
+            vagas: []
 
         })
 
@@ -82,15 +93,15 @@ class Vagas extends React.Component {
 
         getCurriculo().then(result => {
 
-            this.obs.principal_curriculo = false   
+            this.obs.principal_curriculo = false
 
             if (result.data.length > 0) {
                 this.obs.is_curriculo = true
             }
 
-            for(let i = 0; i < result.data.length; i++){
+            for (let i = 0; i < result.data.length; i++) {
 
-                if(result.data[i].principal){
+                if (result.data[i].principal) {
 
                     this.obs.principal_curriculo = true
                     break
@@ -108,6 +119,8 @@ class Vagas extends React.Component {
         }
 
         if (Array.isArray(res.data)) {
+
+            this.obs.vagas = res.data
 
             res.data.map(el => {
 
@@ -140,7 +153,7 @@ class Vagas extends React.Component {
             return
         }
 
-        if(!this.obs.principal_curriculo){
+        if (!this.obs.principal_curriculo) {
 
             AppToaster.show({ message: "Você precia por um curriculo como principal, para se candidatar", intent: "warning" });
             return
@@ -219,27 +232,25 @@ class Vagas extends React.Component {
                     </Modal.Body>
 
                 </Modal>
-                <div className="ml-4 mr-4 mt-4 scroll-card">
 
+                <Form className="mt-4">
 
-                    <Form className="mt-4">
-
-                        <Form.Row>
-                            {/* <Col>
+                    <Form.Row>
+                        {/* <Col>
                                 <Form.Group as={Col} controlId="formSetor">
 
                                     <Ramo empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
                                 </Form.Group>
                             </Col> */}
-                            <Col>
-                                <Form.Group as={Col} controlId="formSetor">
+                        <Col>
+                            <Form.Group as={Col} controlId="formSetor">
 
-                                    <Empresa empresas={this.obs.data_empresas} getVagas={this.getVagas} />
+                                <Empresa empresas={this.obs.data_empresas} getVagas={this.getVagas} />
 
-                                </Form.Group>
-                            </Col>
-                            {/* <Col>
+                            </Form.Group>
+                        </Col>
+                        {/* <Col>
                                 <Form.Group as={Col} controlId="formLocation">
 
                                     <Form.Label>Endereço</Form.Label>
@@ -251,72 +262,98 @@ class Vagas extends React.Component {
 
                                 </Form.Group>
                             </Col> */}
-                        </Form.Row>
+                    </Form.Row>
 
-                    </Form>
+                </Form>
 
 
 
-                    {this.state.vagas.map((el, index) => {
+                {this.state.vagas.map((el, index) => {
 
-                        return (
-                            <>
-                                <CardDeck className="mt-4" key={index}>
 
-                                    {el.map((el2, index) => {
+                    return (
+                        <Container fluid className="main-content-container px-4">
+                        
+                            <Row noGutters className="page-header py-4">
+                                {/* <PageTitle sm="4" title="Blog Posts" subtitle="Components" className="text-sm-left" /> */}
+                            </Row>
 
-                                        return (
+                          
+                            <Row>
+                                {this.obs.vagas.map((post, idx) => (
+                                    <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
 
-                                            <Card className="vagas-cards" key={index}>
-                                                {!this.handleCandidatoAprovado(el2.id) &&
+                                        <Card small className="card-post card-post--1">
+                                            {!this.handleCandidatoAprovado(post.id) &&
 
-                                                    <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
-                                                        Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
-                                                    </Alert>
+                                                <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
+                                                    Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
+                                                </Alert>
+
+                                            }
+                                            <div
+
+                                                className={this.handleValidaCandidato(post.candidatos) ? 'card-post__image' : "card-post__image candidatura-enviada"}
+                                                style={{ backgroundImage: `url(${"data:image/png;base64," + post.imagem_base64})` }}
+                                            >
+                                                <Badge
+                                                    pill
+                                                    className={`card-post__category bg-${"post.categoryTheme"}`}
+                                                >
+                                                    {post.ramo}
+                                                </Badge>
+                                                <div className="card-post__author d-flex">
+                                                    <a
+                                                        href="#"
+                                                        className="card-post__author-avatar card-post__author-avatar--small"
+                                                        style={{ backgroundImage: `url('${post.authorAvatar}')` }}
+                                                    >
+                                                        Written by {"post.author"}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <CardBody>
+                                                <h5 className="card-title">
+                                                    <a href="#" className="text-fiord-blue">
+                                                        {post.titulo}
+                                                    </a>
+                                                </h5>
+                                                <p className="card-text d-inline-block mb-3">
+                                                    {post.descricao.slice(0, 180) + "..."}</p>
+                                                {this.handleValidaCandidato(post.candidatos) ?
+                                                    <Mui.Button
+                                                        size="small"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        endIcon={<SendIcon />}
+                                                        onClick={() => this.candidatarSeVaga(post.id, post.empresa_id)}
+                                                    >
+                                                        Candidatar-se
+                                                    </Mui.Button>
+
+                                                    :
+
+                                                    this.handleCandidatoAprovado(post.id) &&
+
+                                                    <Mui.Button
+                                                        size="small"
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        endIcon={<DeleteIcon />}
+                                                        onClick={() => this.excluirCandidaturaVaga(post.id)}
+                                                    >
+                                                        Excluir
+                                                    </Mui.Button>
 
                                                 }
-                                                <Card.Img className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"} variant="top" src={"data:image/png;base64," + el2.imagem_base64} />
-                                                <Card.Body>
 
-                                                    <Card.Title className={this.handleValidaCandidato(el2.candidatos) ? 'vagas-cards-title' : "candidatura-enviada vagas-cards-title"}>{el2.cidade}</Card.Title>
-                                                    <Card.Text className={this.handleValidaCandidato(el2.candidatos) ? '' : "candidatura-enviada"}>
-                                                        {el2.descricao.slice(0, 180) + "..."}
-                                                    </Card.Text>
+                                                &nbsp;
+                                                <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", post)} color="primary" aria-label="upload picture" component="span">
 
-                                                    {this.handleValidaCandidato(el2.candidatos) ?
-                                                        <Mui.Button
-                                                            size="small"
-                                                            variant="contained"
-                                                            color="primary"
-                                                            endIcon={<SendIcon />}
-                                                            onClick={() => this.candidatarSeVaga(el2.id, el2.empresa_id)}
-                                                        >
-                                                            Candidatar-se
-                                                        </Mui.Button>
+                                                    Mais
+                                                </Mui.IconButton>
 
-                                                        :
-
-                                                        this.handleCandidatoAprovado(el2.id) &&
-
-                                                        <Mui.Button
-                                                            size="small"
-                                                            variant="contained"
-                                                            color="secondary"
-                                                            endIcon={<DeleteIcon />}
-                                                            onClick={() => this.excluirCandidaturaVaga(el2.id)}
-                                                        >
-                                                            Excluir
-                                                        </Mui.Button>
-
-                                                    }
-
-                                                    &nbsp;
-                                                    <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", el2)} color="primary" aria-label="upload picture" component="span">
-                                                        {/* <PhotoCamera /> */}
-                                                        Mais
-                                                    </Mui.IconButton>
-
-                                                    {/* <Mui.Button
+                                                {/* <Mui.Button
                                                         size="small"
                                                         variant="contained"
                                                         color="primary"
@@ -325,32 +362,19 @@ class Vagas extends React.Component {
                                                     >
                                                         Teste
                                                     </Mui.Button> */}
+                                                    
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
+                        </Container>
+                    )
 
+                })
 
+                }
 
-
-                                                </Card.Body>
-
-                                                <Card.Footer>
-                                                    <small className="text-muted">Atualizado em 3 mins agora</small>
-                                                </Card.Footer>
-                                            </Card>
-
-                                        )
-                                    })
-
-                                    }
-
-                                </CardDeck>
-                                <br></br>
-
-                            </>
-                        )
-
-                    })
-
-                    }
-                </div>
 
             </ >
 

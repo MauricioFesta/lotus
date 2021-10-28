@@ -15,6 +15,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { perfil_image_default } from '../../others/global_values'
+
 require("./css/style.scss")
 
 const styleButomDelete = {
