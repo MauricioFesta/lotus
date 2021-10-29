@@ -6,7 +6,7 @@ import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import { Card, Image } from 'semantic-ui-react'
+import { Image } from 'semantic-ui-react'
 import { Spinner } from "@blueprintjs/core";
 import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,6 +15,16 @@ import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { perfil_image_default } from '../../others/global_values'
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardFooter,
+  Badge,
+  Button
+} from "shards-react";
 
 require("./css/style.scss")
 
@@ -38,7 +48,7 @@ export default class Curriculo extends React.Component {
 
   async componentDidMount() {
 
-    this.setState({open_spinner: true})
+    this.setState({ open_spinner: true })
 
     let res = await getCurriculo()
 
@@ -46,7 +56,7 @@ export default class Curriculo extends React.Component {
       this.setState({ showItems: true, dataCurriculo: res.data })
     }
 
-    this.setState({open_spinner: false})
+    this.setState({ open_spinner: false })
 
 
   }
@@ -214,54 +224,69 @@ export default class Curriculo extends React.Component {
         </Modal>
 
 
-        <Jumbotron className="ml-4 mr-4 mt-4">
+
+        <Container fluid className="main-content-container px-4">
+
+          <Row noGutters className="page-header py-4">
+            <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
+          </Row>
+
+          <Row>
 
 
-          <Link className="mb-6" to="curriculo/cadastro">Cadastrar Currículo</Link>
-          <Card.Group>
-            {this.state.showItems ?
+            {this.state.dataCurriculo.map((el, idx) => {
 
-              this.state.dataCurriculo.map(el => {
+              return (
 
-                return (
 
-                  <Card className="mt-4">
-                    <Image src={el.image_base64 === "" || !el.image_base64 ? perfil_image_default : 'data:image/jpeg;base64,' + el.image_base64} wrapped ui={false} />
-                    <Card.Content>
-                      {/* <Card.Header>{el.id}</Card.Header> */}
-                      <Card.Meta>Cadastrado em 2021</Card.Meta>
-                      <Card.Description>
-                        {el.descricao}
-                      </Card.Description>
-                    </Card.Content>
 
-                    <Card.Content extra>
+                <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
+
+                  <Card small className="card-post card-post--1">
+
+                    <div
+
+                      className={"card-post__image"}
+                      style={{ backgroundImage: `url(${el.image_base64 === "" || !el.image_base64 ? perfil_image_default : 'data:image/jpeg;base64,' + el.image_base64})` }}
+                    >
+                      <Badge
+                        pill
+                        className={`card-post__category bg-${"post.categoryTheme"}`}
+                      >
+                        {/* {post.ramo} */}
+                      </Badge>
+                      <div className="card-post__author d-flex">
+
+                      </div>
+                    </div>
+                    <CardBody>
+                      <h5 className="card-title">
+                        <a href="#" className="text-fiord-blue">
+                          {/* {post.titulo} */}
+                        </a>
+                      </h5>
+                      <p className="card-text d-inline-block mb-3">
+                        {el.descricao.slice(0, 180) + "..."}</p><br/>
                       {downloadFormatter(el.id)}
                       {excluirFormatter(el.id)}
                       {el.principal ?
                         curriculoPrincipal(el.id) :
                         tornarPrincipal(el.id)}
-                    </Card.Content>
+
+                    </CardBody>
                   </Card>
+                </Col>
 
 
 
-                )
-              })
+              )
 
-              :
-
-              <Alert variant="info" className="mt-4">
-                Não há curriculos cadastrados!
-                <Link to="curriculo/cadastro"> Clique aqui para cadastrar!</Link> :)
-              </Alert>
+            })
 
             }
 
-          </Card.Group>
-
-        </Jumbotron>
-
+          </Row>
+        </Container>
 
       </>
 

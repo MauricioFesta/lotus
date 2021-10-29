@@ -1,27 +1,24 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Classes, Button, Icon, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
-import { Example } from "@blueprintjs/docs-theme";
-import { Popover2 } from "@blueprintjs/popover2";
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "./css/index.scss"
 import history from "../../others/redirect";
-import AddIcon from '@material-ui/icons/Add';
 import socket from '../socket';
 import Cookies from 'universal-cookie';
 import Notificacoes from "./notificacoes/index"
+import { Modal } from 'react-bootstrap';
 import { idMaster } from '../login/auth';
-import CloseIcon from '@mui/icons-material/Close';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import AllInboxIcon from '@mui/icons-material/AllInbox';
+
+require("./css/index.scss")
+
 const cookies = new Cookies();
 
 export default class NavbarEmpresa extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = { open_modal: false }
 
 
   }
@@ -62,105 +59,109 @@ export default class NavbarEmpresa extends React.Component {
   }
 
 
-
-
   render() {
 
     return (
 
-      <nav className="bp3-navbar bp3-dark layout-default">
+      <>
+
+        <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
+
+          <Modal.Body>
+
+            <Notificacoes />
+
+          </Modal.Body>
+
+        </Modal>
 
 
-        <div styles="margin: 0 auto; width: 480px;">
-          <div className="bp3-navbar-group bp3-align-left">
-            <div className="bp3-navbar-heading">Lotus Empresas</div>
-            {/* <input className="bp3-input" placeholder="Search files..." type="text" /> */}
+        <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
+          <a class="navbar-brand" href="#">Lotus Empresas</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+
+            <ul class="navbar-nav ">
+
+              <li class="nav-item active">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/vagas/cadastradas")} class="fa fa-list-alt"></i>
+                  Vagas cadastradas
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} class="fa fa-list-ul"></i>
+                  Vagas fechadas
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/vagas/cadastro")} class="fa fa-plus-square"></i>
+                  Cadastrar Vaga
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a onClick={() => this.handleRedirect("/postagens/view")} class="nav-link" href="#">
+                  <i class="fa fa-list-ol"></i>
+                  Listar Postagens
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a onClick={() => this.handleRedirect("/postagens/cadastro")} class="nav-link" href="#">
+                  <i class="fa fa-plus"></i>
+                  Cadastro Postagem
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.setState({ open_modal: true })} class="fa fa-bell">
+                    <span class="badge badge-info"></span>
+                  </i>
+                  Notificações
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/perfil")} class="fa fa-address-card">
+                    <span class="badge badge-success"></span>
+                  </i>
+
+                  Perfil
+                </a>
+              </li>
+              <li class="nav-item">
+                <a onClick={() => this.handleSair()} class="nav-link" href="#">
+                  <i class="fa fa-close">
+                    <span class="badge badge-success"></span>
+                  </i>
+
+                  Sair
+                </a>
+              </li>
+            </ul>
+
+
           </div>
-          <div className="bp3-navbar-group bp3-align-right">
 
-            <button onClick={() => this.handleRedirect("/vagas/cadastradas")} className="bp3-button bp3-minimal e"><MenuOpenIcon />&nbsp; Vagas em Aberto</button>
-            <button onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} className="bp3-button bp3-minimal e"><CloseIcon />&nbsp; Vagas Fechadas</button>
-            <button onClick={() => this.handleRedirect("/vagas/cadastro")} className="bp3-button bp3-minimal"><AddIcon />&nbsp;  Cadastrar Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens/cadastro")} className="bp3-button bp3-minimal"><AddBoxIcon />&nbsp;  Cadastrar Postagem</button>
-            <button onClick={() => this.handleRedirect("/postagens/view")} className="bp3-button bp3-minimal"><AllInboxIcon />&nbsp;  Visualizar Postagem</button>
+        </nav>
 
-            <span className="bp3-navbar-divider"></span>
-
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
-
-                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
-
-                  <Menu className={Classes.ELEVATION_1 + " layout-default"} >
-                    <MenuDivider title="Conta" />
-                    <MenuItem onClick={() => this.handleRedirect("/perfil")} icon="align-left" text="Perfil" />
-                  </Menu>
-                </Example>
-
-              }
-
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="user" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
-
-
-            />
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
-
-                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
-
-                  <Menu className={Classes.ELEVATION_1} className="layout-default">
-                    <MenuDivider title="Notificações" />
-
-                    <Notificacoes />
-
-                  </Menu>
-                </Example>
-
-              }
-
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="notifications" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
-
-
-            />
-
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
-
-                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
-
-                  <Menu className={Classes.ELEVATION_1 + " layout-default"}>
-                    <MenuDivider title="Configurações" />
-                    <MenuItem onClick={() => this.handleSair()} icon="align-left" text="Sair" />
-                    {/* <MenuItem icon="align-left" text="Status">
-                      <MenuItem icon="align-left" text="Online" />
-                      <MenuItem icon="align-left" text="Offline" />
-                      <MenuItem icon="align-left" text="Ausente" />
-                    </MenuItem> */}
-                  </Menu>
-                </Example>
-
-              }
-
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="cog" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
-
-
-            />
-
-          </div>
-        </div>
-      </nav>
+    
+      </>
 
 
     );

@@ -266,94 +266,94 @@ class Vagas extends React.Component {
 
                 </Form>
 
+                <Container fluid className="main-content-container px-4">
+                    
+                    <Row>
+
+                        {this.state.vagas.map((el, index) => {
 
 
-                {this.state.vagas.map((el, index) => {
+                            return (
 
+                                <>
+                                    <Row noGutters className="page-header py-4">
+                                        {/* <PageTitle sm="4" title="Blog Posts" subtitle="Components" className="text-sm-left" /> */}
+                                    </Row>
 
-                    return (
-                        <Container fluid className="main-content-container px-4">
-                        
-                            <Row noGutters className="page-header py-4">
-                                {/* <PageTitle sm="4" title="Blog Posts" subtitle="Components" className="text-sm-left" /> */}
-                            </Row>
+                                    {this.obs.vagas.map((post, idx) => (
+                                        <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
 
-                          
-                            <Row>
-                                {this.obs.vagas.map((post, idx) => (
-                                    <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
+                                            <Card small className="card-post card-post--1">
+                                                {!this.handleCandidatoAprovado(post.id) &&
 
-                                        <Card small className="card-post card-post--1">
-                                            {!this.handleCandidatoAprovado(post.id) &&
-
-                                                <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
-                                                    Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
-                                                </Alert>
-
-                                            }
-                                            <div
-
-                                                className={this.handleValidaCandidato(post.candidatos) ? 'card-post__image' : "card-post__image candidatura-enviada"}
-                                                style={{ backgroundImage: `url(${"data:image/png;base64," + post.imagem_base64})` }}
-                                            >
-                                                <Badge
-                                                    pill
-                                                    className={`card-post__category bg-${"post.categoryTheme"}`}
-                                                >
-                                                    {post.ramo}
-                                                </Badge>
-                                                <div className="card-post__author d-flex">
-                                                    <a
-                                                        href="#"
-                                                        className="card-post__author-avatar card-post__author-avatar--small"
-                                                        style={{ backgroundImage: `url('${post.authorAvatar}')` }}
-                                                    >
-                                                        Written by {"post.author"}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <CardBody>
-                                                <h5 className="card-title">
-                                                    <a href="#" className="text-fiord-blue">
-                                                        {post.titulo}
-                                                    </a>
-                                                </h5>
-                                                <p className="card-text d-inline-block mb-3">
-                                                    {post.descricao.slice(0, 180) + "..."}</p>
-                                                {this.handleValidaCandidato(post.candidatos) ?
-                                                    <Mui.Button
-                                                        size="small"
-                                                        variant="contained"
-                                                        color="primary"
-                                                        endIcon={<SendIcon />}
-                                                        onClick={() => this.candidatarSeVaga(post.id, post.empresa_id)}
-                                                    >
-                                                        Candidatar-se
-                                                    </Mui.Button>
-
-                                                    :
-
-                                                    this.handleCandidatoAprovado(post.id) &&
-
-                                                    <Mui.Button
-                                                        size="small"
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        endIcon={<DeleteIcon />}
-                                                        onClick={() => this.excluirCandidaturaVaga(post.id)}
-                                                    >
-                                                        Excluir
-                                                    </Mui.Button>
+                                                    <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
+                                                        Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
+                                                    </Alert>
 
                                                 }
+                                                <div
 
-                                                &nbsp;
-                                                <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", post)} color="primary" aria-label="upload picture" component="span">
+                                                    className={this.handleValidaCandidato(post.candidatos) ? 'card-post__image' : "card-post__image candidatura-enviada"}
+                                                    style={{ backgroundImage: `url(${"data:image/png;base64," + post.imagem_base64})` }}
+                                                >
+                                                    <Badge
+                                                        pill
+                                                        className={`card-post__category bg-${"post.categoryTheme"}`}
+                                                    >
+                                                        {post.ramo}
+                                                    </Badge>
+                                                    <div className="card-post__author d-flex">
+                                                        <a
+                                                            href="#"
+                                                            className="card-post__author-avatar card-post__author-avatar--small"
+                                                            style={{ backgroundImage: `url('${post.authorAvatar}')` }}
+                                                        >
+                                                            Written by {"post.author"}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <CardBody>
+                                                    <h5 className="card-title">
+                                                        <a href="#" className="text-fiord-blue">
+                                                            {post.titulo}
+                                                        </a>
+                                                    </h5>
+                                                    <p className="card-text d-inline-block mb-3">
+                                                        {post.descricao.slice(0, 180) + "..."}</p>
+                                                    {this.handleValidaCandidato(post.candidatos) ?
+                                                        <Mui.Button
+                                                            size="small"
+                                                            variant="contained"
+                                                            color="primary"
+                                                            endIcon={<SendIcon />}
+                                                            onClick={() => this.candidatarSeVaga(post.id, post.empresa_id)}
+                                                        >
+                                                            Candidatar-se
+                                                        </Mui.Button>
 
-                                                    Mais
-                                                </Mui.IconButton>
+                                                        :
 
-                                                {/* <Mui.Button
+                                                        this.handleCandidatoAprovado(post.id) &&
+
+                                                        <Mui.Button
+                                                            size="small"
+                                                            variant="contained"
+                                                            color="secondary"
+                                                            endIcon={<DeleteIcon />}
+                                                            onClick={() => this.excluirCandidaturaVaga(post.id)}
+                                                        >
+                                                            Excluir
+                                                        </Mui.Button>
+
+                                                    }
+
+                                                    &nbsp;
+                                                    <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", post)} color="primary" aria-label="upload picture" component="span">
+
+                                                        Mais
+                                                    </Mui.IconButton>
+
+                                                    {/* <Mui.Button
                                                         size="small"
                                                         variant="contained"
                                                         color="primary"
@@ -362,18 +362,22 @@ class Vagas extends React.Component {
                                                     >
                                                         Teste
                                                     </Mui.Button> */}
-                                                    
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                ))}
-                            </Row>
-                        </Container>
-                    )
 
-                })
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    ))}
 
-                }
+
+                                </>
+
+                            )
+
+                        })
+
+                        }
+                    </Row>
+                </Container>
 
 
             </ >

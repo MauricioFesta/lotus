@@ -1,7 +1,7 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Jumbotron, Container, Button, Modal } from 'react-bootstrap';
-import { Card, Icon } from 'semantic-ui-react'
+import { Modal } from 'react-bootstrap';
+import { Icon } from 'semantic-ui-react'
 import { listVagasEmpresaFechado } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom"
@@ -15,6 +15,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { Spinner } from "@blueprintjs/core";
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardFooter,
+    Badge,
+    Button
+} from "shards-react";
 
 
 class VagasFechadoEmpresa extends React.Component {
@@ -77,7 +87,6 @@ class VagasFechadoEmpresa extends React.Component {
 
                 </Modal>
 
-
                 <div className="mt-4 ml-4 mr-4">
 
                     {this.state.redirect &&
@@ -85,47 +94,74 @@ class VagasFechadoEmpresa extends React.Component {
                         <Redirect to={{ pathname: this.state.path }} />
                     }
 
-                    <Jumbotron className="mt-4">
-                        <Card.Group>
+                    <Container fluid className="main-content-container px-4">
+
+                        <Row>
                             {this.state.vagas ?
 
-                                this.state.vagas.map(el => {
+                                this.state.vagas.map((el, idx) => {
 
                                     return (
 
                                         <>
-                                            <Card>
+
+                                            <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
+
+                                                <Card small className="card-post card-post--1">
+
+                                                    <Alert severity="error">Vaga desativada!!</Alert>
+
+                                                    <div
+
+                                                        className={"card-post__image"}
+                                                        style={{ backgroundImage: `url(${"data:image/png;base64," + el.imagem_base64})` }}
 
 
+                                                    >
+                                                        <Badge
+                                                            pill
+                                                            className={`card-post__category bg-${"post.categoryTheme"}`}
+                                                        >
+                                                            {/* {post.ramo} */}
+                                                        </Badge>
+                                                        <div className="card-post__author d-flex">
 
-                                                <Card.Content header={el.titulo} />
+                                                        </div>
+                                                    </div>
+                                                    <CardBody>
 
-                                                <Card.Content ><Alert severity="error">Vaga desativada!!</Alert> </Card.Content>
+                                                        <h5 className="card-title">
+                                                            <a href="#" className="text-fiord-blue">
+                                                                {el.titulo}
+                                                            </a>
+                                                        </h5>
 
-                                                <Card.Content description={el.descricao.slice(0, 180) + "..."} />
-
-                                                <Card.Content extra>
-                                                    {el.candidatos.length > 1 ?
-
-                                                        <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
-                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                        </a>
-
-                                                        :
-
-                                                        <a>
-                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                        </a>
+                                                        <p className="card-text d-inline-block mb-3">
+                                                            {el.descricao.slice(0, 110) + "..."}</p><br />
 
 
-                                                    }
+                                                        {el.candidatos.length > 1 ?
 
-                                                    <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
-                                                        <EditIcon />
-                                                    </IconButton>
+                                                            <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
+                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                            </a>
 
-                                                </Card.Content>
-                                            </Card>
+                                                            :
+
+                                                            <a>
+                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                            </a>
+
+
+                                                        }
+
+                                                        <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
+                                                            <EditIcon />
+                                                        </IconButton>
+
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
 
                                         </>
 
@@ -136,16 +172,16 @@ class VagasFechadoEmpresa extends React.Component {
 
                                 :
 
-
                                 <Alert severity="info">
-                                    <AlertTitle>Vagas desativadas</AlertTitle>
-                                    Nenhuma vaga esta desativada até o momento.
+                                    <AlertTitle>Vagas em aberto</AlertTitle>
+                                    Nenhuma vaga em aberto até o momento.
                                 </Alert>
 
                             }
 
-                        </Card.Group>
-                    </Jumbotron>
+                        </Row>
+                    </Container>
+
                 </div>
 
             </>

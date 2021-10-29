@@ -1,7 +1,6 @@
 import React from 'react';
-import NavbarEmpresa from "../navbar/index.empresa"
-import { Jumbotron, Container, Button, Modal } from 'react-bootstrap';
-import { Card, Icon } from 'semantic-ui-react'
+import { Modal } from 'react-bootstrap';
+import { Icon } from 'semantic-ui-react'
 import { listVagasEmpresa } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom"
@@ -16,6 +15,16 @@ import EditIcon from '@mui/icons-material/Edit';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import { Spinner } from "@blueprintjs/core";
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardFooter,
+    Badge,
+    Button
+} from "shards-react";
 
 
 class VagasEmpresa extends React.Component {
@@ -40,7 +49,7 @@ class VagasEmpresa extends React.Component {
         }
 
         this.setState({ open_spinner: false })
-        
+
 
     }
 
@@ -87,43 +96,72 @@ class VagasEmpresa extends React.Component {
                         <Redirect to={{ pathname: this.state.path }} />
                     }
 
-                    <Jumbotron className="mt-4">
-                        <Card.Group>
+                    <Container fluid className="main-content-container px-4">
+
+                        <Row>
                             {this.state.vagas ?
 
-                                this.state.vagas.map(el => {
+                                this.state.vagas.map((el, idx) => {
 
                                     return (
 
                                         <>
-                                            <Card>
 
-                                                <Card.Content header={el.titulo} />
+                                            <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
 
-                                                <Card.Content description={el.descricao.slice(0, 110) + "..."} />
-                                                <Card.Content extra>
+                                                <Card small className="card-post card-post--1">
 
-                                                    {el.candidatos.length > 1 ?
+                                                    <div
 
-                                                        <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
-                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                        </a>
-
-                                                        :
-
-                                                        <a>
-                                                            <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                        </a>
+                                                        className={"card-post__image"}
+                                                        style={{ backgroundImage: `url(${"data:image/png;base64," + el.imagem_base64})` }}
 
 
-                                                    }
+                                                    >
+                                                        <Badge
+                                                            pill
+                                                            className={`card-post__category bg-${"post.categoryTheme"}`}
+                                                        >
+                                                            {/* {post.ramo} */}
+                                                        </Badge>
+                                                        <div className="card-post__author d-flex">
 
-                                                    <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
-                                                        <EditIcon />
-                                                    </IconButton>
+                                                        </div>
+                                                    </div>
+                                                    <CardBody>
 
-                                                </Card.Content>
-                                            </Card>
+                                                        <h5 className="card-title">
+                                                            <a href="#" className="text-fiord-blue">
+                                                                {el.titulo}
+                                                            </a>
+                                                        </h5>
+
+                                                        <p className="card-text d-inline-block mb-3">
+                                                            {el.descricao.slice(0, 110) + "..."}</p><br />
+
+
+                                                        {el.candidatos.length > 1 ?
+
+                                                            <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
+                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                            </a>
+
+                                                            :
+
+                                                            <a>
+                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                            </a>
+
+
+                                                        }
+
+                                                        <IconButton className="edit-vaga" onClick={() => this.handleEditVaga(el.id)} color="primary" aria-label="upload picture" component="span">
+                                                            <EditIcon />
+                                                        </IconButton>
+
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
 
                                         </>
 
@@ -141,8 +179,9 @@ class VagasEmpresa extends React.Component {
 
                             }
 
-                        </Card.Group>
-                    </Jumbotron>
+                        </Row>
+                    </Container>
+
                 </div>
 
             </>

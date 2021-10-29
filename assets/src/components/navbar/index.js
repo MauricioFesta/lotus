@@ -1,19 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Classes, Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
-import { Example } from "@blueprintjs/docs-theme";
-import { Popover2 } from "@blueprintjs/popover2";
 import "./css/index.scss"
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
 import Notificacoes from "./notificacoes/index"
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import BusinessIcon from '@material-ui/icons/Business';
-import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import socket from '../socket';
 import Cookies from 'universal-cookie';
-import {idMaster} from '../login/auth'
+import { idMaster } from '../login/auth'
+import { Modal } from 'react-bootstrap';
+
 const cookies = new Cookies();
 require("./css/index.scss")
 
@@ -21,6 +16,8 @@ export default class Navbar extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.state = { open_modal: false }
 
   }
 
@@ -65,96 +62,87 @@ export default class Navbar extends React.Component {
 
     return (
 
+      <>
 
-      <nav className="bp3-navbar bp3-dark layout-default">
+        <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
 
+          <Modal.Body>
 
-        <div styles="margin: 0 auto; width: 480px;">
-          <div className="bp3-navbar-group bp3-align-left">
-            <div className="bp3-navbar-heading">Lotus</div>
-            {/* <input className="bp3-input" placeholder="Search files..." type="text" /> */}
-          </div>
-          <div className="bp3-navbar-group bp3-align-right">
-            <button onClick={() => this.handleRedirect("/curriculo")} className="bp3-button bp3-minimal"> <AssignmentIndIcon />&nbsp;Meus Curriculos</button>
-            <button onClick={() => this.handleRedirect("/vagas")} className="bp3-button bp3-minimal "><BusinessIcon />&nbsp; Vagas</button>
-            <button onClick={() => this.handleRedirect("/postagens")} className="bp3-button bp3-minimal"><MarkunreadMailboxIcon />&nbsp; Postagens</button>
-            <span className="bp3-navbar-divider"></span>
+            <Notificacoes />
 
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
+          </Modal.Body>
 
-                <Example className={Classes.POPOVER2_DISMISS} options={true} {...this.props}>
-
-                  <Menu className={Classes.ELEVATION_1 + " layout-default"} >
-                    <MenuDivider title="Conta" />
-                    <MenuItem  onClick={() => this.handleRedirect("/perfil")} icon="align-left" text="Perfil" />
-                  </Menu>
-                </Example>
-
-              }
-
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="user" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
+        </Modal>
 
 
-            />
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
+        <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
+          <a class="navbar-brand" href="#">Lotus</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-                <Example className={Classes.POPOVER2_DISMISS} className="docs-menu-example" options={true} {...this.props}>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
 
-                  <Menu className={Classes.ELEVATION_1} className="layout-default">
-                    <MenuDivider title="Notificações" />
+            </ul>
 
-                    <Notificacoes />
+            <ul class="navbar-nav ">
 
-                  </Menu>
-                </Example>
+              <li class="nav-item active">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/vagas")} class="fa fa-list-alt"></i>
+                  Vagas
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/curriculo")} class="fa fa-list-ol"></i>
+                  Meus Curriculos
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
 
-              }
+              <li class="nav-item">
+                <a onClick={() => this.handleRedirect("/postagens")} class="nav-link" href="#">
+                  <i class="fa fa-list-ul"></i>
+                  Postagens
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.setState({ open_modal: true })} class="fa fa-bell">
+                    <span class="badge badge-info"></span>
+                  </i>
+                  Notificações
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i onClick={() => this.handleRedirect("/perfil")} class="fa fa-address-card">
+                    <span class="badge badge-success"></span>
+                  </i>
 
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="notifications" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
+                  Perfil
+                </a>
+              </li>
+              <li class="nav-item">
+                <a onClick={() => this.handleSair()} class="nav-link" href="#">
+                  <i class="fa fa-close">
+                    <span class="badge badge-success"></span>
+                  </i>
 
+                  Sair
+                </a>
+              </li>
+            </ul>
 
-            />
-
-            <Popover2
-              autoFocus={false}
-              usePortal={false}
-              content={
-
-                <Example className={Classes.POPOVER2_DISMISS} className="docs-menu-example" options={true} {...this.props}>
-
-                  <Menu className={Classes.ELEVATION_1} className="layout-default">
-                    <MenuDivider title="Configurações" />
-                    <MenuItem onClick={() => this.handleSair()} icon="align-left" text="Sair" />
-                    {/* <MenuItem icon="align-left" text="Status">
-                      <MenuItem icon="align-left" text="Online" />
-                      <MenuItem icon="align-left" text="Offline" />
-                      <MenuItem icon="align-left" text="Ausente" />
-                    </MenuItem> */}
-                  </Menu>
-                </Example>
-
-              }
-
-              renderTarget={({ isOpen, ref, ...p }) => (
-                <Button minimal={true} icon="cog" checked={false} {...p} active={isOpen} elementRef={ref} />
-              )}
-
-
-            />
 
           </div>
-        </div>
-      </nav>
+
+        </nav>
+      </>
 
 
     );

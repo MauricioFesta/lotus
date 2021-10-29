@@ -1,7 +1,6 @@
 import React from 'react';
-import NavbarEmpresa from "../navbar/index.empresa"
-import { Card, Image } from 'semantic-ui-react'
-import {Jumbotron, Modal } from 'react-bootstrap';
+import { Image } from 'semantic-ui-react'
+import { Modal } from 'react-bootstrap';
 import { listVagasEmpresaId, downloadCurriculoCandidato, candidatoAprovar, candidatoDesaprovar } from "../../stores/vagas/api"
 import * as Mui from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -14,6 +13,16 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import { Spinner } from "@blueprintjs/core";
+import {
+    Container,
+    Row,
+    Col,
+    Card,
+    CardBody,
+    CardFooter,
+    Badge,
+    Button
+} from "shards-react";
 
 const styleButomPrincipal = {
     color: '#32CD32',
@@ -234,33 +243,47 @@ class CandidatosEmpresa extends React.Component {
                 </Modal>
 
 
-                <div className="mt-4 ml-4 mt-4 mr-4">
+                <div className="mt-4 ml-4 mr-4">
 
-                    <Jumbotron className="mt-4">
+                    <Container fluid className="main-content-container px-4">
 
-
-                        <Card.Group>
+                        <Row>
                             {this.state.candidatos &&
 
-                                this.state.candidatos.map(el => {
+                                this.state.candidatos.map((el, idx) => {
+
                                     return (
+
                                         <>
 
-                                            <Card>
-                                                <Card.Content>
-                                                    <Image
-                                                        floated='right'
-                                                        size='mini'
-                                                        src={"data:image/png;base64," + el.foto_base64}
-                                                    />
-                                                    <Card.Header>{el.nome}</Card.Header>
-                                                    {/* <Card.Meta></Card.Meta>
-                                                <Card.Description>
-                                                    Steve wants to add you to the group <strong>best friends</strong>
-                                                </Card.Description> */}
-                                                </Card.Content>
-                                                <Card.Content extra>
-                                                    <div className='ui two buttons'>
+                                            <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
+
+                                                <Card small className="card-post card-post--1">
+
+                                                    <div
+
+                                                        className={"card-post__image"}
+                                                        style={{ backgroundImage: `url(${"data:image/png;base64," + el.foto_base64})` }}
+
+
+                                                    >
+                                                        <Badge
+                                                            pill
+                                                            className={`card-post__category bg-${"post.categoryTheme"}`}
+                                                        >
+                                                            {/* {post.ramo} */}
+                                                        </Badge>
+                                                        <div className="card-post__author d-flex">
+
+                                                        </div>
+                                                    </div>
+                                                    <CardBody>
+
+                                                        <h5 className="card-title">
+                                                            <a href="#" className="text-fiord-blue">
+                                                                {el.nome}
+                                                            </a>
+                                                        </h5>
 
                                                         {downloadFormatter(el.id)}
                                                         {validaSelecionado(el.vagas_aprovadas) ?
@@ -269,29 +292,23 @@ class CandidatosEmpresa extends React.Component {
                                                             candidatoSelecionado(el.id)
                                                         }
 
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
 
-
-                                                    </div>
-                                                </Card.Content>
-                                            </Card>
                                         </>
 
                                     )
-
-
 
                                 })
 
                             }
 
-                        </Card.Group>
-
-                    </Jumbotron>
+                        </Row>
+                    </Container>
                 </div>
 
             </>
-
-
 
         );
     }

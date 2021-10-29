@@ -81,7 +81,7 @@ class PostagensEmpresa extends React.Component {
                         return (
 
                             <>
-                                <Card className="text-center">
+                                <Card className="text-center posatgens">
                                     <IconButton className="edit-vaga" onClick={() => this.handleEditPostagem(el.id)} color="primary" aria-label="upload picture" component="span">
                                         <EditIcon />
                                     </IconButton>
