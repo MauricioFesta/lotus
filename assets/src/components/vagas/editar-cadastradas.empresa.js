@@ -8,6 +8,7 @@ import IntlCurrencyInput from "react-intl-currency-input"
 import history from "../../others/redirect";
 import { updateVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
+import { makeAutoObservable, autorun } from "mobx"
 
 
 
@@ -42,6 +43,15 @@ class VagasEmpresaEditar extends React.Component {
 
         })
 
+        console.log(this.obs.vaga, "Teste")
+
+        autorun(() => {
+
+            if (!this.obs.vaga.ativo) {
+                AppToaster.show({ message: "Ao desabilitar uma vaga, os candidatos serão automaticamente removidos.", intent: "warning" });
+            } 
+        })
+
 
     }
 
@@ -62,22 +72,51 @@ class VagasEmpresaEditar extends React.Component {
 
     async handleSendEditVaga() {
 
-        if(!this.obs.vaga.valor && !this.obs.valor_ref){
+        if (!this.obs.vaga.valor && !this.obs.valor_ref) {
 
             AppToaster.show({ message: "Preencha um valor válido", intent: "warning" });
             return
         }
 
+        
         this.obs.isLoading = true
 
 
-        if(typeof(this.obs.valor_ref) == "string"){
+        if (typeof (this.obs.valor_ref) == "string") {
 
             this.obs.vaga.valor = this.obs.valor_ref.slice(3).replace(",", "").slice(0, -2).replace(".", "")
 
         }
-  
-        let resp = await updateVaga(this.obs.vaga)
+
+        let formData = new FormData();
+
+        let file = document.querySelector('#file');
+
+        formData.append("id", this.obs.vaga.id);
+        formData.append("file", file.files[0]);
+        formData.append("valor", this.obs.vaga.valor);
+        formData.append("titulo", this.obs.vaga.titulo);
+        formData.append("ativo", this.obs.vaga.ativo);
+        formData.append("descricao", this.obs.vaga.descricao);
+        formData.append("cidade", this.obs.vaga.cidade);
+        formData.append("turno", this.obs.vaga.turno);
+        formData.append("candidatos", this.obs.vaga.candidatos);
+        formData.append("estado", "RS");
+        formData.append("ramo", this.obs.vaga.ramo);
+        formData.append("imagem_base64_old", this.obs.vaga.imagem_base64);
+        formData.append("inserted_at", this.obs.vaga.inserted_at);
+        formData.append("disponibilidade_viajar", this.obs.vaga.disponibilidade_viajar);
+        formData.append("planejamento_futuro", this.obs.vaga.planejamento_futuro);
+
+        let config = {
+
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+
+        }
+
+        let resp = await updateVaga(formData, config)
 
         if (resp.data.ok) {
 
@@ -89,7 +128,7 @@ class VagasEmpresaEditar extends React.Component {
 
         }
 
-        console.log(this.obs.vaga, "Teste")
+    
         this.obs.isLoading = false
     }
 
@@ -104,16 +143,17 @@ class VagasEmpresaEditar extends React.Component {
 
                 <Jumbotron className="mt-4">
 
-                    <Form.Group>
-                        <Form.Check
-                            type="switch"
-                            id="jjbb"
-                            label="Desabilitar vaga"
-                            defaultChecked={!this.obs.vaga.ativo}
-                            onChange={(vl) => this.handeDisabledVaga(vl.target.checked)}
-                        />
-                    </Form.Group>
+
                     <div className="container mt-4">
+                        <Form.Group>
+                            <Form.Check
+                                type="switch"
+                                id="jjbb"
+                                label="Desabilitar vaga"
+                                defaultChecked={!this.obs.vaga.ativo}
+                                onChange={(vl) => this.handeDisabledVaga(vl.target.checked)}
+                            />
+                        </Form.Group>
 
                         <Form className="mt-4">
 
@@ -219,10 +259,10 @@ class VagasEmpresaEditar extends React.Component {
 
                             </Form.Row>
 
-                        
-                            <Button loading={this.obs.isLoading}  intent="success" onClick={() => this.handleSendEditVaga()} text="Alterar Cadastro" />
 
-                            
+                            <Button loading={this.obs.isLoading} intent="success" onClick={() => this.handleSendEditVaga()} text="Alterar Cadastro" />
+
+
                         </Form>
 
                     </div>

@@ -22,6 +22,7 @@ defmodule LotusWeb.Router do
      post "/login-cadastro", LoginController, :cadastro_login
      post "/password-reset", LoginController, :password_reset
      post "/login-verificado-valida", LoginController, :confirm_login
+     post "/resend-cod-cadastro", LoginController, :resend_cod_cadastro
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
     

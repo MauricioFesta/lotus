@@ -58,9 +58,9 @@ export const candidatoAprovar = async (id, data) => {
     return result
 }
 
-export const updateVaga = async (data) => {
+export const updateVaga = async (data, config) => {
 
-    let result = await api.post(`/api/update-vaga/`, data)
+    let result = await api.post(`/api/update-vaga/`, data, config)
     return result
 }
 

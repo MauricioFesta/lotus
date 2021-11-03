@@ -22,9 +22,7 @@ import VagasEmpresaEditar from "./components/vagas/editar-cadastradas.empresa"
 import VagasFechadoEmpresa from "./components/vagas/index-fechado.empresa"
 import PostagensEmpresa from "./components/postagens/index.empresa"
 import PostEditEmpresa from "./components/postagens/edit.empresa"
-import "./components/shards-dashboard/styles/shards-dashboards.1.1.0.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./components/shards-dashboard/styles/extras.1.1.0.min.css";
+
 
 require("./css/style.scss")
 

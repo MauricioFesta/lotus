@@ -32,7 +32,7 @@ class VagasEmpresa extends React.Component {
     constructor(props) {
 
         super(props);
-        this.state = { vagas: false, redirect: false, path: "", open_spinner: false };
+        this.state = { vagas: [], redirect: false, path: "", open_spinner: false };
 
     }
 
@@ -47,6 +47,8 @@ class VagasEmpresa extends React.Component {
             this.setState({ vagas: resp.data })
 
         }
+
+        console.log(this.state.vagas)
 
         this.setState({ open_spinner: false })
 
@@ -99,7 +101,7 @@ class VagasEmpresa extends React.Component {
                     <Container fluid className="main-content-container px-4">
 
                         <Row>
-                            {this.state.vagas ?
+                            {this.state.vagas.length > 0 ?
 
                                 this.state.vagas.map((el, idx) => {
 
@@ -140,7 +142,7 @@ class VagasEmpresa extends React.Component {
                                                             {el.descricao.slice(0, 110) + "..."}</p><br />
 
 
-                                                        {el.candidatos.length > 1 ?
+                                                        {(el.candidatos.length > 1) ?
 
                                                             <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
                                                                 <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}

@@ -96,15 +96,67 @@ defmodule LotusWeb.VagasController do
     
     def update_vaga(conn, params) do 
 
+        params |> IO.inspect    
 
-        {:ok, data} = JSON.encode(params)
+        file64 = if params["file"] !=  "undefined" do
+
+            IO.puts("Caiu no IF")
+
+            File.read!(params["file"].path) |> Base.encode64()
+
+            else
+
+            params["imagem_base64_old"]
+
+        end
+
+        candidatos = if convert!(params["ativo"]) == false do 
+
+            [params["candidatos"]] |> IO.inspect(label: "Antes")
+
+            delete_candidato(params["candidatos"] |> String.split(","), params["id"])
+
+
+            [UUID.uuid4()]
+
+            else
+            
+           params["candidatos"] |> String.split(",")
+
+        end
+
+
+        id_user =  get_session(conn, "id")["id"]
+
+        {n_valor, _} = Integer.parse(params["valor"])
+
+
+        new_params = params
+
+        |> Map.delete("file")
+        |> Map.delete("valor")
+        |> Map.delete("imagem_base64_old")
+        |> Map.delete("imagem_base64")
+        |> Map.put_new(:imagem_base64, file64)
+        |> Map.put(:valor, n_valor)
+        |> Map.put(:empresa_id, id_user)
+        |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
+        |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
+        |> Map.put(:ativo, convert!(params["ativo"]))
+        |> Map.put(:inserted_at, params["inserted_at"] |> String.to_integer)
+        |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        |> Map.put("candidatos", candidatos)
+        
+
+
+        {:ok, data} = JSON.encode(new_params)
 
         cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
 
         case Xandra.execute(CassPID, cql, _params = []) do
 
             {:ok, _} -> 
-                
+                 
                 LotusRust.Back.building_cache()
                 
                 json(conn, %{"ok" => true})
@@ -403,6 +455,44 @@ defmodule LotusWeb.VagasController do
         end
 
     end
+
+    defp delete_candidato(candidatos, id_vaga) do    
+
+        id_vaga |> IO.inspect   
+
+        candidatos |> length |> IO.inspect  
+
+        Enum.map(candidatos,fn x -> 
+
+            cql = "SELECT id,email,vagas_aprovadas FROM lotus_dev.user WHERE id = '#{x}'"
+
+            {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+        
+            page = page |> Enum.to_list 
+
+            if not Enum.empty?(page) do 
+
+                vagas_aprovadas = page |> hd |> Map.get("vagas_aprovadas")
+                id_user = page |> hd |> Map.get("id")
+                email = page |> hd |> Map.get("email")
+
+                new_vagas = Enum.reject(vagas_aprovadas, fn y -> y == id_vaga end)
+
+                cql_update = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_vagas}'] WHERE id = '#{id_user}' AND email = '#{email}'"
+                
+                case Xandra.execute(CassPID, cql_update, _params = []) do
+                    {:ok, _} -> IO.puts("Update OK")
+                    {:erro,e} -> e |> IO.inspect
+                end
+
+
+            end 
+
+        
+        end)
+
+
+    end 
 
 
 

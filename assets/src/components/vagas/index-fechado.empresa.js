@@ -32,7 +32,7 @@ class VagasFechadoEmpresa extends React.Component {
     constructor(props) {
 
         super(props);
-        this.state = { vagas: false, redirect: false, path: "", open_spinner: false };
+        this.state = { vagas: [], redirect: false, path: "", open_spinner: false };
 
     }
 
@@ -97,9 +97,11 @@ class VagasFechadoEmpresa extends React.Component {
                     <Container fluid className="main-content-container px-4">
 
                         <Row>
-                            {this.state.vagas ?
+                            {(this.state.vagas.length > 0) ?
 
                                 this.state.vagas.map((el, idx) => {
+
+                                    console.log(el.candidatos.length - 1,"Candidatos")
 
                                     return (
 
@@ -173,8 +175,8 @@ class VagasFechadoEmpresa extends React.Component {
                                 :
 
                                 <Alert severity="info">
-                                    <AlertTitle>Vagas em aberto</AlertTitle>
-                                    Nenhuma vaga em aberto até o momento.
+                                    <AlertTitle>Vagas fechadas</AlertTitle>
+                                    Nenhuma vaga em fechada até o momento.
                                 </Alert>
 
                             }

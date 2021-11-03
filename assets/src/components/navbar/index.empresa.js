@@ -90,23 +90,23 @@ export default class NavbarEmpresa extends React.Component {
             <ul class="navbar-nav ">
 
               <li class="nav-item active">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/vagas/cadastradas")} class="fa fa-list-alt"></i>
+                <a onClick={() => this.handleRedirect("/vagas/cadastradas")} class="nav-link" href="#">
+                  <i class="fa fa-list-alt"></i>
                   Vagas cadastradas
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} class="fa fa-list-ul"></i>
+                <a onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} class="nav-link" href="#">
+                  <i class="fa fa-list-ul"></i>
                   Vagas fechadas
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/vagas/cadastro")} class="fa fa-plus-square"></i>
+                <a onClick={() => this.handleRedirect("/vagas/cadastro")} class="nav-link" href="#">
+                  <i class="fa fa-plus-square"></i>
                   Cadastrar Vaga
                   <span class="sr-only">(current)</span>
                 </a>
@@ -128,16 +128,16 @@ export default class NavbarEmpresa extends React.Component {
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.setState({ open_modal: true })} class="fa fa-bell">
+                <a onClick={() => this.setState({ open_modal: true })} class="nav-link" href="#">
+                  <i class="fa fa-bell">
                     <span class="badge badge-info"></span>
                   </i>
                   Notificações
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/perfil")} class="fa fa-address-card">
+                <a onClick={() => this.handleRedirect("/perfil")} class="nav-link" href="#">
+                  <i class="fa fa-address-card">
                     <span class="badge badge-success"></span>
                   </i>
 
@@ -160,7 +160,7 @@ export default class NavbarEmpresa extends React.Component {
 
         </nav>
 
-    
+
       </>
 
 

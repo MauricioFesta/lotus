@@ -77,7 +77,7 @@ defmodule LotusWeb.LoginController do
         
           {:ok, result} -> 
 
-            token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", id_random)
+            token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), id, id_random)
           
             json(conn, %{pre_cad: true, id_random: token, id: id, email: params["email"], exist: false})
      
@@ -149,8 +149,6 @@ defmodule LotusWeb.LoginController do
 
     def password_reset(conn, params) do 
 
-      params |> IO.inspect  
-
       query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
@@ -166,10 +164,26 @@ defmodule LotusWeb.LoginController do
 
         id_random = Login.send_email_confirm_login(params["email"])
 
-        token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", id_random)
-        json(conn, %{id_random: token, id: id, email: params["email"], exist: true})
+        token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), id["id"], id_random)
+        json(conn, %{id_random: token, id: id["id"], email: params["email"], exist: true})
 
       end 
+
+    end 
+
+    def resend_cod_cadastro(conn, params) do 
+
+      id_random = Login.send_email_confirm_login(params["email"])
+
+      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
+
+      {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
+
+      id = page |> Enum.to_list |> hd
+
+      token = Token.sign(System.get_env("TOKEN_PASSWORD_LOTUS"), id["id"], id_random)
+
+      json(conn, %{id_random: token, id: id["id"], email: params["email"], verificado: true})
 
     end 
 
@@ -189,14 +203,9 @@ defmodule LotusWeb.LoginController do
 
     def alterar_password(conn, params) do 
 
-      params |> IO.inspect(label: "aqui")
-
-      cqls = "UPDATE lotus_dev.user SET senha = '#{params["password"]}' WHERE id = '#{params["id"]["id"]}' AND email = '#{params["email"]}'"
+      cqls = "UPDATE lotus_dev.user SET senha = '#{params["password"]}' WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
 
       if confirm_cod_token(params) do 
-
-        IO.puts("okok")
-        cqls |> IO.inspect  
 
         case Xandra.execute(CassPID, cqls, _params = []) do
           
@@ -221,14 +230,12 @@ defmodule LotusWeb.LoginController do
 
     defp confirm_cod_token(params) do  
 
-      params["token"] |> IO.inspect 
-
-      case Token.verify(System.get_env("TOKEN_PASSWORD_LOTUS"), "token_verify_password", params["token"]) do
+      case Token.verify(System.get_env("TOKEN_PASSWORD_LOTUS"), params["id"], params["token"]) do
 
         {:ok, compare}  ->
 
           if compare == params["cod_front"] |> String.to_integer do 
-
+        
             true
 
           else  

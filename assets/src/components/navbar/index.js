@@ -89,38 +89,38 @@ export default class Navbar extends React.Component {
             <ul class="navbar-nav ">
 
               <li class="nav-item active">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/vagas")} class="fa fa-list-alt"></i>
+                <a onClick={() => this.handleRedirect("/vagas")} class="nav-link" href="#">
+                  <i class="fa fa-list-alt"></i>
                   Vagas
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/curriculo")} class="fa fa-list-ol"></i>
+                <a onClick={() => this.handleRedirect("/curriculo")} class="nav-link" href="#">
+                  <i class="fa fa-list-ol"></i>
                   Meus Curriculos
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
 
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/postagens")} class="nav-link" href="#">
+              <li onClick={() => this.handleRedirect("/postagens")} class="nav-item">
+                <a class="nav-link" href="#">
                   <i class="fa fa-list-ul"></i>
                   Postagens
                   <span class="sr-only">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.setState({ open_modal: true })} class="fa fa-bell">
+                <a onClick={() => this.setState({ open_modal: true })} class="nav-link" href="#">
+                  <i class="fa fa-bell">
                     <span class="badge badge-info"></span>
                   </i>
                   Notificações
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i onClick={() => this.handleRedirect("/perfil")} class="fa fa-address-card">
+                <a onClick={() => this.handleRedirect("/perfil")} class="nav-link" href="#">
+                  <i class="fa fa-address-card">
                     <span class="badge badge-success"></span>
                   </i>
 

@@ -6,7 +6,7 @@ defmodule Lotus.Login do
     def send_email_confirm_login(email) do
         #Lotus.Login.send_email
 
-        random_number = :rand.uniform(99999)
+        random_number = :rand.uniform(999999)
 
         new_email()
           |> to(email)

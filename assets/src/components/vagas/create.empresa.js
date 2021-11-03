@@ -173,9 +173,9 @@ export default class CreateEmpresa extends React.Component {
 
                             </Form.Row>
 
-                            <Form.Row>
+                            <Form.Row style={{marginLeft: 40}}>
 
-                                <Form.Group>
+                                <Form.Group as={Col}>
                                     <Form.Check
                                         type="switch"
                                         id="disponibilidade"
@@ -183,9 +183,7 @@ export default class CreateEmpresa extends React.Component {
                                     />
                                 </Form.Group>
 
-                                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-                                <Form.Group>
+                                <Form.Group as={Col}>
                                     <Form.Check
                                         type="switch"
                                         id="planejamento"
