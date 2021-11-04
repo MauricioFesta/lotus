@@ -176,7 +176,7 @@ class VagasFechadoEmpresa extends React.Component {
 
                                 <Alert severity="info">
                                     <AlertTitle>Vagas fechadas</AlertTitle>
-                                    Nenhuma vaga em fechada até o momento.
+                                    Nenhuma vaga fechada até o momento.
                                 </Alert>
 
                             }
