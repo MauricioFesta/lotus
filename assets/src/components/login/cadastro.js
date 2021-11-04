@@ -187,11 +187,12 @@ class CadastroLogin extends React.Component {
 
             </Form.Group>
 
-            <Form.Group>
-              <Form.Check
+            <Form.Group >
+            <Form.Label>Conta corporativa ?</Form.Label>
+              <Form.Check style={{marginLeft: 35, marginBottom: 50}}
                 type="switch"
                 id="conta-corporativa"
-                label="Conta corporativa ?"
+                label=""
                 onChange={(e) => this.obs.is_empresa = !this.obs.is_empresa}
               />
             </Form.Group>
