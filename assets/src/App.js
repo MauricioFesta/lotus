@@ -22,6 +22,7 @@ import VagasEmpresaEditar from "./components/vagas/editar-cadastradas.empresa"
 import VagasFechadoEmpresa from "./components/vagas/index-fechado.empresa"
 import PostagensEmpresa from "./components/postagens/index.empresa"
 import PostEditEmpresa from "./components/postagens/edit.empresa"
+import Politica from "./components/politica-privacidade"
 
 
 require("./css/style.scss")
@@ -107,6 +108,7 @@ function App() {
             <Route path="/login" component={Login} exact />
             <Route path="/cadastro" component={CadastroLogin} />
             <Route path="/redefinicao-senha" component={ResetPassword} />
+            <Route path="/politica-privacidade" component={Politica} exact />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />
             <PrivateRouteEmpresa path="/vagas/cadastradas" exact component={VagasEmpresa} />
