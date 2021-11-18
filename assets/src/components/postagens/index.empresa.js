@@ -5,10 +5,14 @@ import { postagemOne } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { observer } from "mobx-react";
+import { observable } from 'mobx';
 import history from "../../others/redirect";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { Spinner } from "@blueprintjs/core";
+import moment from 'moment';
+
+
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
@@ -20,13 +24,22 @@ class PostagensEmpresa extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = { data: [],open_spinner: false }
-        
+        this.state = { data: [], open_spinner: false }
+
+        this.obs = observable({
+          
+            dateNow: Date,
+            
+
+        })
+
     }
 
     async componentDidMount() {
 
-        this.setState({open_spinner: true})
+        this.obs.dateNow = moment(new Date());
+
+        this.setState({ open_spinner: true })
 
         let res = await getPostagensEmpresaAll()
 
@@ -37,7 +50,7 @@ class PostagensEmpresa extends React.Component {
             this.setState({ data: [] })
         }
 
-        this.setState({open_spinner: false})
+        this.setState({ open_spinner: false })
 
 
     }
@@ -78,6 +91,13 @@ class PostagensEmpresa extends React.Component {
                 <div className="ml-4 mr-4 mt-4 scroll-card">
 
                     {this.state.data.map((el, index) => {
+
+                        let date = moment(new Date(el.inserted_at * 1000)).add(3, 'hours').format()
+
+                        var end = moment(date);
+                        var duration = moment.duration(this.obs.dateNow.diff(end));
+                        var days = duration.asDays();
+
                         return (
 
                             <>
@@ -85,15 +105,15 @@ class PostagensEmpresa extends React.Component {
                                     <IconButton className="edit-vaga" onClick={() => this.handleEditPostagem(el.id)} color="primary" aria-label="upload picture" component="span">
                                         <EditIcon />
                                     </IconButton>
-                                    <Card.Header>Featured</Card.Header>
+                                    {/* <Card.Header>Featured</Card.Header> */}
                                     <Card.Body>
-                                        <Card.Title>Special title treatment</Card.Title>
+                                        <Card.Title>{el.empresa_razao}</Card.Title>
                                         <Card.Text>
                                             {el.descricao}
                                         </Card.Text>
 
                                     </Card.Body>
-                                    <Card.Footer className="text-muted">2 days ago</Card.Footer>
+                                    <Card.Footer className="text-muted">{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min ago" : Math.floor(duration.asHours()) + " hours ago" : Math.floor(days) + " day ago"}</Card.Footer>
                                 </Card>
                                 <br></br>
                             </>

@@ -76,7 +76,7 @@ export default class NavbarEmpresa extends React.Component {
         </Modal>
 
 
-        <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
+        <nav style={{height: 10}} class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
           <a class="navbar-brand" href="#">Lotus Empresas</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

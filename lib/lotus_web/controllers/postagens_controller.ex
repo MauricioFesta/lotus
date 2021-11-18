@@ -12,6 +12,8 @@ defmodule LotusWeb.PostagensController do
         nome_empresa =  page |> Enum.to_list |> hd |> Map.get("nome")
         
         params_new = params |> Map.put_new("empresa_razao", nome_empresa) 
+        |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
 
         |> Map.put_new("empresa_id", id_user)
 

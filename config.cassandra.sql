@@ -67,6 +67,8 @@ CREATE TABLE lotus_dev.postagens(
    descricao text,
    empresa_razao text,
    empresa_id text,
+   inserted_at bigint,
+   updated_at bigint,
    PRIMARY KEY (id)
 
 );
