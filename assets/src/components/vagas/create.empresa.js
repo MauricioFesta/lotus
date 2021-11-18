@@ -143,8 +143,9 @@ export default class CreateEmpresa extends React.Component {
                                         <option>Bento Gonçalves</option>
                                         <option>Garibaldi</option>
                                         <option>Carlos Barbosa</option>
-                                        <option>Monte Belo</option>
                                         <option>Monte Belo do Sul</option>
+                                        <option>Farroupilha</option>
+                                        <option>Caxias do Sul</option>
                                     </Form.Control>
                                 </Form.Group>
 
@@ -161,6 +162,7 @@ export default class CreateEmpresa extends React.Component {
                                         <option value="metalurgico">Metalúrgico</option>
                                         <option value="comercio">Comércio</option>
                                         <option value="alimentos">Alimentos</option>
+                                        <option value="outros">Outros</option>
                                     </Form.Control>
                                 </Form.Group>
 
