@@ -90,6 +90,8 @@ class Vagas extends React.Component {
 
         })
 
+        console.log(res.data.length, "aqui")
+
 
         getCurriculo().then(result => {
 

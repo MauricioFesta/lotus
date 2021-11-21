@@ -6,28 +6,40 @@ defmodule LotusWeb.LoginController do
    
     def login_valida(conn, %{"email"=> email, "senha" => senha}) do
 
-        statement = "SELECT id, is_empresa,email, verificado FROM lotus_dev.user WHERE email = '#{email}' AND senha = '#{senha}' ALLOW FILTERING"
+        statement = "SELECT id, is_empresa,email,senha, verificado FROM lotus_dev.user WHERE email = '#{email}'"
        
-        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, statement, _params = [])
+        {:ok, %Xandra.Page{} = page_cql } = Xandra.execute(CassPID, statement, _params = [])
 
-        page = page |> Enum.to_list  
-   
+        page = page_cql |> Enum.to_list 
+        
         if page |> length != 0 do
 
-          {:ok, id_} = page |> hd |> Map.fetch("id")
-          {:ok, email} = page |> hd |> Map.fetch("email")
+          senha_db = page_cql |> Enum.to_list |> hd
 
-          put_session(conn, :idUser, id_)
-          put_session(conn, :email, email)
+          senha_db["senha"] |> IO.inspect 
+
+          if Bcrypt.verify_pass(senha, senha_db["senha"]) do
+
+            {:ok, id_} = page |> hd |> Map.fetch("id")
+            {:ok, email} = page |> hd |> Map.fetch("email")
+
+            put_session(conn, :idUser, id_)
+            put_session(conn, :email, email)
+            
+            conn = assign(conn, :id, id_)
           
-          conn = assign(conn, :id, id_)
-         
-          {:ok, empresa} =  page |> hd |> Map.fetch("is_empresa")
-          {:ok, verificado} =  page |> hd |> Map.fetch("verificado")
+            {:ok, empresa} =  page |> hd |> Map.fetch("is_empresa")
+            {:ok, verificado} =  page |> hd |> Map.fetch("verificado")
 
-          token = Token.sign(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", %{"id" => id_, "email" => email})
-        
-          json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
+            token = Token.sign(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", %{"id" => id_, "email" => email})
+          
+            json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
+
+          else
+
+            json(conn, %{"Ok": false})
+
+          end 
 
           # case page |> hd |> Map.fetch("email") do  
           #   {:ok, id_} -> 
@@ -47,7 +59,8 @@ defmodule LotusWeb.LoginController do
     def cadastro_login(conn, params)do
       
       new_params = params 
-    
+      
+      |> Map.put("senha", Bcrypt.hash_pwd_salt(params["senha"]))
       |> Map.put("vagas_aprovadas", [UUID.uuid4()])
       |> Map.put("notificacoes", [""])
       |> Map.put("verificado", false)
@@ -65,7 +78,7 @@ defmodule LotusWeb.LoginController do
 
       statement = "INSERT INTO lotus_dev.user JSON '#{data}'" 
 
-      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
+      query = "SELECT id, email, inserted_at, verificado FROM lotus_dev.user WHERE email = '#{params["email"]}'"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
 
@@ -119,7 +132,7 @@ defmodule LotusWeb.LoginController do
 
       if confirm_cod_token(params) do  
 
-        statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
+        statement = "UPDATE lotus_dev.user SET verificado = #{true} WHERE id = '#{params["id"]}'"
 
         case Xandra.execute(CassPID, statement, _params = []) do
           
@@ -149,7 +162,7 @@ defmodule LotusWeb.LoginController do
 
     def password_reset(conn, params) do 
 
-      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
+      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}'"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
 
@@ -175,7 +188,7 @@ defmodule LotusWeb.LoginController do
 
       id_random = Login.send_email_confirm_login(params["email"])
 
-      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}' ALLOW FILTERING"
+      query = "SELECT id FROM lotus_dev.user WHERE email = '#{params["email"]}'"
 
       {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])
 
@@ -191,9 +204,13 @@ defmodule LotusWeb.LoginController do
 
       if confirm_cod_token(params) do 
 
+        IO.puts("Ok token")
+
         json(conn, %{confirmado: true, id: params["id"], email: params["email"]}) 
 
       else  
+
+        IO.puts("Erro token")
 
         json(conn, %{confirmado: false})
 
@@ -203,7 +220,9 @@ defmodule LotusWeb.LoginController do
 
     def alterar_password(conn, params) do 
 
-      cqls = "UPDATE lotus_dev.user SET senha = '#{params["password"]}' WHERE id = '#{params["id"]}' AND email = '#{params["email"]}'"
+      senha = params["password"] |> Bcrypt.hash_pwd_salt
+
+      cqls = "UPDATE lotus_dev.user SET senha = '#{senha}' WHERE id = '#{params["id"]}'" |> IO.inspect
 
       if confirm_cod_token(params) do 
 

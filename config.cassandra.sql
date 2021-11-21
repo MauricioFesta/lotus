@@ -14,10 +14,10 @@ CREATE TABLE lotus_dev.user(
    inserted_at bigint,
    updated_at bigint,
    verificado boolean,
-   PRIMARY KEY (id, email)
+   PRIMARY KEY (id)
    );
 
-CREATE INDEX ON user (senha);
+CREATE INDEX ON user (email);
 CREATE INDEX ON user (is_empresa);
 
   

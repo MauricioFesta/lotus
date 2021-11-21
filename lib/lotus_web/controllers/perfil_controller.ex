@@ -4,23 +4,38 @@ defmodule LotusWeb.PerfilController do
 
     def alterar_perfil(conn, params) do
         
-        id_user =  get_session(conn, "id")
+        id_user =  get_session(conn, "id") 
 
-        params |> IO.inspect
-    
-      query = if params["foto_base64"] != nil do
-   
-            file64 =  base64_image(params["foto_base64"])
+        select = "SELECT senha FROM lotus_dev.user WHERE id = '#{id_user["id"]}'"
 
-            "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user["id"]}' AND email = '#{id_user["email"]}'"
+        {:ok, %Xandra.Page{} = page_cql } = Xandra.execute(CassPID, select, _params = [])
 
-            else
+        page = page_cql |> Enum.to_list |> hd
 
-           "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{params["senha"]}' WHERE id = '#{id_user["id"]}' AND email = '#{id_user["email"]}'"
+       query = cond do 
 
+            page["senha"] != params["senha"] && params["foto_base64"] != nil -> 
 
+                senha_hash = Bcrypt.hash_pwd_salt(params["senha"])
+                file64 =  base64_image(params["foto_base64"])
+
+                "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{senha_hash}',foto_base64 = '#{file64}' WHERE id = '#{id_user["id"]}'"
+
+            params["foto_base64"] != nil ->
+
+                file64 =  base64_image(params["foto_base64"])
+
+                "UPDATE lotus_dev.user SET nome = '#{params["nome"]}',foto_base64 = '#{file64}' WHERE id = '#{id_user["id"]}'"
+
+            page["senha"] != params["senha"] -> 
+
+                senha_hash = Bcrypt.hash_pwd_salt(params["senha"])
+                "UPDATE lotus_dev.user SET nome = '#{params["nome"]}', senha = '#{senha_hash}' WHERE id = '#{id_user["id"]}'"
+
+            true ->
+
+                "UPDATE lotus_dev.user SET nome = '#{params["nome"]}' WHERE id = '#{id_user["id"]}'"
         end
-
 
         case Xandra.execute(CassPID, query , _params = []) do
             {:ok, _} -> json(conn, %{Ok: true})

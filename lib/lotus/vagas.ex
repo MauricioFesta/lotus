@@ -18,7 +18,7 @@ defmodule Lotus.Vagas do
             
         else
          
-            cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{id_vaga}'] + vagas_aprovadas WHERE  id = '#{id}' AND email = '#{email}'"
+            cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{id_vaga}'] + vagas_aprovadas WHERE  id = '#{id}'"
          
             case Xandra.execute(CassPID, cql, _params = []) do
                 {:ok, _} -> true
@@ -35,7 +35,7 @@ defmodule Lotus.Vagas do
 
         date_new = DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix()
 
-        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_user}' AND email = '#{email}'"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
 
@@ -57,7 +57,7 @@ defmodule Lotus.Vagas do
         {:ok, data} = JSON.encode(new_map) 
 
            
-        cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}'] + notificacoes WHERE email = '#{email}' AND id = '#{id}'"
+        cql = "UPDATE lotus_dev.user SET notificacoes = ['#{data}'] + notificacoes WHERE id = '#{id}'"
        
     
         case Xandra.execute(CassPID, cql, _params = []) do

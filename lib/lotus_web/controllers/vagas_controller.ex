@@ -77,7 +77,7 @@ defmodule LotusWeb.VagasController do
          end
 
      
-        if redis |> Enum.count > 0 do
+        if redis |> Enum.count > 1 do
 
             IO.puts("Tem valor em cache")
 
@@ -309,11 +309,11 @@ defmodule LotusWeb.VagasController do
      
         cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}'"
         
-        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}'" |> IO.inspect
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
 
-        page = page |> Enum.to_list 
+        page = page |> Enum.to_list |> IO.inspect(label: "aqui")
 
         nome = page |> hd |> Map.get("nome")
 
@@ -389,7 +389,7 @@ defmodule LotusWeb.VagasController do
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, query, p_params = [] )
         {:ok,email} = page |> Enum.to_list |> hd |> Map.fetch("email")
 
-        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
 
@@ -430,7 +430,7 @@ defmodule LotusWeb.VagasController do
 
         new_list = Enum.reject(candidato, fn x -> x == params["id_vaga"] end)
 
-        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}' AND email = '#{id_email["email"]}'"
+        cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}'"
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
 
@@ -438,7 +438,7 @@ defmodule LotusWeb.VagasController do
 
         nome = page |> hd |> Map.get("nome")
 
-        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}' AND email = '#{email}'"
+        cql = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_list}']  WHERE id = '#{params["id"]}'"
 
         case Vagas.notificacao_user(params["id"],params["id_vaga"], "#{nome} desaprovou seu currículo :(", false, email) do
             true ->
@@ -478,7 +478,7 @@ defmodule LotusWeb.VagasController do
 
                 new_vagas = Enum.reject(vagas_aprovadas, fn y -> y == id_vaga end)
 
-                cql_update = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_vagas}'] WHERE id = '#{id_user}' AND email = '#{email}'"
+                cql_update = "UPDATE lotus_dev.user SET vagas_aprovadas = ['#{new_vagas}'] WHERE id = '#{id_user}'"
                 
                 case Xandra.execute(CassPID, cql_update, _params = []) do
                     {:ok, _} -> IO.puts("Update OK")
