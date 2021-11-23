@@ -87,7 +87,7 @@ defmodule LotusWeb.VagasController do
 
             ret = LotusRust.Back.get_list_vagas()
             IO.puts("Não tem valor em cache")
-            # set_cache_vagas(ret)
+            set_cache_vagas(ret)
             ret
 
         end
@@ -96,11 +96,7 @@ defmodule LotusWeb.VagasController do
     
     def update_vaga(conn, params) do 
 
-        params |> IO.inspect    
-
         file64 = if params["file"] !=  "undefined" do
-
-            IO.puts("Caiu no IF")
 
             File.read!(params["file"].path) |> Base.encode64()
 

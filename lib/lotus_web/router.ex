@@ -25,6 +25,9 @@ defmodule LotusWeb.Router do
      post "/resend-cod-cadastro", LoginController, :resend_cod_cadastro
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
+     get "/vagas-lista", VagasController, :list_vagas
+     get "/postagens-listar", PostagensController, :list_postagens
+     
     
   #   get "/", PageController, :index
 
@@ -50,10 +53,10 @@ defmodule LotusWeb.Router do
     get "/curriculo-download-candidato/:id", CurriculoController, :download_curriculo_candidato
     put "/curriculo-principal-set/:id", CurriculoController, :curriculo_principal
     post "/postagens-cadastro", PostagensController, :cadastro_postagem
-    get "/postagens-listar", PostagensController, :list_postagens
+    # get "/postagens-listar", PostagensController, :list_postagens
     get "/postagens-listar-empresa", PostagensController, :list_postagens_empresa
     post "/vagas-cadastro", VagasController, :cadastro_vagas
-    get "/vagas-lista", VagasController, :list_vagas
+    # get "/vagas-lista", VagasController, :list_vagas
     get "/vagas-lista-empresa", VagasController, :list_vagas_empresa
     get "/vagas-lista-empresa-fechado", VagasController, :list_vagas_empresa_fechado
     get "/vagas-lista-candidatos/:id", VagasController, :list_vagas_candidatos
