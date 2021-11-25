@@ -87,7 +87,7 @@ defmodule LotusWeb.VagasController do
 
             ret = LotusRust.Back.get_list_vagas()
             IO.puts("Não tem valor em cache")
-            set_cache_vagas(ret)
+            # set_cache_vagas(ret)
             ret
 
         end
