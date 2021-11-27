@@ -10,7 +10,7 @@ export const postCreatePostagem = (data) => {
 
 export const getPostagensAll = () => {
 
-    let result = api.get("/api/postagens-listar")
+    let result = api.get("/public/postagens-listar")
 
     return result
 
