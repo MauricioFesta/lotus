@@ -3,6 +3,7 @@ defmodule LotusWeb.VagasController do
     alias Lotus.Vagas
     alias LotusWeb.PerfilController
     alias Lotus
+    use Bamboo.Phoenix, view: Lotus.EmailView
 
     def cadastro_vagas(conn, params) do
 
@@ -393,11 +394,16 @@ defmodule LotusWeb.VagasController do
 
         nome = page |> hd |> Map.get("nome")
 
+        email_empresa = page |> hd |> Map.get("email")
+
         case Vagas.aprovar_candidato_vaga(params["id_user"],params["id_vaga"]) do
 
             true ->
 
                 LotusRust.Back.building_cache()
+
+                {:ok, _pid} = Task.start(fn -> send_email_user_aprovado(email, "Parabéns!!!! Você foi aprovado em uma vaga, confira no app ;)") end)
+                {:ok, _pid} = Task.start(fn -> send_email_user_aprovado(email_empresa, "Você tem um novo candidato confira no app.") end)
 
                 case Vagas.notificacao_user(params["id_user"],params["id_vaga"], "#{nome} aprovou seu currículo", true, email) do
                     true -> json(conn, %{Ok: true})
@@ -411,6 +417,20 @@ defmodule LotusWeb.VagasController do
 
 
 
+    end
+
+    defp send_email_user_aprovado(email, msg) do   
+
+        new_email()
+        |> to(email)
+        |> from("applotus.no.replay@gmail.com")
+        |> put_header("Reply-To", "mauricio.festa@icloud.com")
+        |> subject("Lotus App")
+        |> text_body(msg) 
+
+        |>  Lotus.Mailer.deliver_now
+        
+        
     end
 
     def delete_candidato_aprovado(conn, params) do

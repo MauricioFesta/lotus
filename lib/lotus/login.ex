@@ -12,7 +12,7 @@ defmodule Lotus.Login do
           |> to(email)
           |> from("applotus.no.replay@gmail.com")
           |> put_header("Reply-To", "mauricio.festa@icloud.com")
-          |> subject("Seja muito bem vindo(a) ao lotus!")
+          |> subject("Lotus App")
           |> text_body("Segue seu código de confirmação: #{random_number}") 
 
           |>  Lotus.Mailer.deliver_now
