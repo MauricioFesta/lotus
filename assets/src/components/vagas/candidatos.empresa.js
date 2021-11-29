@@ -165,7 +165,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Você foi desaprovado, :( em uma vaga." })
+                channel.push("notify_send:" + id, { body: "Você foi desaprovado em uma vaga que estava apovada, :(, mas não fique triste melhores oportunidades virão!" })
 
                 this.componentDidMount()
 
@@ -204,7 +204,7 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Parabéns você foi aprovado em uma vaga, verifique..." })
+                channel.push("notify_send:" + id, { body: "Parabéns você foi aprovado em uma vaga, verifique na aba VAGA e filtre por aprovadas." })
 
                 this.componentDidMount()
 
