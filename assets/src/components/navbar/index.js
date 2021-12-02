@@ -9,6 +9,7 @@ import Cookies from 'universal-cookie';
 import { idMaster } from '../login/auth'
 import { Modal } from 'react-bootstrap';
 
+
 const cookies = new Cookies();
 require("./css/index.scss")
 

@@ -2,7 +2,7 @@ defmodule LotusWeb.Router do
   use LotusWeb, :router
 
    pipeline :browser do
-     plug :accepts, ["html"]
+     plug :accepts, ["html", "json"]
      plug :fetch_session
      plug :fetch_flash
      #plug :protect_from_forgery
@@ -14,6 +14,7 @@ defmodule LotusWeb.Router do
     plug :fetch_session
     plug LotusWeb.Plugs.Auth
   end
+
 
    scope "/public", LotusWeb do
      pipe_through :browser
@@ -27,6 +28,7 @@ defmodule LotusWeb.Router do
      post "/new-password", LoginController, :alterar_password
      get "/vagas-lista", VagasController, :list_vagas
      get "/postagens-listar", PostagensController, :list_postagens
+     get "/teste", PostagensController, :teste
      
     
   #   get "/", PageController, :index

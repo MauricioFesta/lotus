@@ -23,6 +23,7 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
+import init, { run } from "../../wasm/pkg/wasm";
 import {
     Container,
     Row,
@@ -82,16 +83,15 @@ class Vagas extends React.Component {
 
         let tmp = 0, array = [], array2 = [];
 
-        let res = await listVagas()
-
+        // let res = await listVagas()
+        await init()
+        let res = await run()
+       
         listVagasAprovadas().then(result => {
 
             this.obs.candidato_vagas = [...result.data[0].vagas_aprovadas]
 
         })
-
-        console.log(res.data.length, "aqui")
-
 
         getCurriculo().then(result => {
 
@@ -120,11 +120,11 @@ class Vagas extends React.Component {
 
         }
 
-        if (Array.isArray(res.data)) {
+        if (Array.isArray(res)) {
 
-            this.obs.vagas = res.data
+            this.obs.vagas = res
 
-            res.data.map(el => {
+            res.map(el => {
 
                 if (tmp === 5) {
 
@@ -269,7 +269,7 @@ class Vagas extends React.Component {
                 </Form>
 
                 <Container fluid className="main-content-container px-4">
-                    
+
                     <Row>
 
                         {this.state.vagas.map((el, index) => {
