@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import { Image } from 'semantic-ui-react'
 import { Spinner } from "@blueprintjs/core";
+import { tokenMain } from "../login/auth"
 import 'semantic-ui-css/semantic.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Jumbotron, Alert, Modal } from 'react-bootstrap';
@@ -15,6 +16,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { perfil_image_default } from '../../others/global_values'
+import init, { get_curriculos } from "../../wasm/pkg/wasm";
 import {
   Container,
   Row,
@@ -50,14 +52,17 @@ export default class Curriculo extends React.Component {
 
     this.setState({ open_spinner: true })
 
-    let res = await getCurriculo()
+    await init()
 
-    if (res.data.length > 0) {
-      this.setState({ showItems: true, dataCurriculo: res.data })
+    let token = tokenMain()
+
+    let res = await get_curriculos(token)
+
+    if (res.length > 0) {
+      this.setState({ showItems: true, dataCurriculo: res })
     }
 
     this.setState({ open_spinner: false })
-
 
   }
 

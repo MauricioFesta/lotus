@@ -10,7 +10,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import * as Mui from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { idMaster } from "../login/auth"
+import { idMaster,tokenMain } from "../login/auth"
 import socket from '../socket';
 import Alert from '@material-ui/lab/Alert';
 import { observable } from 'mobx';
@@ -23,7 +23,7 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
-import init, { run } from "../../wasm/pkg/wasm";
+import init, { get_vagas, get_curriculos } from "../../wasm/pkg/wasm";
 import {
     Container,
     Row,
@@ -85,7 +85,7 @@ class Vagas extends React.Component {
 
         // let res = await listVagas()
         await init()
-        let res = await run()
+        let res = await get_vagas()
        
         listVagasAprovadas().then(result => {
 
@@ -93,17 +93,19 @@ class Vagas extends React.Component {
 
         })
 
-        getCurriculo().then(result => {
+        let token = tokenMain()
 
+        get_curriculos(token).then(result => {
+        
             this.obs.principal_curriculo = false
 
-            if (result.data.length > 0) {
+            if (result.length > 0) {
                 this.obs.is_curriculo = true
             }
 
-            for (let i = 0; i < result.data.length; i++) {
+            for (let i = 0; i < result.length; i++) {
 
-                if (result.data[i].principal) {
+                if (result[i].principal) {
 
                     this.obs.principal_curriculo = true
                     break
@@ -113,6 +115,28 @@ class Vagas extends React.Component {
             }
 
         })
+
+        // getCurriculo().then(result => {
+            
+
+        //     this.obs.principal_curriculo = false
+
+        //     if (result.data.length > 0) {
+        //         this.obs.is_curriculo = true
+        //     }
+
+        //     for (let i = 0; i < result.data.length; i++) {
+
+        //         if (result.data[i].principal) {
+
+        //             this.obs.principal_curriculo = true
+        //             break
+
+        //         }
+
+        //     }
+
+        // })
 
         if (new_data) {
 

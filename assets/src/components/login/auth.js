@@ -108,3 +108,9 @@ export const isEmpresa = () => {
     }
 }
 
+export const tokenMain = () => {
+
+    return cookies.get('_A-T')
+    
+}
+
