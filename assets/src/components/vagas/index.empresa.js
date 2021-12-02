@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { Icon } from 'semantic-ui-react'
-import { listVagasEmpresa } from "../../stores/vagas/api"
+// import { listVagasEmpresa } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom"
 import { vagaView } from '../../actions';
@@ -15,6 +15,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import AlertTitle from '@mui/material/AlertTitle';
 import Alert from '@mui/material/Alert';
 import { Spinner } from "@blueprintjs/core";
+import { tokenMain} from '../login/auth'
+import init, { get_vagas_empresa } from "../../wasm/pkg/wasm";
+
 import {
     Container,
     Row,
@@ -40,15 +43,20 @@ class VagasEmpresa extends React.Component {
 
         this.setState({ open_spinner: true })
 
-        let resp = await listVagasEmpresa()
+        await init()
 
-        if (Array.isArray(resp.data)) {
+        let token = tokenMain()
 
-            this.setState({ vagas: resp.data })
+        let resp = await get_vagas_empresa(token)
+
+        // let resp = await listVagasEmpresa()
+
+        if (Array.isArray(resp)) {
+
+            this.setState({ vagas: resp })
 
         }
 
-        console.log(this.state.vagas)
 
         this.setState({ open_spinner: false })
 

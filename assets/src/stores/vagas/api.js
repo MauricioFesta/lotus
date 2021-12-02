@@ -8,13 +8,13 @@ export const postCadastroVaga = async (data, config) => {
     return result
 }
 
-export const listVagas = async () => {
+// export const listVagas = async () => {
 
-    let result = await api.get("/api/vagas-lista")
-    return result
+//     let result = await api.get("/api/vagas-lista")
+//     return result
 
 
-}
+// }
 
 export const postCandidatarseVaga = async (data) => {
     let result = await api.post("/api/vagas-candidatar-se", data, config)
@@ -26,17 +26,17 @@ export const deleteCandidatarseVaga = async (id_vaga) => {
     return result
 }
 
-export const listVagasEmpresa = async () => {
+// export const listVagasEmpresa = async () => {
 
-    let result = await api.get("/api/vagas-lista-empresa")
-    return result
-}
+//     let result = await api.get("/api/vagas-lista-empresa")
+//     return result
+// }
 
-export const listVagasEmpresaFechado = async () => {
+// export const listVagasEmpresaFechado = async () => {
 
-    let result = await api.get("/api/vagas-lista-empresa-fechado")
-    return result
-}
+//     let result = await api.get("/api/vagas-lista-empresa-fechado")
+//     return result
+// }
 
 
 export const listVagasEmpresaId = async (id) => {
@@ -71,10 +71,10 @@ export const candidatoDesaprovar = async (id, data) => {
 }
 
 
-export const listNotificacoes = async () => {
-    let result = await api.get("/api/lista-notificacoes")
-    return result
-}
+// export const listNotificacoes = async () => {
+//     let result = await api.get("/api/lista-notificacoes")
+//     return result
+// }
 
 export const listVagasAprovadas = async () => {
 

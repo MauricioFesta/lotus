@@ -1,10 +1,12 @@
 import React from 'react';
 import { Button, Card, Modal } from 'react-bootstrap';
-import { getPostagensAll } from "../../stores/postagens/api"
+// import { getPostagensAll } from "../../stores/postagens/api"
 import { Spinner } from "@blueprintjs/core";
 import moment from 'moment';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import { tokenMain} from '../login/auth'
+import init, { get_postagens_all } from "../../wasm/pkg/wasm";
 
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,11 +36,17 @@ class Postagens extends React.Component {
 
         this.setState({ open_spinner: true })
 
-        let res = await getPostagensAll()
+        await init()
 
-        if (Array.isArray(res.data)) {
+        let token = tokenMain()
 
-            this.setState({ data: res.data })
+        // let res = await getPostagensAll()
+
+        let res = await get_postagens_all(token)
+
+        if (Array.isArray(res)) {
+
+            this.setState({ data: res })
         } else {
             this.setState({ data: [] })
         }

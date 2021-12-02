@@ -3,12 +3,14 @@ import { Figure, Jumbotron, Container, Row, Form } from 'react-bootstrap';
 import { Button, Icon } from "@blueprintjs/core";
 import { Store } from "../../store"
 import PerfilFoto from './index.foto';
-import { putPerfil, getPerfil } from "../../stores/perfil/api"
+import { putPerfil } from "../../stores/perfil/api"
 import { perfilMODEL } from "../../model/perfil"
 import { perfilForm, perfilQuery } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AppToaster } from "../../others/toaster"
+import { tokenMain} from '../login/auth'
+import init, { get_perfil } from "../../wasm/pkg/wasm";
 
 class Perfil extends React.Component {
 
@@ -20,9 +22,17 @@ class Perfil extends React.Component {
     }
 
     async componentDidMount() {
-        let res = await getPerfil()
+        // let res = await getPerfil()
 
-        Object.assign(perfilMODEL, res.data[0])
+        let token = tokenMain()
+
+        await init()
+
+        let res = await get_perfil(token)
+
+        console.log(res[0], "Perfil here")
+
+        Object.assign(perfilMODEL, res[0])
 
         this.setState({ perfilMODEL: perfilMODEL })
 

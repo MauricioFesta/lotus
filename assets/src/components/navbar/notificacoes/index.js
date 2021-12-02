@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Feed } from 'semantic-ui-react'
-import { listNotificacoes } from "../../../stores/vagas/api"
+// import { listNotificacoes } from "../../../stores/vagas/api"
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import * as Mui from "@material-ui/core"
@@ -8,6 +8,8 @@ import { Spinner } from "@blueprintjs/core";
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 import { NavItem, NavLink, Badge, Collapse, DropdownItem } from "shards-react";
+import { tokenMain} from '../../login/auth'
+import init, { get_notificacoes } from "../../../wasm/pkg/wasm";
 
 
 class Notificacoes extends React.Component {
@@ -41,9 +43,14 @@ class Notificacoes extends React.Component {
 
         this.obs.dateNow = moment(new Date());
 
-        let res = await listNotificacoes()
+        let token = tokenMain()
 
-        this.obs.itens_notificacoes = res.data[0].notificacoes
+        await init()
+        let res = await get_notificacoes(token)
+
+        // let res = await listNotificacoes()
+
+        this.obs.itens_notificacoes = res[0].notificacoes
 
         this.obs.open_spinner = false
 

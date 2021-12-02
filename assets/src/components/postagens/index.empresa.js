@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Modal } from 'react-bootstrap';
-import { getPostagensEmpresaAll } from "../../stores/postagens/api"
+// import { getPostagensEmpresaAll } from "../../stores/postagens/api"
 import { postagemOne } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { Spinner } from "@blueprintjs/core";
 import moment from 'moment';
+import { tokenMain} from '../login/auth'
+import init, { get_postagens_empresa } from "../../wasm/pkg/wasm";
 
 
 
@@ -41,11 +43,16 @@ class PostagensEmpresa extends React.Component {
 
         this.setState({ open_spinner: true })
 
-        let res = await getPostagensEmpresaAll()
+        // let res = await getPostagensEmpresaAll()
+        await init()
 
-        if (Array.isArray(res.data)) {
+        let token = tokenMain()
 
-            this.setState({ data: res.data })
+        let res = await get_postagens_empresa(token)
+
+        if (Array.isArray(res)) {
+
+            this.setState({ data: res })
         } else {
             this.setState({ data: [] })
         }

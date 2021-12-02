@@ -7,8 +7,8 @@ export const putPerfil = async (data) => {
   return result
 }
 
-export const getPerfil = async () => {
-  let result = await api.get("api/get-perfil")
+// export const getPerfil = async () => {
+//   let result = await api.get("api/get-perfil")
 
-  return result
-}
+//   return result
+// }

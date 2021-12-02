@@ -2,7 +2,7 @@ import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
 import { Modal } from 'react-bootstrap';
 import { Icon } from 'semantic-ui-react'
-import { listVagasEmpresaFechado } from "../../stores/vagas/api"
+// import { listVagasEmpresaFechado } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
 import { Redirect } from "react-router-dom"
 import { vagaView } from '../../actions';
@@ -25,6 +25,8 @@ import {
     Badge,
     Button
 } from "shards-react";
+import { tokenMain} from '../login/auth'
+import init, { get_vagas_empresa_fechado} from "../../wasm/pkg/wasm";
 
 
 class VagasFechadoEmpresa extends React.Component {
@@ -40,11 +42,17 @@ class VagasFechadoEmpresa extends React.Component {
 
         this.setState({ open_spinner: true })
 
-        let resp = await listVagasEmpresaFechado()
+        await init()
 
-        if (Array.isArray(resp.data)) {
+        let token = tokenMain()
 
-            this.setState({ vagas: resp.data })
+        let resp = await get_vagas_empresa_fechado(token)
+
+        // let resp = await listVagasEmpresaFechado()
+
+        if (Array.isArray(resp)) {
+
+            this.setState({ vagas: resp })
 
         }
 

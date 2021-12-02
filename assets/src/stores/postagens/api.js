@@ -8,18 +8,18 @@ export const postCreatePostagem = (data) => {
 
 }
 
-export const getPostagensAll = () => {
+// export const getPostagensAll = () => {
 
-    let result = api.get("/public/postagens-listar")
+//     let result = api.get("/public/postagens-listar")
 
-    return result
+//     return result
 
-}
+// }
 
-export const getPostagensEmpresaAll = () => {
+// export const getPostagensEmpresaAll = () => {
 
-    let result = api.get("/api/postagens-listar-empresa")
+//     let result = api.get("/api/postagens-listar-empresa")
 
-    return result
+//     return result
 
-}
+// }

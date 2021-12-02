@@ -12,11 +12,11 @@ export const postCurriculoForm = async (data) => {
     
 }
 
-export const getCurriculo = async () => {
+// export const getCurriculo = async () => {
 
-    return await api.get("/api/curriculo-consulta");
+//     return await api.get("/api/curriculo-consulta");
     
-}
+// }
 
 export const getDownload = async (id) => {
 
