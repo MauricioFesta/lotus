@@ -472,6 +472,20 @@ defmodule LotusWeb.VagasController do
 
     end
 
+    def length_vagas(conn, _) do    
+
+        cql = "SELECT COUNT(id) as count FROM vagas";
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+
+        page = page |> Enum.to_list 
+
+        total = page |> hd |> Map.get("count")
+
+        json(conn, %{"count" => total})
+
+    end 
+
     defp delete_candidato(candidatos, id_vaga) do    
 
         id_vaga |> IO.inspect   

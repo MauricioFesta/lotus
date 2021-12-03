@@ -10,7 +10,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import * as Mui from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { idMaster,tokenMain } from "../login/auth"
+import { idMaster, tokenMain } from "../login/auth"
 import socket from '../socket';
 import Alert from '@material-ui/lab/Alert';
 import { observable } from 'mobx';
@@ -23,7 +23,9 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
-import init, { get_vagas, get_curriculos } from "../../wasm/pkg/wasm";
+import init, { get_curriculos } from "../../wasm/pkg/wasm";
+import { VagasStore } from '../../stores/vagas'
+import { NotificacoesStore } from '../../stores/notificacoes'
 import {
     Container,
     Row,
@@ -83,20 +85,27 @@ class Vagas extends React.Component {
 
         let tmp = 0, array = [], array2 = [];
 
+        let token = tokenMain()
+
         // let res = await listVagas()
         await init()
-        let res = await get_vagas()
-       
+        // let res = await get_vagas()
+        await VagasStore.handleGetVagas()
+
+    
+        let res = VagasStore.obs.vagas
+
+
         listVagasAprovadas().then(result => {
 
             this.obs.candidato_vagas = [...result.data[0].vagas_aprovadas]
 
         })
 
-        let token = tokenMain()
+
 
         get_curriculos(token).then(result => {
-        
+
             this.obs.principal_curriculo = false
 
             if (result.length > 0) {
@@ -117,7 +126,7 @@ class Vagas extends React.Component {
         })
 
         // getCurriculo().then(result => {
-            
+
 
         //     this.obs.principal_curriculo = false
 

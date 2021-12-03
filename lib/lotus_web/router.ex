@@ -28,7 +28,8 @@ defmodule LotusWeb.Router do
      post "/new-password", LoginController, :alterar_password
      get "/vagas-lista", VagasController, :list_vagas
      get "/postagens-listar", PostagensController, :list_postagens
-     get "/teste", PostagensController, :teste
+     get "/vagas-length", VagasController, :length_vagas
+
      
     
   #   get "/", PageController, :index

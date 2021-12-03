@@ -8,8 +8,10 @@ import { Spinner } from "@blueprintjs/core";
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 import { NavItem, NavLink, Badge, Collapse, DropdownItem } from "shards-react";
-import { tokenMain} from '../../login/auth'
-import init, { get_notificacoes } from "../../../wasm/pkg/wasm";
+import { tokenMain } from '../../login/auth'
+// import init, { get_notificacoes } from "../../../wasm/pkg/wasm";
+import { NotificacoesStore } from '../../../stores/notificacoes'
+
 
 
 class Notificacoes extends React.Component {
@@ -39,18 +41,26 @@ class Notificacoes extends React.Component {
 
     async componentDidMount() {
 
+        let token = tokenMain()
+
+        await NotificacoesStore.handleGetNotificacoes(token);
+
         this.obs.open_spinner = true
 
         this.obs.dateNow = moment(new Date());
 
-        let token = tokenMain()
+        // let token = tokenMain()
 
-        await init()
-        let res = await get_notificacoes(token)
+        // await NotificacoesStore.handleGetNotificacoes(token)
+
+
+        // await init()
+        // let res = await get_notificacoes(token)
 
         // let res = await listNotificacoes()
 
-        this.obs.itens_notificacoes = res[0].notificacoes
+
+        this.obs.itens_notificacoes = NotificacoesStore.notificacoes
 
         this.obs.open_spinner = false
 
@@ -88,51 +98,44 @@ class Notificacoes extends React.Component {
                         </DropdownItem>
                     }
 
-                    {Array.isArray(this.obs.itens_notificacoes) &&
+                    {
+
+                        NotificacoesStore.obs.notificacoes.map((el, index) => {
 
 
+                            let date = moment(new Date(el.date * 1000)).add(3, 'hours').format()
 
-                        this.obs.itens_notificacoes.map((el, index) => {
+                            var end = moment(date);
+                            var duration = moment.duration(moment(new Date()).diff(end));
+                            var days = duration.asDays();
 
-                            if (el != '' && index < 6) {
+                            return (
 
-                                let json = JSON.parse(el)
+                                <>
 
-                                let date = moment(new Date(json.date * 1000)).add(3, 'hours').format()
+                                    <DropdownItem>
+                                        <div className="notification__icon-wrapper">
+                                            <div className="notification__icon">
+                                                {/* <i className="material-icons">&#xE6E1;</i> */}
+                                            </div>
+                                        </div>
+                                        <div className="notification__content">
+                                            <span className="notification__category">{el.empresa}</span>
+                                            <p>
+                                                {el.notify}<br />
+                                                <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min ago" : Math.floor(duration.asHours()) + " hours ago" : Math.floor(days) + " day ago"}´</span>
 
-                                var end = moment(date);
-                                var duration = moment.duration(this.obs.dateNow.diff(end));
-                                var days = duration.asDays();
+                                            </p>
+                                        </div>
+                                    </DropdownItem>
 
-                                if (Math.floor(days) <= 1) {
+                                </>
+                            )
 
-                                    return (
-
-                                        <>
-
-                                            <DropdownItem>
-                                                <div className="notification__icon-wrapper">
-                                                    <div className="notification__icon">
-                                                        {/* <i className="material-icons">&#xE6E1;</i> */}
-                                                    </div>
-                                                </div>
-                                                <div className="notification__content">
-                                                    <span className="notification__category">{json.empresa}</span>
-                                                    <p>
-                                                        {json.notify}<br />
-                                                        <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min ago" : Math.floor(duration.asHours()) + " hours ago" : Math.floor(days) + " day ago"}´</span>
-
-                                                    </p>
-                                                </div>
-                                            </DropdownItem>
-
-                                        </>
-                                    )
-
-                                }
+                            // }
 
 
-                            }
+                            // }
 
 
 

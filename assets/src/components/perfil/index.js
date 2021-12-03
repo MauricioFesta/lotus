@@ -30,8 +30,6 @@ class Perfil extends React.Component {
 
         let res = await get_perfil(token)
 
-        console.log(res[0], "Perfil here")
-
         Object.assign(perfilMODEL, res[0])
 
         this.setState({ perfilMODEL: perfilMODEL })

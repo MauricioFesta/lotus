@@ -8,6 +8,18 @@ import socket from '../socket';
 import Cookies from 'universal-cookie';
 import { idMaster } from '../login/auth'
 import { Modal } from 'react-bootstrap';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import PageviewIcon from '@material-ui/icons/Pageview';
+import Tooltip from '@material-ui/core/Tooltip';
+import { VagasStore } from '../../stores/vagas';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { NotificacoesStore } from '../../stores/notificacoes';
+
 
 
 const cookies = new Cookies();
@@ -18,11 +30,11 @@ export default class Navbar extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { open_modal: false }
+    this.state = { open_modal: false, vagas_length: 0 }
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
     let channel = socket.channel("notify:open");
 
@@ -89,54 +101,76 @@ export default class Navbar extends React.Component {
 
             <ul class="navbar-nav ">
 
-              <li class="nav-item active">
-                <a onClick={() => this.handleRedirect("/vagas")} class="nav-link" href="#">
-                  <i class="fa fa-list-alt"></i>
-                  Vagas
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/curriculo")} class="nav-link" href="#">
-                  <i class="fa fa-list-ol"></i>
-                  Meus Curriculos
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
+              <Tooltip title="Vagas em Aberto" aria-label="Vagas em Aberto">
 
-              <li onClick={() => this.handleRedirect("/postagens")} class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="fa fa-list-ul"></i>
-                  Postagens
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.setState({ open_modal: true })} class="nav-link" href="#">
-                  <i class="fa fa-bell">
-                    <span class="badge badge-info"></span>
-                  </i>
-                  Notificações
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/perfil")} class="nav-link" href="#">
-                  <i class="fa fa-address-card">
-                    <span class="badge badge-success"></span>
-                  </i>
+                <IconButton onClick={() => this.handleRedirect("/vagas")}
 
-                  Perfil
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleSair()} class="nav-link" href="#">
-                  <i class="fa fa-close">
-                    <span class="badge badge-success"></span>
-                  </i>
+                  color="#F4F4F4"
+                >
+                  <Badge badgeContent={VagasStore.obs.vagas.length} color="secondary">
+                    <span className="name-navs-itens">Vagas <PageviewIcon style={{ color: "#F4F4F4" }} /></span>
+                  </Badge>
+                </IconButton>
+              </Tooltip>
 
-                  Sair
-                </a>
-              </li>
+
+              <Tooltip title="Meus Curriculos" aria-label="Meus Curriculos">
+                <IconButton onClick={() => this.handleRedirect("/curriculo")}
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="#F4F4F4"
+                >
+                  <span className="name-navs-itens">Curriculos <InsertDriveFileIcon style={{ color: "#F4F4F4" }} /></span>
+
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Ver Postagens" aria-label="Ver Postagens">
+
+                <IconButton onClick={() => this.handleRedirect("/postagens")}
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="#F4F4F4"
+                >
+                  <span className="name-navs-itens">Posts <SpeakerNotesIcon style={{ color: "#F4F4F4" }} /></span>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Ver Notificações" aria-label="Ver Notificações">
+                <IconButton onClick={() => this.setState({ open_modal: true })} aria-label="show 11 new notifications" color="inherit">
+                  <Badge badgeContent={NotificacoesStore.obs.notificacoes.length} color="secondary">
+                    <span className="name-navs-itens">Notificaçoes<NotificationsIcon style={{ color: "#F4F4F4" }} /></span>
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Meu Perfil" aria-label="Meu Perfil">
+                <IconButton onClick={() => this.handleRedirect("/perfil")}
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="#F4F4F4"
+                >
+                  <span className="name-navs-itens">Perfil <AccountCircle style={{ color: "#F4F4F4" }} /></span>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Sair" aria-label="Sair">
+
+                <IconButton onClick={() => this.handleSair()}
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  color="#F4F4F4"
+                >
+                  <span className="name-navs-itens">Sair <ExitToAppIcon style={{ color: "#F4F4F4" }} /></span>
+                </IconButton>
+
+              </Tooltip>
+
+
             </ul>
 
 
