@@ -88,7 +88,8 @@ export default class NavbarEmpresa extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null })
+    console.log("Aquiiii")
+    this.setState({ anchorEl: null, anchorElMobile: null,  anchorElPost: null})
   };
 
   handleMenuMobile = (event) => {
