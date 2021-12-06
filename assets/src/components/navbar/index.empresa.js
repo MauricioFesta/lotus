@@ -15,12 +15,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SpeakerNotesIcon from '@material-ui/icons/SpeakerNotes';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import Tooltip from '@material-ui/core/Tooltip';
-import { VagasStore } from '../../stores/vagas';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { NotificacoesStore } from '../../stores/notificacoes';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import DoNotDisturbOffIcon from '@mui/icons-material/DoNotDisturbOff';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 
 require("./css/index.scss")
 
@@ -31,7 +30,7 @@ export default class NavbarEmpresa extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { open_modal: false }
+    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null }
 
 
   }
@@ -58,6 +57,7 @@ export default class NavbarEmpresa extends React.Component {
 
   handleRedirect(path) {
 
+    this.setState({ anchorEl: null, anchorElPost: null })
     history.push(path);
 
   }
@@ -70,6 +70,34 @@ export default class NavbarEmpresa extends React.Component {
     this.handleRedirect("/")
 
   }
+
+
+  handleChange = (event) => {
+    this.setState({ auth: event.target.checked });
+  };
+
+
+  handleMenu = (event) => {
+
+    this.setState({ anchorEl: event.currentTarget })
+  };
+
+  handleMenuPost = (event) => {
+
+    this.setState({ anchorElPost: event.currentTarget })
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null })
+  };
+
+  handleMenuMobile = (event) => {
+
+    this.setState({ anchorElMobile: event.currentTarget })
+  };
+
+
+  
 
 
   render() {
@@ -90,80 +118,137 @@ export default class NavbarEmpresa extends React.Component {
 
         <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
           <a class="navbar-brand" href="#">Lotus Empresa</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+
+          <Tooltip title="Vagas" aria-label="Vagas">
+
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              color="#F4F4F4"
+              onClick={this.handleMenuMobile }
+            >
+              <MenuIcon style={{ color: "#F4F4F4" }} />
+            </IconButton>
+
+
+          </Tooltip>
+
+          <Menu
+            id="menu-appbar"
+            anchorEl={this.state.anchorElMobile}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(this.state.anchorElMobile)}
+            onClose={this.handleClose}
+          >
+            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas")}>Vagas Abertas</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastro")}>Cadastrar Vaga</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")}>Vagas Fechadas</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/postagens/view")}>Posts Abertos</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/postagens/cadastro")}>Cadastrar Post</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
+            {/* <MenuItem onClick={() => this.setState({ open_modal: true })} >Notificações</MenuItem> */}
+            <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
+          </Menu>
+
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
 
+
             </ul>
+
+
 
             <ul class="navbar-nav ">
 
-              <Tooltip title="Vagas Abertas" aria-label="Vagas Abertas">
 
-                <IconButton onClick={() => this.handleRedirect("/vagas/cadastradas")}
+              <div>
+                <Tooltip title="Vagas" aria-label="Vagas">
 
-                  color="#F4F4F4"
+                  <IconButton
+
+                    color="#F4F4F4"
+                    onClick={this.handleMenu}
+                  >
+                    <Badge badgeContent={0} color="secondary">
+                      <span className="name-navs-itens">Vagas <PageviewIcon style={{ color: "#F4F4F4" }} /></span>
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={this.state.anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(this.state.anchorEl)}
+                  onClose={this.handleClose}
                 >
-                  <Badge badgeContent={0} color="secondary">
-                    <span className="name-navs-itens">Vagas Abertas <PageviewIcon style={{ color: "#F4F4F4" }} /></span>
-                  </Badge>
-                </IconButton>
-              </Tooltip>
+                  <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas")}>Vagas Abertas</MenuItem>
+                  <MenuItem onClick={() => this.handleRedirect("/vagas/cadastro")}>Cadastrar Vaga</MenuItem>
+                  <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")}>Vagas Fechadas</MenuItem>
+                </Menu>
+              </div>
 
-              <Tooltip title="Cadastrar Vaga" aria-label="Cadastrar Vaga">
 
-                <IconButton onClick={() => this.handleRedirect("/vagas/cadastro")}
 
-                  color="#F4F4F4"
+
+
+
+              <div>
+
+                <Tooltip title="Meus Posts" aria-label="Meus Posts">
+
+                  <IconButton onClick={this.handleMenuPost}
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="#F4F4F4"
+                  >
+                    <span className="name-navs-itens">Meus Posts <SpeakerNotesIcon style={{ color: "#F4F4F4" }} /></span>
+                  </IconButton>
+                </Tooltip>
+
+
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={this.state.anchorElPost}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(this.state.anchorElPost)}
+                  onClose={this.handleClose}
                 >
-                  <Badge badgeContent={0} color="secondary">
-                    <span className="name-navs-itens">Cadastrar Vaga <AddBoxIcon style={{ color: "#F4F4F4" }} /></span>
-                  </Badge>
-                </IconButton>
-              </Tooltip>
+                  <MenuItem onClick={() => this.handleRedirect("/postagens/view")}>Posts Abertos</MenuItem>
+                  <MenuItem onClick={() => this.handleRedirect("/postagens/cadastro")}>Cadastrar Post</MenuItem>
 
+                </Menu>
+              </div>
 
-              <Tooltip title="Vagas Fechadas" aria-label="Vagas Fechadas">
-
-                <IconButton onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")}
-
-                  color="#F4F4F4"
-                >
-                  <Badge badgeContent={0} color="secondary">
-                    <span className="name-navs-itens">Vagas Fechadas <DoNotDisturbOffIcon style={{ color: "#F4F4F4" }} /></span>
-                  </Badge>
-                </IconButton>
-              </Tooltip>
-
-
-
-
-              <Tooltip title="Meus Posts" aria-label="Meus Posts">
-
-                <IconButton onClick={() => this.handleRedirect("/postagens/view")}
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="#F4F4F4"
-                >
-                  <span className="name-navs-itens">Meus Posts <SpeakerNotesIcon style={{ color: "#F4F4F4" }} /></span>
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Cadastrar Post" aria-label="Cadastrar Post">
-
-                <IconButton onClick={() => this.handleRedirect("/postagens/cadastro")}
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  color="#F4F4F4"
-                >
-                  <span className="name-navs-itens">Cadastrar Post <AddCircleIcon style={{ color: "#F4F4F4" }} /></span>
-                </IconButton>
-              </Tooltip>
 
               <Tooltip title="Ver Notificações" aria-label="Ver Notificações">
                 <IconButton onClick={() => this.setState({ open_modal: true })} aria-label="show 11 new notifications" color="inherit">
@@ -204,92 +289,6 @@ export default class NavbarEmpresa extends React.Component {
           </div>
 
         </nav>
-
-
-        {/* <nav style={{height: 10}} class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
-          <a class="navbar-brand" href="#">Lotus Empresas</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-
-            </ul>
-
-            <ul class="navbar-nav ">
-
-              <li class="nav-item active">
-                <a onClick={() => this.handleRedirect("/vagas/cadastradas")} class="nav-link" href="#">
-                  <i class="fa fa-list-alt"></i>
-                  Vagas cadastradas
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")} class="nav-link" href="#">
-                  <i class="fa fa-list-ul"></i>
-                  Vagas fechadas
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/vagas/cadastro")} class="nav-link" href="#">
-                  <i class="fa fa-plus-square"></i>
-                  Cadastrar Vaga
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/postagens/view")} class="nav-link" href="#">
-                  <i class="fa fa-list-ol"></i>
-                  Listar Postagens
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/postagens/cadastro")} class="nav-link" href="#">
-                  <i class="fa fa-plus"></i>
-                  Cadastro Postagem
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.setState({ open_modal: true })} class="nav-link" href="#">
-                  <i class="fa fa-bell">
-                    <span class="badge badge-info"></span>
-                  </i>
-                  Notificações
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleRedirect("/perfil")} class="nav-link" href="#">
-                  <i class="fa fa-address-card">
-                    <span class="badge badge-success"></span>
-                  </i>
-
-                  Perfil
-                </a>
-              </li>
-              <li class="nav-item">
-                <a onClick={() => this.handleSair()} class="nav-link" href="#">
-                  <i class="fa fa-close">
-                    <span class="badge badge-success"></span>
-                  </i>
-
-                  Sair
-                </a>
-              </li>
-            </ul>
-
-
-          </div>
-
-        </nav> */}
-
 
       </>
 

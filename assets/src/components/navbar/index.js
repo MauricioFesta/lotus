@@ -19,6 +19,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { VagasStore } from '../../stores/vagas';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { NotificacoesStore } from '../../stores/notificacoes';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+
 
 
 
@@ -30,9 +34,10 @@ export default class Navbar extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { open_modal: false, vagas_length: 0 }
+    this.state = { open_modal: false, vagas_length: 0, auth: true, anchorEl: null }
 
   }
+
 
   async componentDidMount() {
 
@@ -69,6 +74,15 @@ export default class Navbar extends React.Component {
 
   }
 
+  handleMenu = (event) => {
+
+    this.setState({ anchorEl: event.currentTarget })
+  };
+
+  handleClose = () => {
+
+    this.setState({ anchorEl: null })
+  };
 
 
   render() {
@@ -90,9 +104,50 @@ export default class Navbar extends React.Component {
 
         <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
           <a class="navbar-brand" href="#">Lotus</a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+
+
+          <Tooltip title="Vagas navbar-toggler" aria-label="Vagas">
+
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              color="#F4F4F4"
+              onClick={this.handleMenu}
+            >
+              <MenuIcon style={{ color: "#F4F4F4" }} />
+            </IconButton>
+
+
+          </Tooltip>
+
+          <Menu
+            id="menu-appbar"
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(this.state.anchorEl)}
+            onClose={this.handleClose}
+          >
+            <MenuItem onClick={() => this.handleRedirect("/vagas")}>Vagas</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/curriculo")}>Curriculo</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/postagens")}>Postagens</MenuItem>
+            <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
+            {/* <MenuItem onClick={() => this.setState({ open_modal: true })}>Notificações</MenuItem> */}
+            <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
+          </Menu>
+
+
+
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
