@@ -112,13 +112,13 @@ defmodule LotusWeb.LoginController do
 
           verificado == true -> json(conn, %{exist: true})
 
-          now - date_insert >= 86400 && verificado == false -> 
+          # now - date_insert >= 86400 && verificado == false -> 
 
-            id_random = Login.send_email_confirm_login(new_params["email"])
+          #   id_random = Login.send_email_confirm_login(new_params["email"])
 
-            json(conn, %{pre_cad: true, id: id_random, id: id, email: params["email"], exist: false})
+          #   json(conn, %{pre_cad: true, id: id_random, id: id, email: params["email"], exist: false})
 
-          now - date_insert < 86400 && verificado == false -> json(conn, %{time: true})
+          # now - date_insert < 86400 && verificado == false -> json(conn, %{time: true})
 
           true ->  json(conn, %{exist: false})
             
