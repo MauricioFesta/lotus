@@ -9,6 +9,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import { AppToaster } from "../../others/toaster"
 import socket from '../socket';
+import { tokenMain} from '../login/auth'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
@@ -23,6 +24,10 @@ import {
     Badge,
     Button
 } from "shards-react";
+import init, { list_candidatos_vagas } from "../../wasm/pkg/wasm";
+
+
+
 
 const styleButomPrincipal = {
     color: '#32CD32',
@@ -54,11 +59,17 @@ class CandidatosEmpresa extends React.Component {
 
         this.obs.open_spinner = true
 
-        let res = await listVagasEmpresaId(url[3])
+        let token = tokenMain()
+
+        await init()
+
+        // let res = await listVagasEmpresaId(url[3])
+
+        let res = await list_candidatos_vagas(url[3], token)
 
         this.obs.id_vaga = url[3]
 
-        this.setState({ candidatos: res.data })
+        this.setState({ candidatos: res })
 
         this.obs.open_spinner = false
 
