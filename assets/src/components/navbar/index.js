@@ -22,6 +22,7 @@ import { NotificacoesStore } from '../../stores/notificacoes';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import { isMobile } from 'react-device-detect';
 
 
 
@@ -105,46 +106,54 @@ export default class Navbar extends React.Component {
         <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
           <a class="navbar-brand" href="#">Lotus</a>
 
+          {isMobile &&
 
-          <Tooltip title="Vagas navbar-toggler" aria-label="Vagas">
+            <>
+              <Tooltip title="Vagas navbar-toggler" aria-label="Vagas">
 
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              color="#F4F4F4"
-              onClick={this.handleMenu}
-            >
-              <MenuIcon style={{ color: "#F4F4F4" }} />
-            </IconButton>
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  color="#F4F4F4"
+                  onClick={this.handleMenu}
+                >
+                  <MenuIcon style={{ color: "#F4F4F4" }} />
+                </IconButton>
 
 
-          </Tooltip>
+              </Tooltip>
 
-          <Menu
-            id="menu-appbar"
-            anchorEl={this.state.anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(this.state.anchorEl)}
-            onClose={this.handleClose}
-          >
-            <MenuItem onClick={() => this.handleRedirect("/vagas")}>Vagas</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/curriculo")}>Curriculo</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/postagens")}>Postagens</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
-            {/* <MenuItem onClick={() => this.setState({ open_modal: true })}>Notificações</MenuItem> */}
-            <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
-          </Menu>
+              <Menu
+                id="menu-appbar"
+                anchorEl={this.state.anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(this.state.anchorEl)}
+                onClose={this.handleClose}
+              >
+                <MenuItem onClick={() => this.handleRedirect("/vagas")}>Vagas</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/curriculo")}>Curriculo</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/postagens")}>Postagens</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
+                {/* <MenuItem onClick={() => this.setState({ open_modal: true })}>Notificações</MenuItem> */}
+                <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
+              </Menu>
+            </>
+
+
+          }
+
+
 
 
 

@@ -20,6 +20,7 @@ import { NotificacoesStore } from '../../stores/notificacoes';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import { isMobile } from 'react-device-detect';
 
 require("./css/index.scss")
 
@@ -88,8 +89,8 @@ export default class NavbarEmpresa extends React.Component {
   };
 
   handleClose = () => {
-    console.log("Aquiiii")
-    this.setState({ anchorEl: null, anchorElMobile: null,  anchorElPost: null})
+
+    this.setState({ anchorEl: null, anchorElMobile: null, anchorElPost: null })
   };
 
   handleMenuMobile = (event) => {
@@ -98,7 +99,7 @@ export default class NavbarEmpresa extends React.Component {
   };
 
 
-  
+
 
 
   render() {
@@ -120,47 +121,55 @@ export default class NavbarEmpresa extends React.Component {
         <nav class="navbar navbar-icon-top navbar-expand-sm navbar-dark bg-color">
           <a class="navbar-brand" href="#">Lotus Empresa</a>
 
-          <Tooltip title="Vagas" aria-label="Vagas">
+          {isMobile &&
 
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              color="#F4F4F4"
-              onClick={this.handleMenuMobile }
-            >
-              <MenuIcon style={{ color: "#F4F4F4" }} />
-            </IconButton>
+            <>
+
+              <Tooltip title="Vagas" aria-label="Vagas">
+
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="menu"
+                  sx={{ mr: 2 }}
+                  color="#F4F4F4"
+                  onClick={this.handleMenuMobile}
+                >
+                  <MenuIcon style={{ color: "#F4F4F4" }} />
+                </IconButton>
 
 
-          </Tooltip>
+              </Tooltip>
 
-          <Menu
-            id="menu-appbar"
-            anchorEl={this.state.anchorElMobile}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(this.state.anchorElMobile)}
-            onClose={this.handleClose}
-          >
-            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas")}>Vagas Abertas</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastro")}>Cadastrar Vaga</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")}>Vagas Fechadas</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/postagens/view")}>Posts Abertos</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/postagens/cadastro")}>Cadastrar Post</MenuItem>
-            <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
-            {/* <MenuItem onClick={() => this.setState({ open_modal: true })} >Notificações</MenuItem> */}
-            <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
-          </Menu>
+              <Menu
+                id="menu-appbar"
+                anchorEl={this.state.anchorElMobile}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(this.state.anchorElMobile)}
+                onClose={this.handleClose}
+              >
+                <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas")}>Vagas Abertas</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/vagas/cadastro")}>Cadastrar Vaga</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/vagas/cadastradas/fechado")}>Vagas Fechadas</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/postagens/view")}>Posts Abertos</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/postagens/cadastro")}>Cadastrar Post</MenuItem>
+                <MenuItem onClick={() => this.handleRedirect("/perfil")}>Perfil</MenuItem>
+                {/* <MenuItem onClick={() => this.setState({ open_modal: true })} >Notificações</MenuItem> */}
+                <MenuItem onClick={() => this.handleSair()}>Sair</MenuItem>
+              </Menu>
+            </>
+
+          }
+
 
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
