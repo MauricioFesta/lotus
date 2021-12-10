@@ -16,6 +16,8 @@ defmodule Lotus.Mongo do
 
 	def password, do: "nuOTbtK$B8G%#0I$w7@" 
 	
+	def password_prod, do: "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m"
+	
 	def opts, do: "?authSource=admin&authMechanism=SCRAM-SHA-256"
 
 
