@@ -18,7 +18,7 @@ config :lotus, Lotus.Scheduler,
 
     # {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_pdf_tmp, []}},
     # {{:cron, "*/15 * * * *"},  {Lotus.Cron, :update_cache, []}},
-    {{:cron, "*/15 * * * *"},  {Lotus.Cron, :building_cache, []}},
+    # {{:cron, "*/15 * * * *"},  {Lotus.Cron, :building_cache, []}},
     # {{:cron, "*/1 * * * *"},  {Lotus.Cron, :clear_notificacoes, []}}building_cache
 
   ]

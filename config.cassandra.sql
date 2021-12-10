@@ -55,7 +55,7 @@ CREATE TABLE lotus_dev.vagas(
    inserted_at bigint,
    updated_at bigint,
    ativo boolean,
-   PRIMARY KEY (id, ramo)
+   PRIMARY KEY (id)
    );
 
    CREATE INDEX ON vagas (empresa_id);

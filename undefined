@@ -4,3 +4,17 @@ CREATE ROLE lotus_root with SUPERUSER = true AND LOGIN = true and PASSWORD = 'nu
 
 
 "cd /cassandra/apache-cassandra-4.0.0/bin && ./cqlsh 137.184.9.0 -u lotus_root -p 'nuOTbtK$B8G%#0I$w7@'"
+
+
+
+
+db.createUser(
+  {
+    user: "lotus",
+    pwd: "nuOTbtK$B8G%#0I$w7@",
+    roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+      { role: "readWriteAnyDatabase", db: "admin" }
+    ]
+  }
+)

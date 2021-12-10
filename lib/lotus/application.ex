@@ -4,8 +4,10 @@ defmodule Lotus.Application do
   @moduledoc false
 
   use Application
-
+  import Supervisor.Spec
+  
   def start(_type, _args) do
+    
     children = [
       # Start the Ecto repository
       # Lotus.Repo,
@@ -17,6 +19,7 @@ defmodule Lotus.Application do
       LotusWeb.Endpoint,
       
       Lotus.Scheduler,
+      # worker(Mongo, [[name: :mongo , url: "mongodb://#{Lotus.Mongo.host}/#{Lotus.Mongo.database}#{Lotus.Mongo.opts}",username: Lotus.Mongo.username, password: Lotus.Mongo.password, pool_size: 20]]),
 
     # {Xandra, name: CassPID, nodes: ["127.0.0.1:9042"],
     #      authentication: {Xandra.Authenticator.Password, 

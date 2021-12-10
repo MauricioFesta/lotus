@@ -22,6 +22,54 @@ defmodule LotusWeb.VagasController do
         {n_valor, _} = Integer.parse(params["valor"])
 
 
+        # Enum.map(1..1000, fn x -> 
+
+        #     data = params
+        #     |> Map.delete("file")
+        #     |> Map.delete("valor")
+        #     |> Map.delete("id")
+        #     |> Map.put("imagem_base64", file64)
+        #     |> Map.put("valor", n_valor)
+        #     |> Map.put("empresa_id", id_user)
+        #     |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
+        #     |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
+        #     |> Map.put("candidatos", [UUID.uuid4()])
+        #     |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        #     |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        #     |> Map.put("ativo", true)
+    
+        #     # {:ok, data} = JSON.encode(new_params)
+
+        #     data |> IO.inspect  
+    
+        #     Mongo.insert_one(:mongo, "vagas", data)
+              
+
+        # end)
+
+
+        # json(conn, %{"Ok": true})
+
+
+        #insert em mongo
+
+        # data = params
+        # |> Map.delete("file")
+        # |> Map.delete("valor")
+        # |> Map.delete("id")
+        # |> Map.put("imagem_base64", file64)
+        # |> Map.put("valor", n_valor)
+        # |> Map.put("empresa_id", id_user)
+        # |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
+        # |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
+        # |> Map.put("candidatos", [UUID.uuid4()])
+        # |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        # |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
+        # |> Map.put("ativo", true)
+
+        # Mongo.insert_one(:mongo, "vagas", data)
+
+
         new_params = params
         |> Map.delete("file")
         |> Map.delete("valor")
@@ -56,11 +104,19 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas(conn, _) do
 
-        query = list_vagas_cache
+        # query = list_vagas_cache
         
-        new_ret = Enum.map(query, fn x -> x |> JSON.decode! end)
+        # new_ret = Enum.map(query, fn x -> x |> JSON.decode! end)
 
-        json(conn, new_ret)
+        #select mongo 
+        # page = Mongo.find(:mongo, "vagas", %{}) |> Enum.to_list
+        # page |> length |> IO.inspect(label: "Tamanho here")
+
+        cql = "SELECT * FROM lotus_dev.vagas WHERE ativo = true"
+
+        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = [])
+
+        json(conn, page |> Enum.to_list)
 
     end
 
@@ -327,8 +383,7 @@ defmodule LotusWeb.VagasController do
 
         if Enum.member?(candidato, id_email["id"]), do: json(conn, %{erro: " Candidatura já enviada"})
 
-        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_email["id"]}'] + candidatos WHERE id = '#{params["id"]}' AND ramo = '#{ramo}'"
-
+        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_email["id"]}'] + candidatos WHERE id = '#{params["id"]}'"
 
         case Xandra.execute(CassPID, cql, _params = []) do
             {:ok, _} ->
@@ -364,7 +419,7 @@ defmodule LotusWeb.VagasController do
 
        new_list = Enum.reject(candidato, fn x -> x == id_user["id"] end)
 
-       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}' AND ramo = '#{ramo}'"
+       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}'"
 
        case Xandra.execute(CassPID, cql, _params = []) do
            {:ok, _} ->
@@ -429,7 +484,6 @@ defmodule LotusWeb.VagasController do
         |> text_body(msg) 
 
         |>  Lotus.Mailer.deliver_now
-        
         
     end
 
