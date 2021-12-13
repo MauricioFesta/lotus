@@ -19,28 +19,28 @@ defmodule Lotus.Application do
       LotusWeb.Endpoint,
       
       Lotus.Scheduler,
-      # worker(Mongo, [[name: :mongo , url: "mongodb://#{Lotus.Mongo.host}/#{Lotus.Mongo.database}#{Lotus.Mongo.opts}",username: Lotus.Mongo.username, password: Lotus.Mongo.password, pool_size: 20]]),
+      worker(Mongo, [[name: :mongo , url: "mongodb://#{Lotus.Mongo.host}/#{Lotus.Mongo.database}#{Lotus.Mongo.opts}",username: Lotus.Mongo.username, password: Lotus.Mongo.password, pool_size: 20]]),
 
-    # {Xandra, name: CassPID, nodes: ["127.0.0.1:9042"],
-    #      authentication: {Xandra.Authenticator.Password, 
-    #        [
-    #          username: "", 
-    #          password: ""
-    #        ]},
-    #      my_keyspace: "lotus_dev",
-    #     pool: DBConnection.Poolboy,
-    #     pool_size: 10}
+    {Xandra, name: CassPID, nodes: ["127.0.0.1:9042"],
+         authentication: {Xandra.Authenticator.Password, 
+           [
+             username: "", 
+             password: ""
+           ]},
+         my_keyspace: "lotus_dev",
+        pool: DBConnection.Poolboy,
+        pool_size: 10}
 
       # Server prod
-         {Xandra, name: CassPID, nodes: ["137.184.9.0:9042"],
-             authentication: {Xandra.Authenticator.Password, 
-               [
-                 username: "lotus_root", 
-                 password: "nuOTbtK$B8G%#0I$w7@"
-            ]},
-          my_keyspace: "lotus_dev",
-          pool: DBConnection.Poolboy,
-      pool_size: 10}
+      #    {Xandra, name: CassPID, nodes: ["137.184.9.0:9042"],
+      #        authentication: {Xandra.Authenticator.Password, 
+      #          [
+      #            username: "lotus_root", 
+      #            password: "nuOTbtK$B8G%#0I$w7@"
+      #       ]},
+      #     my_keyspace: "lotus_dev",
+      #     pool: DBConnection.Poolboy,
+      # pool_size: 10}
          
       
       # Start a worker by calling: Lotus.Worker.start_link(arg)

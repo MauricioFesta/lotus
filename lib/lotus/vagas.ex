@@ -76,5 +76,119 @@ defmodule Lotus.Vagas do
         VagasController.set_cache_vagas(ret)
 
     end 
+
+    def valor_maximo_vaga do  
+        
+
+       ret =  Mongo.aggregate(:mongo, "vagas", [
+            %{"$sort" => 
+
+            %{"valor" => -1}
+            
+            },
+            %{"$limit" => 1}
+            
+        ]) |> Enum.to_list |> hd
+
+     
+    end
+
+
+    def filter_empresa(params) do 
+
+        pagged_skip = params["pagged"]["limit_pagged"] * params["pagged"]["pagged"] 
+        pagged_limit = params["pagged"]["limit_pagged"]
+
+        ret = Mongo.aggregate(:mongo, "vagas", [
+            %{"$match" => 
+
+                %{"$expr" => %{"$and" => [
+
+                    %{"$eq" => ["$empresa_id",params["empresa"]]},
+                    %{"$eq" => ["$ativo", true]}
+
+                ]}}
+   
+            },
+            
+            %{"$skip" => pagged_skip},
+            %{"$limit" =>pagged_limit}
+        
+        ]) |> Enum.to_list
+
+    end
+
+    def filter_cache(params) do 
+    
+        pagged_skip = params["pagged"]["limit_pagged"] * params["pagged"]["pagged"] 
+        pagged_limit = params["pagged"]["limit_pagged"]
+        valor = params["valor"]
+
+        ret = Mongo.aggregate(:mongo, "vagas", [
+            %{"$match" => 
+
+                %{"$expr" =>
+
+                    %{"$and" => [
+
+                        %{"$lte" => ["$valor",valor]},
+                        %{"$eq" => ["$ativo", true]}
+
+                    ]}
+ 
+                }
+
+           
+            },
+            
+            %{"$skip" => pagged_skip},
+            %{"$limit" =>pagged_limit}
+        
+        ]) |> Enum.to_list
+
+
+    end
+
+    def filter_cidade(params) do  
+
+        pagged_skip = params["pagged"]["limit_pagged"] * params["pagged"]["pagged"] 
+        pagged_limit = params["pagged"]["limit_pagged"] |> IO.inspect(label: "limit") 
+    
+        ret = Mongo.aggregate(:mongo, "vagas", [
+            %{"$match" => 
+
+                %{"$expr" => %{"$and" => [
+
+                    %{"$eq" => ["$cidade", params["cidade"]]},
+                    %{"$eq" => ["$ativo", true]}
+
+                ]}}
+
+            },
+            %{"$skip" => pagged_skip},
+            %{"$limit" =>pagged_limit}
+        
+        ]) |> Enum.to_list
+
+    
+    end
+
+    def list_vagas(params) do  
+        
+        params |> IO.inspect(label: "Parametros")
+
+        pagged_skip = params["limit_pagged"] * params["pagged"]
+        pagged_limit = params["limit_pagged"]
+    
+        Mongo.aggregate(:mongo, "vagas", [
+            %{"$match" => %{"ativo" => true}},
+            %{"$skip" => pagged_skip},
+            %{"$limit" => pagged_limit},
+            %{"$sort" => %{"inserted_at" => -1}}
+        
+        ]) |> Enum.to_list 
+
+    end
+
  
 end

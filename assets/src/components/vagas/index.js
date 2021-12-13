@@ -23,7 +23,7 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
-import init, { get_curriculos } from "../../wasm/pkg/wasm";
+import init, { get_curriculos, get_vagas } from "../../wasm/pkg/wasm";
 import { VagasStore } from '../../stores/vagas'
 import { NotificacoesStore } from '../../stores/notificacoes'
 import {
@@ -89,11 +89,12 @@ class Vagas extends React.Component {
 
         // let res = await listVagas()
         await init()
-        // let res = await get_vagas()
-        await VagasStore.handleGetVagas()
+        let res = await get_vagas("teste")
+        console.log("rssss", res.length)
+        //await VagasStore.handleGetVagas()
 
     
-        let res = VagasStore.obs.vagas
+        // let res = VagasStore.obs.vagas
 
 
         listVagasAprovadas().then(result => {

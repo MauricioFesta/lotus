@@ -21,76 +21,21 @@ defmodule LotusWeb.VagasController do
 
         {n_valor, _} = Integer.parse(params["valor"])
 
-
-        # Enum.map(1..1000, fn x -> 
-
-        #     data = params
-        #     |> Map.delete("file")
-        #     |> Map.delete("valor")
-        #     |> Map.delete("id")
-        #     |> Map.put("imagem_base64", file64)
-        #     |> Map.put("valor", n_valor)
-        #     |> Map.put("empresa_id", id_user)
-        #     |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
-        #     |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
-        #     |> Map.put("candidatos", [UUID.uuid4()])
-        #     |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
-        #     |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
-        #     |> Map.put("ativo", true)
-    
-        #     # {:ok, data} = JSON.encode(new_params)
-
-        #     data |> IO.inspect  
-    
-        #     Mongo.insert_one(:mongo, "vagas", data)
-              
-
-        # end)
-
-
-        # json(conn, %{"Ok": true})
-
-
-        #insert em mongo
-
-        # data = params
-        # |> Map.delete("file")
-        # |> Map.delete("valor")
-        # |> Map.delete("id")
-        # |> Map.put("imagem_base64", file64)
-        # |> Map.put("valor", n_valor)
-        # |> Map.put("empresa_id", id_user)
-        # |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
-        # |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
-        # |> Map.put("candidatos", [UUID.uuid4()])
-        # |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
-        # |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
-        # |> Map.put("ativo", true)
-
-        # Mongo.insert_one(:mongo, "vagas", data)
-
-
         new_params = params
         |> Map.delete("file")
         |> Map.delete("valor")
-        |> Map.put(:imagem_base64, file64)
-        |> Map.put(:valor, n_valor)
-        |> Map.put(:empresa_id, id_user)
-        |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
-        |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
-        |> Map.put(:candidatos, [UUID.uuid4()])
+        |> Map.put("imagem_base64", file64)
+        |> Map.put("valor", n_valor)
+        |> Map.put("empresa_id", id_user)
+        |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
+        |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
+        |> Map.put("candidatos", [])
         |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("ativo", true)
 
-        {:ok, data} = JSON.encode(new_params)
-
-        cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
-
-       case Xandra.execute(CassPID,cql, params = [])  do
+       case Mongo.insert_one(:mongo, "vagas", new_params)  do
            {:ok, _} ->
-
-            set_cache_vagas([data])
 
             json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})
@@ -102,21 +47,11 @@ defmodule LotusWeb.VagasController do
     def convert!("false"), do: false
 
 
-    def list_vagas(conn, _) do
+    def list_vagas(conn, params) do
 
-        # query = list_vagas_cache
-        
-        # new_ret = Enum.map(query, fn x -> x |> JSON.decode! end)
+        ret = Vagas.list_vagas(params)
 
-        #select mongo 
-        # page = Mongo.find(:mongo, "vagas", %{}) |> Enum.to_list
-        # page |> length |> IO.inspect(label: "Tamanho here")
-
-        cql = "SELECT * FROM lotus_dev.vagas WHERE ativo = true"
-
-        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = [])
-
-        json(conn, page |> Enum.to_list)
+        json(conn, ret)
 
     end
 
@@ -252,18 +187,18 @@ defmodule LotusWeb.VagasController do
 
     end
 
-    def filter_empresa(conn, params) do
+    # def filter_empresa(conn, params) do
 
 
-         ret = LotusRust.Back.get_filtro_vagas_empresa(params["empresa"])
+    #      ret = LotusRust.Back.get_filtro_vagas_empresa(params["empresa"])
 
-         new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
+    #      new_ret = Enum.map(ret, fn x -> x |> JSON.decode! end)
 
-         json(conn, new_ret)
+    #      json(conn, new_ret)
 
 
 
-    end
+    # end
 
     def filter_ramo(conn, params) do
 
@@ -360,8 +295,10 @@ defmodule LotusWeb.VagasController do
        
         id_email = get_session(conn, "id")
      
-        cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}'"
-        
+        # cql_consulta =  "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{params["id"]}'"
+
+        ret = Mongo.find_one(:mongo, "vagas", %{"_id" => params["id"] |> BSON.ObjectId.decode!})
+
         cql1 = "SELECT id, nome,foto_base64, email FROM lotus_dev.user WHERE id = '#{id_email["id"]}'" |> IO.inspect
 
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql1, _params = [])
@@ -370,35 +307,51 @@ defmodule LotusWeb.VagasController do
 
         nome = page |> hd |> Map.get("nome")
 
-        {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, _params = [])
+        # {:ok,  %Xandra.Page{} = page} = Xandra.execute(CassPID, cql_consulta, _params = [])
 
-        {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
-        {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
-        {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
+        # {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
+        # {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
+        # {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
    
-        email_user_cql = "SELECT email FROM lotus_dev.user WHERE id = '#{empresa_id}'"
+        email_user_cql = "SELECT email FROM lotus_dev.user WHERE id = '#{ret["empresa_id"]}'"
         {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, email_user_cql, _params = [] )
 
         {:ok,email} = page |> Enum.to_list |> hd |> Map.fetch("email")
 
-        if Enum.member?(candidato, id_email["id"]), do: json(conn, %{erro: " Candidatura já enviada"})
+        Enum.member?(ret["candidatos"], id_email["id"]) |> IO.inspect(lable: "E membro ?")
 
-        cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_email["id"]}'] + candidatos WHERE id = '#{params["id"]}'"
+        if Enum.member?(ret["candidatos"], id_email["id"]) do
 
-        case Xandra.execute(CassPID, cql, _params = []) do
-            {:ok, _} ->
+            json(conn, %{"erro" => "Candidatura já enviada"})
 
-                LotusRust.Back.building_cache()
+        else
 
-                case Vagas.notificacao_user(empresa_id,params["id"], "#{nome} enviou uma candidatura para uma vaga", false, email) do
+            new_list =  ret["candidatos"] ++ [id_email["id"]]
 
-                    true -> json(conn, %{Ok: true})
+            doc = %{
+                "candidatos" => new_list
+            }
+    
+      
+    
+           # cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{id_email["id"]}'] + candidatos WHERE id = '#{params["id"]}'"
+    
+            case Mongo.update_one(:mongo, "vagas", %{"_id" => params["id"] |> BSON.ObjectId.decode!}, %{"$set" => doc}) do
+                {:ok, _} ->
+    
+                    LotusRust.Back.building_cache()
+    
+                    case Vagas.notificacao_user(ret["empresa_id"],params["id"], "#{nome} enviou uma candidatura para uma vaga", false, email) do
+    
+                        true -> json(conn, %{Ok: true})
+    
+                        _ ->  json(conn, %{Ok: false})
+                    end
+    
+                    # json(conn, %{Ok: true})
+                _ -> json(conn, %{Ok: false})
+            end
 
-                    _ ->  json(conn, %{Ok: false})
-                end
-
-                # json(conn, %{Ok: true})
-            _ -> json(conn, %{Ok: false})
         end
 
 
@@ -410,23 +363,29 @@ defmodule LotusWeb.VagasController do
 
         %{"id" => id_} = params
 
-        sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{id_}'"
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, _params = [] )
+        ret = Mongo.find_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => true})
 
-        {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
-        {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
-        {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
+        # sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{id_}'"
+        # {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, _params = [] )
 
-       new_list = Enum.reject(candidato, fn x -> x == id_user["id"] end)
+        # {:ok,candidato} = page |> Enum.to_list |> hd |> Map.fetch("candidatos")
+        # {:ok,ramo} = page |> Enum.to_list |> hd |> Map.fetch("ramo")
+        # {:ok,empresa_id} = page |> Enum.to_list |> hd |> Map.fetch("empresa_id")
 
-       cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}'"
+       new_list = Enum.reject(ret["candidatos"], fn x -> x == id_user["id"] end)
 
-       case Xandra.execute(CassPID, cql, _params = []) do
+       doc = %{
+           "candidatos" => new_list
+       }
+
+    #    cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}'"
+
+       case Mongo.update_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => true}, %{"$set" => doc}) do
            {:ok, _} ->
 
-            LotusRust.Back.building_cache()
-
+            # LotusRust.Back.building_cache()
             json(conn, %{Ok: true})
+
            _ -> json(conn, %{Ok: false})
        end
 
@@ -578,7 +537,53 @@ defmodule LotusWeb.VagasController do
 
     end 
 
+    def filter_cidade(conn, params) do  
 
+    
+        ret = Vagas.filter_cidade(params)
+
+        json(conn, ret)
+
+
+    end
+
+    def filter_cache(conn, params) do 
+        
+        ret = Vagas.filter_cache(params)
+
+        json(conn, ret)
+
+    end
+
+    def filter_empresa(conn, params) do 
+
+        ret = Vagas.filter_empresa(params)
+
+        json(conn, ret)
+
+    end 
+
+    def valor_maximo_vaga(conn, _) do  
+        
+        ret = Vagas.valor_maximo_vaga
+
+        json(conn, %{"valor" => ret["valor"] || 0})
+
+    end
+
+    def editar_vaga(conn, params) do 
+
+        new_params = params |> Map.delete("_id")
+  
+        case Mongo.update_one(:mongo, "vagas", %{"_id" => params["_id"] |> BSON.ObjectId.decode!}, %{"$set" => new_params}) do 
+
+            {:ok, _} -> json(conn, "ok")
+
+            {:error, _} -> json(conn, "error")
+
+        end
+
+    end
 
 
 end

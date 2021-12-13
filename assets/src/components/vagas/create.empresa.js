@@ -52,7 +52,7 @@ export default class CreateEmpresa extends React.Component {
         let file = document.querySelector('#file');
         const id = uuidv4()
 
-        formData.append("id", id);
+        // formData.append("id", id);
         formData.append("file", file.files[0]);
         formData.append("valor", $("#valor-vaga").val().slice(3).split(",")[0].replace(".", ""));
         formData.append("titulo", $("#titulo").val());

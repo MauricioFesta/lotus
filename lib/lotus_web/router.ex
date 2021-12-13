@@ -26,9 +26,14 @@ defmodule LotusWeb.Router do
      post "/resend-cod-cadastro", LoginController, :resend_cod_cadastro
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
-     get "/vagas-lista", VagasController, :list_vagas
+     post "/vagas-lista", VagasController, :list_vagas
      get "/postagens-listar", PostagensController, :list_postagens
      get "/vagas-length", VagasController, :length_vagas
+     post "/vagas-filter-cidade", VagasController, :filter_cidade
+     post "/vagas-filter-cache", VagasController, :filter_cache
+     post "/vagas-filter-empresa", VagasController, :filter_empresa
+     get "/valor-maximo-vaga", VagasController, :valor_maximo_vaga
+     get "/vagas-all-empresas", VagasController, :lista_all_empresas
 
      
     
@@ -68,7 +73,8 @@ defmodule LotusWeb.Router do
     put "/vagas-arovar-candidato/:id", VagasController, :aprovar_candidato
     put "/vagas-desaprovar-candidato/:id", VagasController, :delete_candidato_aprovado
     get "/lista-vagas-aprovadas", VagasController, :lista_vagas_aprovadas
-    get "/vagas-all-empresas", VagasController, :lista_all_empresas
+    post "/vagas-editar", VagasController, :editar_vaga
+  
     # post "/vagas-filter-empresa", VagasController, :filter_empresa
     # post "/vagas-filter-ramo", VagasController, :filter_ramo
     post "/update-vaga", VagasController, :update_vaga
