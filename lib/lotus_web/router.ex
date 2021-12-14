@@ -27,6 +27,7 @@ defmodule LotusWeb.Router do
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
      post "/vagas-lista", VagasController, :list_vagas
+     get "/vagas-lista", VagasController, :list_vagas
      get "/postagens-listar", PostagensController, :list_postagens
      get "/vagas-length", VagasController, :length_vagas
      post "/vagas-filter-cidade", VagasController, :filter_cidade
@@ -54,6 +55,8 @@ defmodule LotusWeb.Router do
     post "/curriculo-cadastro-base64", CurriculoController, :cadastro_curriculo_base64
     post "/curriculo-cadastro-form", CurriculoController, :cadastro_curriculo_form
     delete "/curriculo-excluir/:id", CurriculoController, :excluir_curriculo
+    get "/length-vagas-empresa-abertas", VagasController, :length_vagas_abertas_empresa
+    get "/length-vagas-empresa-fechados", VagasController, :length_vagas_fechados_empresa
     
     get "/curriculo-consulta", CurriculoController, :consulta_curriculo
   

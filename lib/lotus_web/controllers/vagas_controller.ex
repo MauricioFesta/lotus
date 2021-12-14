@@ -98,6 +98,8 @@ defmodule LotusWeb.VagasController do
 
         end
 
+        params["ativo"] |> IO.inspect(label: "Ativo here")
+
         candidatos = if convert!(params["ativo"]) == false do 
 
             [params["candidatos"]] |> IO.inspect(label: "Antes")
@@ -105,7 +107,7 @@ defmodule LotusWeb.VagasController do
             delete_candidato(params["candidatos"] |> String.split(","), params["id"])
 
 
-            [UUID.uuid4()]
+            []
 
             else
             
@@ -125,27 +127,29 @@ defmodule LotusWeb.VagasController do
         |> Map.delete("valor")
         |> Map.delete("imagem_base64_old")
         |> Map.delete("imagem_base64")
-        |> Map.put_new(:imagem_base64, file64)
-        |> Map.put(:valor, n_valor)
-        |> Map.put(:empresa_id, id_user)
-        |> Map.put(:disponibilidade_viajar, convert!(params["disponibilidade_viajar"]))
-        |> Map.put(:planejamento_futuro, convert!(params["planejamento_futuro"]))
-        |> Map.put(:ativo, convert!(params["ativo"]))
-        |> Map.put(:inserted_at, params["inserted_at"] |> String.to_integer)
+        |> Map.delete("_id")
+        |> Map.put_new("imagem_base64", file64)
+        |> Map.put("valor", n_valor)
+        |> Map.put("empresa_id", id_user)
+        |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
+        |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
+        |> Map.put("ativo", convert!(params["ativo"]))
+        |> Map.put("inserted_at", params["inserted_at"] |> String.to_integer)
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("candidatos", candidatos)
         
 
+        new_params |> IO.inspect(label: "Id AQUIIIIIIIIIII")
 
-        {:ok, data} = JSON.encode(new_params)
+        # {:ok, data} = JSON.encode(new_params)
 
-        cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
+        # cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
 
-        case Xandra.execute(CassPID, cql, _params = []) do
+        case Mongo.update_one(:mongo, "vagas", %{"_id" => params["_id"] |> BSON.ObjectId.decode!}, %{"$set" => new_params}) do
 
             {:ok, _} -> 
                  
-                LotusRust.Back.building_cache()
+                # LotusRust.Back.building_cache()
                 
                 json(conn, %{"ok" => true})
 
@@ -211,42 +215,72 @@ defmodule LotusWeb.VagasController do
 
     end
 
-    def list_vagas_empresa(conn,_) do
+    def list_vagas_empresa(conn, params) do
 
 
         id_user = get_session(conn, "id")["id"]
 
-        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = true ALLOW FILTERING"
+        # cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = true ALLOW FILTERING"
 
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+        # {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
-        if page |> Enum.at(0)  != nil do
+        ret = Vagas.list_vagas_empresa(params, id_user)
 
-         json(conn, Enum.to_list(page))
+        if Enum.empty?(ret) do
+
+            json(conn, "Nenhuma vaga encontrada")
 
         else
 
-            json(conn, "Nenhuma vaga encontrada")
+            json(conn, ret)
+
+          
 
         end
     end
 
-    def list_vagas_empresa_fechado(conn,_) do
+    def length_vagas_abertas_empresa(conn, _) do    
+
+        id_user = get_session(conn, "id")["id"]
+
+        ret = Vagas.length_vagas_abertas_empresa(id_user)
+
+        json(conn, ret)
+
+
+    end
+
+    def length_vagas_fechados_empresa(conn, _) do    
+
+        id_user = get_session(conn, "id")["id"]
+
+        ret = Vagas.length_vagas_fechados_empresa(id_user)
+
+        json(conn, ret)
+
+
+    end
+
+    def list_vagas_empresa_fechado(conn,params) do
 
 
         id_user = get_session(conn, "id")["id"]
 
-        cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = false ALLOW FILTERING"
+        # cql = "SELECT * FROM lotus_dev.vagas WHERE empresa_id = '#{id_user}' AND ativo = false ALLOW FILTERING"
 
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+        # {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
-        if page |> Enum.at(0)  != nil do
+        ret = Vagas.list_vagas_empresa_fechado(params, id_user)
 
-         json(conn, Enum.to_list(page))
+        if Enum.empty?(ret) do
+
+            json(conn, "Nenhuma vaga encontrada")
 
         else
 
-            json(conn, "Nenhuma vaga encontrada")
+            json(conn, ret)
+
+          
 
         end
     end
@@ -255,19 +289,21 @@ defmodule LotusWeb.VagasController do
 
     def list_vagas_candidatos(conn, %{"id" => id_vaga}) do
 
-        cql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = '#{id_vaga}'"
+        ret = Vagas.list_vagas_candidatos(id_vaga)
 
-        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql,  _paraams = [])
+        # cql = "SELECT candidatos FROM lotus_dev.vagas WHERE id = '#{id_vaga}'"
 
-        page_new = page |> Enum.to_list |> hd
+        # {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql,  _paraams = [])
 
-        formated =  Enum.join(page_new["candidatos"], "','")
+        # page_new = page |> Enum.to_list |> hd
 
-        cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
+        # formated =  Enum.join(page_new["candidatos"], "','")
 
-        {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
+        # cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
 
-        json(conn, page_candidatos |> Enum.to_list)
+        # {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
+
+        json(conn, ret |> Enum.to_list)
 
     end
 
@@ -487,15 +523,18 @@ defmodule LotusWeb.VagasController do
 
     def length_vagas(conn, _) do    
 
-        cql = "SELECT COUNT(id) as count FROM vagas";
+        # cql = "SELECT COUNT(id) as count FROM vagas";
 
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
+        # {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
-        page = page |> Enum.to_list 
+        # page = page |> Enum.to_list 
 
-        total = page |> hd |> Map.get("count")
+        # total = page |> hd |> Map.get("count")
 
-        json(conn, %{"count" => total})
+        ret = Vagas.length_vagas
+
+
+        json(conn, ret)
 
     end 
 

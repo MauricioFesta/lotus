@@ -1,6 +1,6 @@
 import React from 'react';
 import NavbarEmpresa from "../navbar/index.empresa"
-import { Modal } from 'react-bootstrap';
+import { Modal, Form } from 'react-bootstrap';
 import { Icon } from 'semantic-ui-react'
 // import { listVagasEmpresaFechado } from "../../stores/vagas/api"
 // import Alert from '@material-ui/lab/Alert';
@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { Spinner } from "@blueprintjs/core";
+import Pagination from '@material-ui/lab/Pagination';
 import {
     Container,
     Row,
@@ -26,7 +27,7 @@ import {
     Button
 } from "shards-react";
 import { tokenMain} from '../login/auth'
-import init, { get_vagas_empresa_fechado} from "../../wasm/pkg/wasm";
+import init, { get_vagas_empresa_fechado, length_vagas_empresa_fechados} from "../../wasm/pkg/wasm";
 
 
 class VagasFechadoEmpresa extends React.Component {
@@ -34,7 +35,7 @@ class VagasFechadoEmpresa extends React.Component {
     constructor(props) {
 
         super(props);
-        this.state = { vagas: [], redirect: false, path: "", open_spinner: false };
+        this.state = { vagas: [], redirect: false, path: "", open_spinner: false, total_vagas: 0 };
 
     }
 
@@ -46,9 +47,22 @@ class VagasFechadoEmpresa extends React.Component {
 
         let token = tokenMain()
 
-        let resp = await get_vagas_empresa_fechado(token)
+
+        let total = await length_vagas_empresa_fechados(token)
+
+        this.setState({ open_spinner: true, total_vagas: Math.ceil((total.count / 10) - 10) })
+
+        let resp = await get_vagas_empresa_fechado(token, 10, 0)
 
         // let resp = await listVagasEmpresaFechado()
+
+        this.handleSetVagasFechado(resp)
+
+      
+
+    }
+
+    handleSetVagasFechado(resp){
 
         if (Array.isArray(resp)) {
 
@@ -57,7 +71,7 @@ class VagasFechadoEmpresa extends React.Component {
         }
 
         this.setState({ open_spinner: false })
-
+        
     }
 
     handleEditVaga(id) {
@@ -75,6 +89,17 @@ class VagasFechadoEmpresa extends React.Component {
 
         this.props.vagaView({ ...vaga })
         history.push("/vaga-edit");
+    }
+
+    async handleChangePagination(page){
+
+        this.state.open_spinner = true
+
+        let token = tokenMain()
+      
+        let resp = await get_vagas_empresa_fechado(token, 10, page)
+
+        this.handleSetVagasFechado(resp)
     }
 
     render() {
@@ -152,7 +177,7 @@ class VagasFechadoEmpresa extends React.Component {
 
                                                         {el.candidatos.length > 1 ?
 
-                                                            <a onClick={() => this.setState({ path: `/vagas/candidatos/${el.id}`, redirect: true })}>
+                                                            <a onClick={() => this.setState({ path: `/vagas/candidatos/${el._id}`, redirect: true })}>
                                                                 <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
                                                             </a>
 
@@ -190,6 +215,14 @@ class VagasFechadoEmpresa extends React.Component {
                             }
 
                         </Row>
+                        <Form className="footer-pagination">
+
+                            <Form.Group>
+
+                                <Pagination count={this.state.total_vagas} onChange={(event, value) => this.handleChangePagination(value)} variant="outlined" color="primary" />
+                            </Form.Group>
+
+                        </Form>
                     </Container>
 
                 </div>

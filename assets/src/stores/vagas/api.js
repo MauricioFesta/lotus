@@ -97,7 +97,7 @@ export const filterEmpresa = async (data) => {
 
 export const allEmpresas = async () => {
 
-    let result = await api.get("/api/vagas-all-empresas")
+    let result = await api.get("/public/vagas-all-empresas")
     return result
 
 }

@@ -23,7 +23,7 @@ import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import history from "../../others/redirect";
-import init, { get_curriculos, get_vagas } from "../../wasm/pkg/wasm";
+import init, { get_curriculos, get_vagas, get_length_vagas } from "../../wasm/pkg/wasm";
 import { VagasStore } from '../../stores/vagas'
 import { NotificacoesStore } from '../../stores/notificacoes'
 import {
@@ -37,17 +37,20 @@ import {
     Button
 } from "shards-react";
 // import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import Pagination from '@material-ui/lab/Pagination';
+
 
 const id_master = idMaster()
 
 require("./css/index.scss")
+
 
 class Vagas extends React.Component {
 
     constructor(props) {
 
         super(props);
-        this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null" };
+        this.state = { vagas: [], qtdline: 0, variant: "primary", text: "null", activePage: 15 };
         this.teste = 10
 
         this.obs = observable({
@@ -56,13 +59,20 @@ class Vagas extends React.Component {
             data_empresas: [],
             open_spinner: false,
             principal_curriculo: false,
-            vagas: []
+            vagas: [],
+            total_vagas: 0
 
         })
 
     }
 
     async componentDidMount() {
+
+        await init()
+
+        let total = await get_length_vagas()
+        
+        this.obs.total_vagas = Math.ceil((total.count / 10) - 10)
 
         this.getVagas()
         let res = await allEmpresas()
@@ -83,17 +93,16 @@ class Vagas extends React.Component {
 
         this.obs.open_spinner = true
 
-        let tmp = 0, array = [], array2 = [];
-
+    
         let token = tokenMain()
 
         // let res = await listVagas()
         await init()
-        let res = await get_vagas("teste")
-        console.log("rssss", res.length)
+        let res = await get_vagas(10, 0)
+        
         //await VagasStore.handleGetVagas()
 
-    
+
         // let res = VagasStore.obs.vagas
 
 
@@ -154,6 +163,16 @@ class Vagas extends React.Component {
 
         }
 
+        this.handleSetVagas(res)
+
+       
+
+    }
+
+    handleSetVagas(res){
+
+        let tmp = 0, array = [], array2 = [];
+
         if (Array.isArray(res)) {
 
             this.obs.vagas = res
@@ -171,7 +190,7 @@ class Vagas extends React.Component {
                 tmp++
             })
 
-            array2.push(array)
+            // array2.push(array)
 
             this.setState({ vagas: array2 })
 
@@ -252,6 +271,20 @@ class Vagas extends React.Component {
         return this.obs.candidato_vagas.indexOf(id) === -1
     }
 
+    handlePageChange(pageNumber) {
+        console.log(`active page is ${pageNumber}`);
+        this.setState({ activePage: pageNumber });
+    }
+
+    async handleChangePagination(page){
+
+        this.obs.open_spinner = true
+      
+        let res = await get_vagas(10, page)
+
+        this.handleSetVagas(res)
+    }
+
     render() {
 
 
@@ -317,10 +350,10 @@ class Vagas extends React.Component {
                                     </Row>
 
                                     {this.obs.vagas.map((post, idx) => (
-                                        <Col lg="3" md="6" sm="12" className="mb-4" key={idx}>
+                                        <Col lg="3" md="6" sm="12" className="mb-4" key={post._id}>
 
                                             <Card small className="card-post card-post--1">
-                                                {!this.handleCandidatoAprovado(post.id) &&
+                                                {!this.handleCandidatoAprovado(post._id) &&
 
                                                     <Alert variant="filled" className="mt-2 mb-2 ml-2 mr-2" severity="success">
                                                         Parabéns você foi selecionado para esta vaga, aguarde o contato da empresa. E boa sorte :)
@@ -362,7 +395,7 @@ class Vagas extends React.Component {
                                                             variant="contained"
                                                             color="primary"
                                                             endIcon={<SendIcon />}
-                                                            onClick={() => this.candidatarSeVaga(post.id, post.empresa_id)}
+                                                            onClick={() => this.candidatarSeVaga(post._id, post.empresa_id)}
                                                         >
                                                             Candidatar-se
                                                         </Mui.Button>
@@ -376,7 +409,7 @@ class Vagas extends React.Component {
                                                             variant="contained"
                                                             color="secondary"
                                                             endIcon={<DeleteIcon />}
-                                                            onClick={() => this.excluirCandidaturaVaga(post.id)}
+                                                            onClick={() => this.excluirCandidaturaVaga(post._id)}
                                                         >
                                                             Excluir
                                                         </Mui.Button>
@@ -412,9 +445,18 @@ class Vagas extends React.Component {
                         })
 
                         }
-                    </Row>
-                </Container>
 
+                    </Row>
+
+                    <Form className="footer-pagination">
+
+                        <Form.Group>
+
+                            <Pagination count={this.obs.total_vagas} onChange={(event,value) => this.handleChangePagination(value)} variant="outlined" color="primary" />
+                        </Form.Group>
+
+                    </Form>
+                </Container>
 
             </ >
 

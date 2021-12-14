@@ -57,7 +57,7 @@ class VagasEmpresaEditar extends React.Component {
 
     async componentDidMount() {
 
-        if (!this.obs.vaga.id) {
+        if (!this.obs.vaga._id) {
 
             history.push("/vagas/cadastradas");
         }
@@ -92,7 +92,7 @@ class VagasEmpresaEditar extends React.Component {
 
         let file = document.querySelector('#file');
 
-        formData.append("id", this.obs.vaga.id);
+        formData.append("_id", this.obs.vaga._id);
         formData.append("file", file.files[0]);
         formData.append("valor", this.obs.vaga.valor);
         formData.append("titulo", this.obs.vaga.titulo);

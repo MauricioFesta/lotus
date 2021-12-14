@@ -177,8 +177,19 @@ defmodule Lotus.Vagas do
         
         params |> IO.inspect(label: "Parametros")
 
-        pagged_skip = params["limit_pagged"] * params["pagged"]
-        pagged_limit = params["limit_pagged"]
+       new_params = cond do 
+
+            is_binary(params["limit_pagged"]) -> 
+
+                params |> Map.put("limit_pagged", String.to_integer(params["limit_pagged"]))
+                |> Map.put("pagged", String.to_integer(params["pagged"]))
+
+            true -> params  
+
+        end   
+
+        pagged_skip = new_params["limit_pagged"] * new_params["pagged"]
+        pagged_limit = new_params["limit_pagged"]
     
         Mongo.aggregate(:mongo, "vagas", [
             %{"$match" => %{"ativo" => true}},
@@ -187,6 +198,175 @@ defmodule Lotus.Vagas do
             %{"$sort" => %{"inserted_at" => -1}}
         
         ]) |> Enum.to_list 
+
+    end
+
+    def length_vagas do 
+        
+        Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => 
+                 
+                %{"ativo" => true}
+
+            },
+            %{"$count" => "count"} 
+        ]) |> Enum.to_list |> hd
+
+    end
+
+    def length_vagas_abertas_empresa(id_empresa) do 
+
+       ret =  Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => 
+
+                %{"$expr" =>
+
+                %{"$and" => [
+
+                    %{"$eq" => ["$empresa_id", id_empresa]},
+                    %{"$eq" => ["$ativo", true]}
+
+                ]}
+            
+                }
+                 
+            },
+            %{"$count" => "count"} 
+        ]) |> Enum.to_list
+
+        if Enum.empty?(ret) do
+        
+            %{"count" => 0}
+
+         else
+
+            ret |> hd
+
+        end
+       
+
+    end
+
+
+    def length_vagas_fechados_empresa(id_empresa) do 
+
+      ret =  Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => 
+
+                %{"$expr" =>
+
+                %{"$and" => [
+
+                    %{"$eq" => ["$empresa_id", id_empresa]},
+                    %{"$eq" => ["$ativo", false]}
+
+                ]}
+            
+                }
+                 
+            },
+            %{"$count" => "count"} 
+        ]) |> Enum.to_list 
+
+        if Enum.empty?(ret) do
+        
+          %{"count" => 0}
+
+         else
+
+            ret |> hd
+
+        end
+        
+
+    end
+
+    def list_vagas_empresa(params,id_empresa) do 
+
+        new_params = cond do 
+
+            is_binary(params["limit_pagged"]) -> 
+
+                params |> Map.put("limit_pagged", String.to_integer(params["limit_pagged"]))
+                |> Map.put("pagged", String.to_integer(params["pagged"]))
+
+            true -> params  
+
+        end  
+
+        pagged_skip = new_params["limit_pagged"] * new_params["pagged"]
+        pagged_limit = new_params["limit_pagged"]
+    
+        Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => %{"$expr" => 
+
+                %{"$and" => [
+                    %{"$eq" => ["$empresa_id", id_empresa]},
+                    %{"$eq" => ["$ativo", true]}
+                ]}
+
+            }},
+
+            %{"$skip" => pagged_skip},
+            %{"$limit" => pagged_limit},
+            %{"$sort" => %{"inserted_at" => -1}}
+        
+        ]) |> Enum.to_list 
+    
+
+    end
+
+    def list_vagas_empresa_fechado(params,id_empresa) do 
+
+        new_params = cond do 
+
+            is_binary(params["limit_pagged"]) -> 
+
+                params |> Map.put("limit_pagged", String.to_integer(params["limit_pagged"]))
+                |> Map.put("pagged", String.to_integer(params["pagged"]))
+
+            true -> params  
+
+        end  
+
+        pagged_skip = new_params["limit_pagged"] * new_params["pagged"]
+        pagged_limit = new_params["limit_pagged"]
+    
+        Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => %{"$expr" => 
+
+                %{"$and" => [
+                    %{"$eq" => ["$empresa_id", id_empresa]},
+                    %{"$eq" => ["$ativo", false]}
+                ]}
+
+            }},
+
+            %{"$skip" => pagged_skip},
+            %{"$limit" => pagged_limit},
+            %{"$sort" => %{"inserted_at" => -1}}
+        
+        ]) |> Enum.to_list 
+    
+
+    end
+
+    def list_vagas_candidatos(id_vaga) do 
+        
+       ret = Mongo.find_one(:mongo, "vagas", %{"_id" => id_vaga |> BSON.ObjectId.decode!})
+
+       formated =  Enum.join(ret["candidatos"], "','")
+
+       cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
+
+       {:ok, %Xandra.Page{} = page_candidatos} = Xandra.execute(CassPID, cql_candidatos, _params = [])
+
+       page_candidatos
 
     end
 
