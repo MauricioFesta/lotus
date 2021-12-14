@@ -104,7 +104,7 @@ defmodule LotusWeb.VagasController do
 
             [params["candidatos"]] |> IO.inspect(label: "Antes")
 
-            delete_candidato(params["candidatos"] |> String.split(","), params["id"])
+            delete_candidato(params["candidatos"] |> String.split(","), params["_id"])
 
 
             []
