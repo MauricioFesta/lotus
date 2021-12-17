@@ -49,7 +49,7 @@ class VagasEmpresa extends React.Component {
 
         let total = await length_vagas_empresa_abertas(token)
 
-        this.setState({ open_spinner: true, total_vagas: Math.ceil((total.count / 10) - 10) })
+        this.setState({ open_spinner: true, total_vagas: Math.ceil(total.count / 10) })
 
         let resp = await get_vagas_empresa(token, 10, 0)
 
@@ -218,7 +218,7 @@ class VagasEmpresa extends React.Component {
 
                             <Form.Group>
 
-                                <Pagination count={this.state.total_vagas} onChange={(event, value) => this.handleChangePagination(value)} variant="outlined" color="primary" />
+                                <Pagination count={this.state.total_vagas} onChange={(event, value) => this.handleChangePagination(value - 1)} variant="outlined" color="primary" />
                             </Form.Group>
 
                         </Form>

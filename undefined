@@ -18,3 +18,20 @@ db.createUser(
     ]
   }
 )
+
+pineb28164@wolfpat.com
+
+Mongo.aggregate(:mongo, "vagas", [
+
+  %{"$match" => 
+                
+     %{"_id" => %{"$in" => [#BSON.ObjectId<61b31906b75d3a42eb883c8c>,#BSON.ObjectId<61bc3f0fb75d3a0d1d938a5c>]}}
+              
+  },
+
+  %{"$skip" => pagged_skip},
+  %{"$limit" => pagged_limit},
+  %{"$sort" => %{"inserted_at" => -1}}
+        
+            
+]) |> Enum.to_list

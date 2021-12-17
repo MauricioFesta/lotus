@@ -61,8 +61,8 @@ defmodule LotusWeb.LoginController do
       new_params = params 
       
       |> Map.put("senha", Bcrypt.hash_pwd_salt(params["senha"]))
-      |> Map.put("vagas_aprovadas", [UUID.uuid4()])
-      |> Map.put("notificacoes", [""])
+      |> Map.put("vagas_aprovadas", [Mongo.object_id |> BSON.ObjectId.encode!])
+      |> Map.put("notificacoes", [UUID.uuid4()])
       |> Map.put("verificado", false)
       |> Map.put("cnpj_cpf", params["cnpj_cpf"] |> String.to_integer)
       |> Map.put("is_empresa", params["is_empresa"] |> valid_bol)

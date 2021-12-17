@@ -624,5 +624,17 @@ defmodule LotusWeb.VagasController do
 
     end
 
+    def filter_vagas_aprovadas(conn, params) do 
+
+        id_user = get_session(conn, "id")
+
+        ret = Vagas.filter_vagas_aprovadas(params, id_user)
+
+        json(conn, ret)
+
+    end
+
+  
+
 
 end

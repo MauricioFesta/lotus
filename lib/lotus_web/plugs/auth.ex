@@ -1,4 +1,3 @@
-
 defmodule LotusWeb.Plugs.Auth do
     import Plug.Conn
     import Phoenix.Controller
@@ -12,7 +11,7 @@ defmodule LotusWeb.Plugs.Auth do
   
       case Map.get(headers, "x-nz-token") do
         nil ->
-            redirect(conn, to: "/not-permission")
+          json(conn, "not-permission")
             
         token ->
           case Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", token) do
@@ -27,14 +26,10 @@ defmodule LotusWeb.Plugs.Auth do
                   put_session(conn, :id, user_id_email)
                  
               end
-
-            #   conn
-            #   |> assign(:usuario, usuario["_id"])
-            #   |> assign(:conta, usuario["conta_id"])
-  
-         
+       
             {:error, _} ->
-                redirect(conn, to: "/not-permission")
+              json(conn, "not-permission")
+
           end
       end
     end

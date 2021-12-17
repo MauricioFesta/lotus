@@ -72,7 +72,7 @@ class Vagas extends React.Component {
 
         let total = await get_length_vagas()
         
-        this.obs.total_vagas = Math.ceil((total.count / 10) - 10)
+        this.obs.total_vagas = Math.ceil(total.count / 10)
 
         this.getVagas()
         let res = await allEmpresas()
@@ -173,6 +173,10 @@ class Vagas extends React.Component {
 
         let tmp = 0, array = [], array2 = [];
 
+        console.log(res, "resp")
+
+       
+
         if (Array.isArray(res)) {
 
             this.obs.vagas = res
@@ -190,8 +194,11 @@ class Vagas extends React.Component {
                 tmp++
             })
 
-            // array2.push(array)
+            if(res.length < 5){
+                array2.push(array)
+            }
 
+            
             this.setState({ vagas: array2 })
 
         }
@@ -452,7 +459,7 @@ class Vagas extends React.Component {
 
                         <Form.Group>
 
-                            <Pagination count={this.obs.total_vagas} onChange={(event,value) => this.handleChangePagination(value)} variant="outlined" color="primary" />
+                            <Pagination count={this.obs.total_vagas} onChange={(event,value) => this.handleChangePagination(value - 1)} variant="outlined" color="primary" />
                         </Form.Group>
 
                     </Form>
