@@ -606,7 +606,9 @@ defmodule LotusWeb.VagasController do
         
         ret = Vagas.valor_maximo_vaga
 
-        json(conn, %{"valor" => ret["valor"] || 0})
+        vl = if ret != 0, do: ret["valor"], else: ret
+
+        json(conn, %{"valor" => vl})
 
     end
 

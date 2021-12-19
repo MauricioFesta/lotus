@@ -19,8 +19,6 @@ defmodule LotusWeb.Plugs.AuthPublic do
 
                 {:ok, id} -> 
 
-                  IO.puts("Autenticado")
-
                   conn
 
                 _ ->
