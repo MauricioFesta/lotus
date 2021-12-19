@@ -35,3 +35,15 @@ Mongo.aggregate(:mongo, "vagas", [
         
             
 ]) |> Enum.to_list
+
+
+* 1st argument: not a nonempty list
+
+        :erlang.hd([])
+        (lotus 0.1.0) lib/lotus/vagas.ex:92: Lotus.Vagas.valor_maximo_vaga/0
+        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:607: LotusWeb.VagasController.valor_maximo_vaga/2
+        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:1: LotusWeb.VagasController.action/2
+        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:1: LotusWeb.VagasController.phoenix_controller_pipeline/2
+        (phoenix 1.5.9) lib/phoenix/router.ex:352: Phoenix.Router.__call__/2
+        (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.plug_builder_call/2
+        (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.call/2

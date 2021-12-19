@@ -89,7 +89,10 @@ defmodule Lotus.Vagas do
             },
             %{"$limit" => 1}
             
-        ]) |> Enum.to_list |> hd
+        ]) |> Enum.to_list 
+
+
+        if Enum.empty?(ret), do: 0, else: ret |> hd
 
      
     end
