@@ -68,9 +68,11 @@ class Vagas extends React.Component {
 
     async componentDidMount() {
 
+        let token = tokenMain()
+
         await init()
 
-        let total = await get_length_vagas()
+        let total = await get_length_vagas(token)
         
         this.obs.total_vagas = Math.ceil(total.count / 10)
 
@@ -98,8 +100,9 @@ class Vagas extends React.Component {
 
         // let res = await listVagas()
         await init()
-        let res = await get_vagas(10, 0)
-        
+        let res = await get_vagas(token, 10, 0)
+
+    
         //await VagasStore.handleGetVagas()
 
 
@@ -286,8 +289,10 @@ class Vagas extends React.Component {
     async handleChangePagination(page){
 
         this.obs.open_spinner = true
+
+        let token = tokenMain()
       
-        let res = await get_vagas(10, page)
+        let res = await get_vagas(token, 10, page)
 
         this.handleSetVagas(res)
     }

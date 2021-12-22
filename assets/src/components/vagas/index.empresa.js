@@ -56,13 +56,13 @@ class VagasEmpresa extends React.Component {
 
         // let resp = await listVagasEmpresa()
 
-       this.handleSetVagasAbertas(resp)
+        this.handleSetVagasAbertas(resp)
 
     }
 
-    handleSetVagasAbertas(resp){
+    handleSetVagasAbertas(resp) {
 
-    
+
         if (Array.isArray(resp)) {
 
             this.setState({ vagas: resp })
@@ -92,12 +92,12 @@ class VagasEmpresa extends React.Component {
         history.push("/vaga-edit");
     }
 
-    async handleChangePagination(page){
+    async handleChangePagination(page) {
 
         this.state.open_spinner = true
 
         let token = tokenMain()
-      
+
         let resp = await get_vagas_empresa(token, 10, page)
 
         this.handleSetVagasAbertas(resp)
@@ -173,18 +173,17 @@ class VagasEmpresa extends React.Component {
                                                             {el.descricao.slice(0, 110) + "..."}</p><br />
 
 
-                                                        {(el.candidatos.length > 1) ?
+                                                        {(el.candidatos.length > 0) ?
 
                                                             <a onClick={() => this.setState({ path: `/vagas/candidatos/${el._id}`, redirect: true })}>
-                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                                <Icon name='user' /> {`${el.candidatos.length} Candidatos`}
                                                             </a>
 
                                                             :
 
                                                             <a>
-                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                                <Icon name='user' /> {`${el.candidatos.length} Candidatos`}
                                                             </a>
-
 
                                                         }
 

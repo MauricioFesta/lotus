@@ -108,6 +108,7 @@ class VagasEmpresaEditar extends React.Component {
         formData.append("disponibilidade_viajar", this.obs.vaga.disponibilidade_viajar);
         formData.append("planejamento_futuro", this.obs.vaga.planejamento_futuro);
 
+
         let config = {
 
             headers: {

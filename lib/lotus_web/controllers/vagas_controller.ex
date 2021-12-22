@@ -88,6 +88,9 @@ defmodule LotusWeb.VagasController do
     
     def update_vaga(conn, params) do 
 
+
+        params["candidatos"] |> IO.inspect
+
         file64 = if params["file"] !=  "undefined" do
 
             File.read!(params["file"].path) |> Base.encode64()
@@ -102,16 +105,17 @@ defmodule LotusWeb.VagasController do
 
         candidatos = if convert!(params["ativo"]) == false do 
 
-            [params["candidatos"]] |> IO.inspect(label: "Antes")
-
             delete_candidato(params["candidatos"] |> String.split(","), params["_id"])
 
 
             []
 
             else
+
+
+            if params["candidatos"] == "", do: [], else:  params["candidatos"] |> String.split(",")
             
-           params["candidatos"] |> String.split(",")
+          
 
         end
 
@@ -138,9 +142,6 @@ defmodule LotusWeb.VagasController do
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("candidatos", candidatos)
         
-
-        new_params |> IO.inspect(label: "Id AQUIIIIIIIIIII")
-
         # {:ok, data} = JSON.encode(new_params)
 
         # cql =  "INSERT INTO lotus_dev.vagas JSON '#{data}'"
@@ -542,11 +543,16 @@ defmodule LotusWeb.VagasController do
 
         id_vaga |> IO.inspect   
 
-        candidatos |> length |> IO.inspect  
+        candidatos |> IO.inspect  
 
         Enum.map(candidatos,fn x -> 
 
+
+            if x != "" do
+
             cql = "SELECT id,email,vagas_aprovadas FROM lotus_dev.user WHERE id = '#{x}'"
+
+            cql |> IO.inspect(label: "delete vaga")
 
             {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
         
@@ -569,6 +575,13 @@ defmodule LotusWeb.VagasController do
 
 
             end 
+
+        else
+
+            IO.puts("ID NOT VALID")
+
+
+        end
 
         
         end)

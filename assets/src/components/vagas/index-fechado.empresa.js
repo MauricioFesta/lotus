@@ -26,8 +26,8 @@ import {
     Badge,
     Button
 } from "shards-react";
-import { tokenMain} from '../login/auth'
-import init, { get_vagas_empresa_fechado, length_vagas_empresa_fechados} from "../../wasm/pkg/wasm";
+import { tokenMain } from '../login/auth'
+import init, { get_vagas_empresa_fechado, length_vagas_empresa_fechados } from "../../wasm/pkg/wasm";
 
 
 class VagasFechadoEmpresa extends React.Component {
@@ -58,11 +58,11 @@ class VagasFechadoEmpresa extends React.Component {
 
         this.handleSetVagasFechado(resp)
 
-      
+
 
     }
 
-    handleSetVagasFechado(resp){
+    handleSetVagasFechado(resp) {
 
         if (Array.isArray(resp)) {
 
@@ -71,7 +71,7 @@ class VagasFechadoEmpresa extends React.Component {
         }
 
         this.setState({ open_spinner: false })
-        
+
     }
 
     handleEditVaga(id) {
@@ -91,12 +91,12 @@ class VagasFechadoEmpresa extends React.Component {
         history.push("/vaga-edit");
     }
 
-    async handleChangePagination(page){
+    async handleChangePagination(page) {
 
         this.state.open_spinner = true
 
         let token = tokenMain()
-      
+
         let resp = await get_vagas_empresa_fechado(token, 10, page)
 
         this.handleSetVagasFechado(resp)
@@ -134,7 +134,7 @@ class VagasFechadoEmpresa extends React.Component {
 
                                 this.state.vagas.map((el, idx) => {
 
-                                    console.log(el.candidatos.length - 1,"Candidatos")
+                                    console.log(el.candidatos.length - 1, "Candidatos")
 
                                     return (
 
@@ -175,18 +175,18 @@ class VagasFechadoEmpresa extends React.Component {
                                                             {el.descricao.slice(0, 110) + "..."}</p><br />
 
 
-                                                        {el.candidatos.length > 1 ?
+                                                        {el.candidatos.length > 0 ?
 
                                                             <a onClick={() => this.setState({ path: `/vagas/candidatos/${el._id}`, redirect: true })}>
-                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
+                                                                <Icon name='user' /> {`${el.candidatos.length} Candidatos`}
                                                             </a>
 
                                                             :
 
                                                             <a>
-                                                                <Icon name='user' /> {`${el.candidatos.length - 1} Candidatos`}
-                                                            </a>
+                                                                <Icon name='user' /> {`${el.candidatos.length} Candidatos`}
 
+                                                            </a>
 
                                                         }
 

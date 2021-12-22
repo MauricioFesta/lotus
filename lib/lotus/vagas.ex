@@ -404,7 +404,17 @@ defmodule Lotus.Vagas do
         
        ret = Mongo.find_one(:mongo, "vagas", %{"_id" => id_vaga |> BSON.ObjectId.decode!})
 
-       formated =  Enum.join(ret["candidatos"], "','")
+
+       ret["candidatos"] |> IO.inspect(label: "antes")
+
+       new_ret = [] ++ ret["candidatos"] |> Enum.filter(fn x -> 
+
+            if x != "", do: x
+
+        end) 
+
+
+       formated =  Enum.join(new_ret, "','")
 
        cql_candidatos =  "SELECT * FROM lotus_dev.user WHERE id IN ('#{formated}')"
 
