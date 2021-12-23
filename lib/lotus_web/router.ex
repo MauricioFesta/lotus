@@ -49,6 +49,7 @@ defmodule LotusWeb.Router do
     post "/vagas-filter-empresa", VagasController, :filter_empresa
     get "/valor-maximo-vaga", VagasController, :valor_maximo_vaga
     get "/vagas-all-empresas", VagasController, :lista_all_empresas
+    post "/filter-vagas-aprovadas", VagasController, :filter_vagas_aprovadas
 
     
   #   get "/", PageController, :index

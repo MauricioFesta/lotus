@@ -178,40 +178,49 @@ defmodule Lotus.Vagas do
     end
 
     def filter_vagas_aprovadas(params, id_user) do   
-
-        cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{id_user["id"]}'"
-
-        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
-
-        page = page |> Enum.to_list 
-
-        vagas_aprovadas = page |> hd |> Map.get("vagas_aprovadas")
-
-        new_vagas = vagas_aprovadas |> Enum.map(fn x ->
         
-            x |> BSON.ObjectId.decode!
+        if id_user != nil do    
+
         
-        end)
-           
+            cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{id_user["id"]}'"
 
-        pagged_skip = params["pagged"]["limit_pagged"] * params["pagged"]["pagged"] 
-        pagged_limit = params["pagged"]["limit_pagged"]
+            {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
-        Mongo.aggregate(:mongo, "vagas", [
+            page = page |> Enum.to_list 
 
-            %{"$match" => 
-                
-                %{"_id" => %{"$in" => new_vagas}}
-                
+            vagas_aprovadas = page |> hd |> Map.get("vagas_aprovadas")
 
-            },
-
-            %{"$skip" => pagged_skip},
-            %{"$limit" => pagged_limit},
-            %{"$sort" => %{"inserted_at" => -1}}
-        
+            new_vagas = vagas_aprovadas |> Enum.map(fn x ->
             
-        ]) |> Enum.to_list |> IO.inspect
+                x |> BSON.ObjectId.decode!
+            
+            end)
+            
+
+            pagged_skip = params["pagged"]["limit_pagged"] * params["pagged"]["pagged"] 
+            pagged_limit = params["pagged"]["limit_pagged"]
+
+            Mongo.aggregate(:mongo, "vagas", [
+
+                %{"$match" => 
+                    
+                    %{"_id" => %{"$in" => new_vagas}}
+                    
+
+                },
+
+                %{"$skip" => pagged_skip},
+                %{"$limit" => pagged_limit},
+                %{"$sort" => %{"inserted_at" => -1}}
+            
+                
+            ]) |> Enum.to_list |> IO.inspect
+
+        else
+
+            []
+
+        end
 
        
 
