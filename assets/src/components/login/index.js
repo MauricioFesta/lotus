@@ -19,8 +19,10 @@ import $ from "jquery";
 import { getUser } from "../../stores/login/api"
 import Cookies from 'universal-cookie';
 import { AppToaster } from "../../others/toaster"
+
 const cookies = new Cookies();
 var jwt = require('jsonwebtoken');
+
 
 
 function Copyright() {
@@ -67,8 +69,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
 function Login_view(props) {
   const classes = useStyles();
+  const [type_password, onChangeType] = React.useState("password")
+
+  function handleVisualizarSenha(e) {
+    onChangeType(type_password == "text" ? "password" : "text")
+  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -78,7 +88,7 @@ function Login_view(props) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-             <LockOutlinedIcon /> 
+            <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Entrar
@@ -102,13 +112,13 @@ function Login_view(props) {
               fullWidth
               name="password"
               label="Senha"
-              type="password"
+              type={type_password}
               id="senha"
               autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Relembrar me"
+              control={<Checkbox value="remember" onChange={(e) => handleVisualizarSenha(e)} color="primary" />}
+              label="Visualizar senha"
             />
             <Button
               type="button"
@@ -127,9 +137,9 @@ function Login_view(props) {
                 </Link>
               </Grid>
               <Grid item>
-                 <Link href="cadastro" variant="body2">
+                <Link href="cadastro" variant="body2">
                   {"Não tenho conta ainda ? Cadastre-se"}
-                </Link> 
+                </Link>
               </Grid>
             </Grid>
             <Box mt={5}>
@@ -183,13 +193,13 @@ export default class Login extends React.Component {
       cookies.set('_A-T', res.data.token);
       cookies.set('_A-T-T_L', token);
 
-      if(!res.data.is_empresa){
+      if (!res.data.is_empresa) {
         window.location.href = "/vagas"
-      }else{
+      } else {
         window.location.href = "/vagas/cadastradas"
       }
 
-     
+
 
     } else {
 
@@ -220,6 +230,7 @@ export default class Login extends React.Component {
 
   }
 }
+
 
 
 

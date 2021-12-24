@@ -22,7 +22,7 @@ export default class Details extends React.Component {
 
     componentDidMount() {
 
-        if (!Store.getState().vagasState.vaga_one.id) {
+        if (!Store.getState().vagasState.vaga_one._id) {
 
             history.push("/vagas");
         }
