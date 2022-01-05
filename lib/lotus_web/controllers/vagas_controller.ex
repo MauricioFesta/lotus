@@ -7,9 +7,17 @@ defmodule LotusWeb.VagasController do
 
     def cadastro_vagas(conn, params) do
 
+        file_next = "/tmp/#{Mongo.object_id |> BSON.ObjectId.encode!}.png"
+
         file64 = if params["file"] !=  "undefined" do
 
-            File.read!(params["file"].path) |> Base.encode64()
+            {"ok", _} = resize_image(params["file"].path, file_next)
+
+            encode = File.read!(file_next) |> Base.encode64()
+
+            File.rm!(file_next)
+
+            encode
 
             else
 
@@ -88,19 +96,28 @@ defmodule LotusWeb.VagasController do
     
     def update_vaga(conn, params) do 
 
+        file_next = "/tmp/#{Mongo.object_id |> BSON.ObjectId.encode!}.png"
+
 
         params["candidatos"] |> IO.inspect
 
         file64 = if params["file"] !=  "undefined" do
 
-            File.read!(params["file"].path) |> Base.encode64()
+            {"ok", _} = resize_image(params["file"].path, file_next)
 
+            encode = File.read!(file_next) |> Base.encode64()
+
+            File.rm!(file_next)
+
+            encode
+            
             else
 
             params["imagem_base64_old"]
 
         end
 
+    
         params["ativo"] |> IO.inspect(label: "Ativo here")
 
         candidatos = if convert!(params["ativo"]) == false do 
@@ -173,6 +190,14 @@ defmodule LotusWeb.VagasController do
          end
 
     end
+
+    defp resize_image(fp_current, fp_next) do
+
+        System.cmd("resize_img_mauri42", [fp_current, fp_next])
+
+    end
+
+  
 
     def lista_all_empresas(conn, _) do
 
