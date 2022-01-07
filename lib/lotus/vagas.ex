@@ -82,10 +82,17 @@ defmodule Lotus.Vagas do
         
 
        ret =  Mongo.aggregate(:mongo, "vagas", [
+
+            %{"$match" => %{"$expr" => 
+
+                %{"$eq" => ["$ativo", true]}
+            
+            }},
+
             %{"$sort" => 
 
-            %{"valor" => -1}
-            
+                %{"valor" => -1}
+                
             },
             %{"$limit" => 1}
             
