@@ -9,6 +9,8 @@ import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import { Spinner } from "@blueprintjs/core";
 import Link from '@material-ui/core/Link';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const InputMask = require('react-input-mask');
 
@@ -27,7 +29,8 @@ class CadastroLogin extends React.Component {
       email: "",
       user_valid: false,
       cnpj: "",
-      codigo_front: ""
+      codigo_front: "",
+      type_password: "password"
 
     })
 
@@ -43,7 +46,7 @@ class CadastroLogin extends React.Component {
       email: this.obs.email,
       cod_front: this.obs.codigo_front,
       token: this.obs.token
-      
+
     }
 
     let res = await postVerificado(data)
@@ -67,6 +70,12 @@ class CadastroLogin extends React.Component {
 
     }
 
+
+  }
+
+  handleVisualizarSenha(){
+
+    this.obs.type_password = this.obs.type_password == "text" ? "password" : "text";
 
   }
 
@@ -170,7 +179,12 @@ class CadastroLogin extends React.Component {
 
             <Form.Group>
               <Form.Label>Senha</Form.Label>
-              <Form.Control id="senha" type="password" placeholder="Senha" />
+              <Form.Control id="senha" type={this.obs.type_password} placeholder="Senha" />
+
+              <FormControlLabel
+                control={<Checkbox value="remember" onChange={(e) => this.handleVisualizarSenha()} color="primary" />}
+                label="Visualizar senha"
+              />
             </Form.Group>
 
 
@@ -188,8 +202,8 @@ class CadastroLogin extends React.Component {
             </Form.Group>
 
             <Form.Group >
-            <Form.Label>Conta corporativa ?</Form.Label>
-              <Form.Check style={{marginLeft: 35, marginBottom: 50}}
+              <Form.Label>Conta corporativa ?</Form.Label>
+              <Form.Check style={{ marginLeft: 35, marginBottom: 50 }}
                 type="switch"
                 id="conta-corporativa"
                 label=""
