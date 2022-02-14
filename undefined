@@ -47,3 +47,5 @@ Mongo.aggregate(:mongo, "vagas", [
         (phoenix 1.5.9) lib/phoenix/router.ex:352: Phoenix.Router.__call__/2
         (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.plug_builder_call/2
         (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.call/2
+
+
