@@ -24,7 +24,7 @@ defmodule Lotus.Mongo do
 
 		{:ok, ips} = :inet.getif()
 
-		ip = ips |> Enum.map(fn x -> x |> elem(0)  end) |> Enum.at(1)
+		ip = ips |> Enum.map(fn x -> x |> elem(0)  end) |> Enum.at(0)
 
 		cond do 
 
