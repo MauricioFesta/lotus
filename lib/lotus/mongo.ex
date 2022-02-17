@@ -30,6 +30,8 @@ defmodule Lotus.Mongo do
 
 			ip == {137, 184,9,0} -> password_prod
 
+			ip == {10,0,10,100} -> password_prod
+
 			true -> password
 
 

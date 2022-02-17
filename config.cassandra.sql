@@ -1,4 +1,8 @@
 
+copy lotus_dev.postagens to '/tmp/postagens.csv' with header=true
+
+copy lotus_dev.postagens from '/tmp/postagens.csv' with header=true
+
 CREATE KEYSPACE lotus_dev WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': '1'}  AND durable_writes = true;
 
 CREATE TABLE lotus_dev.user(
