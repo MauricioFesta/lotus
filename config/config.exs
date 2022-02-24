@@ -49,7 +49,7 @@ config :pdf_generator,
     port: 587,
     username: "applotus.no.replay@gmail.com",
     password: "@brasil123++@",
-    tls: :if_available, # can be `:always` or `:never`
+    #tls: :if_available, # can be `:always` or `:never`
     ssl: false, # can be `true`
     retries: 1
 
