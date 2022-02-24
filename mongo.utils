@@ -1,0 +1,13 @@
+"copy lotus_dev.postagens to '/tmp/postagens.csv' with header=true"
+
+copy lotus_dev.user from '/tmp/user.csv' with header=true CHUNKSIZE=1
+
+
+db.auth("lotus", "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m")
+
+
+  db.createUser( { user: "lotus",
+                 pwd: "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m",
+                 roles: [ { role: "clusterAdmin", db: "admin" },
+                          { role: "readAnyDatabase", db: "admin" },
+                          "readWrite"] } )

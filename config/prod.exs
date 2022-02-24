@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :lotus, LotusWeb.Endpoint,
-  check_origin: ["https://applotus.com.br/"],
+  check_origin: ["https://applotus.com.br/", "https://newdeploy.applotus.com.br"],
   http: [:inet6, port: System.get_env("PORT") || 4000],
   url: [host: "localhost", port: System.get_env("PORT")],
   cache_static_manifest: "priv/static/cache_manifest.json",

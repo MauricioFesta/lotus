@@ -22,20 +22,22 @@ defmodule Lotus.Mongo do
 
 	def get_password do	
 
-		{:ok, ips} = :inet.getif()
+		password_prod
 
-		ip = ips |> Enum.map(fn x -> x |> elem(0)  end) |> Enum.at(0)
+		# {:ok, ips} = :inet.getif()
 
-		cond do 
+		# ip = ips |> Enum.map(fn x -> x |> elem(0)  end) |> Enum.at(0)
 
-			ip == {137, 184,9,0} -> password_prod
+		# cond do 
 
-			ip == {10,0,10,100} -> password_prod
+		# 	ip == {137, 184,9,0} -> password_prod
 
-			true -> password
+		# 	ip == {10,0,10,100} -> password_prod
+
+		# 	true -> password
 
 
-		end
+		# end
 
 
 	end	

@@ -1,0 +1,21 @@
+[Unit]
+Description=lotus
+After=network.target
+
+[Service]
+Type=forking
+User=root
+WorkingDirectory=//usr/local/bin/lotus_back
+ExecStart=/usr/local/bin/lotus_back/bin/lotus start
+ExecStop=/usr/local/bin/lotus_back/bin/lotus stop
+PIDFile=/usr/local/bin/lotus_back/bin/lotus.pid
+Restart=on-failure
+RestartSec=5
+Environment=PORT=4000
+Environment=LANG=en_US.UTF-8
+Environment=PIDFILE=/usr/local/bin/lotus_back/bin/lotus.pid
+SyslogIdentifier=lotus_back
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

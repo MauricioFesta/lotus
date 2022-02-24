@@ -53,14 +53,3 @@ export: -e'SELECT * FROM lotus_dev.user' > /tmp/user.txt
 export: -e'SELECT * FROM lotus_dev.curriculos' > /tmp/curriculos.txt
 export: -e'SELECT * FROM lotus_dev.postagens' > /tmp/postagens.txt
 
-"copy lotus_dev.postagens to '/tmp/postagens.csv' with header=true"
-
-copy lotus_dev.user from '/tmp/user.csv' with header=true CHUNKSIZE=1
-
-
-db.auth("lotus", "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m")
-
-mongoimport --db lotus_prod --collection vagas --file vagas.json --jsonArray
-
-
-  db.createUser({	user: "lotus",pwd: "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m",roles:[{role: "userAdminAnyDatabase" , db:"admin"}]})
