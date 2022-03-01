@@ -48,8 +48,8 @@ config :pdf_generator,
     server: "smtp.gmail.com",
     port: 587,
     username: "applotus.no.replay@gmail.com",
-    password: "@brasil123++@",
-    #tls: :if_available, # can be `:always` or `:never`
+    password: "ynMQeTA%vQgbBu11TgxgNlr%FQfQg*syQY4RTxrRbbpR!1HPc9",
+    tls: :if_available, # can be `:always` or `:never`
     ssl: false, # can be `true`
     retries: 1
 
