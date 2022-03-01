@@ -7,7 +7,10 @@ defmodule Lotus.Application do
   import Supervisor.Spec
   
   def start(_type, _args) do
-    
+
+    System.put_env("TOKEN_LOGIN_LOTUS", "v%5EMEfENbFpT8g!1m$jdPk7D8lj!KZjTg%is3ku$mus7&l%40tmOOPm*%lQCdJ6&tnd9QWV1gW3bWYfvJyIknO$75zUuM6RrKMm%L@hc0/#yNrF1AadqW6HgPiTAd6a1U9F#hLkVLB^dL9QlF4cTUxM24F")
+    System.put_env("TOKEN_PASSWORD_LOTUS", "nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H")
+
     children = [
       # Start the Ecto repository
       # Lotus.Repo,

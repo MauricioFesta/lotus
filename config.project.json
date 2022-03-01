@@ -2,7 +2,7 @@
     {
         "Dependencias Projeto": {
             "Elixir Version": "1.12.0",
-            "Erlang Version": 24,
+            "Erlang Version": 24.0,
             "Cassandra Version": 4.0,
             "Python version": 3,
             "Node Version": "10.19.0",
