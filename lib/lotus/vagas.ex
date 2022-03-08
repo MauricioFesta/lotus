@@ -135,7 +135,7 @@ defmodule Lotus.Vagas do
         pagged_limit = params["pagged"]["limit_pagged"]
         valor = params["valor"]
 
-        ret = Mongo.aggregate(:mongo, "vagas", [
+        Mongo.aggregate(:mongo, "vagas", [
             %{"$match" => 
 
                 %{"$expr" =>
@@ -151,12 +151,15 @@ defmodule Lotus.Vagas do
 
            
             },
+
+            %{"$sort" => %{"valor" => -1}},
             
             %{"$skip" => pagged_skip},
             %{"$limit" =>pagged_limit}
         
         ]) |> Enum.to_list
 
+    
 
     end
 

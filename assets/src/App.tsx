@@ -14,7 +14,7 @@ import PostCreateEmpresa from "./components/postagens/create.empresa"
 import Perfil from "./components/perfil"
 import Navbar from "./components/navbar"
 import CandidatosEmpresa from "./components/vagas/candidatos.empresa"
-import NavbarEmpresa from "./components/navbar/index.empresa"
+import NavbarEmpresa from "./components/navbar/index.empresa.js"
 import history from "./others/redirect"
 import Details from "./components/vagas/details"
 import ResetPassword from "./components/login/password-reset"
@@ -23,9 +23,7 @@ import VagasFechadoEmpresa from "./components/vagas/index-fechado.empresa"
 import PostagensEmpresa from "./components/postagens/index.empresa"
 import PostEditEmpresa from "./components/postagens/edit.empresa"
 import Politica from "./components/politica-privacidade"
-
-
-require("./css/style.scss")
+import "./css/style.scss"
 
 
 

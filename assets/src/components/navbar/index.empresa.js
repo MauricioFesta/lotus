@@ -26,12 +26,15 @@ require("./css/index.scss")
 
 const cookies = new Cookies();
 
-export default class NavbarEmpresa extends React.Component {
+
+export  default class NavbarEmpresa extends React.Component {
+
+
 
   constructor(props) {
     super(props);
 
-    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null }
+    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null, messages: "" }
 
 
   }
@@ -108,6 +111,7 @@ export default class NavbarEmpresa extends React.Component {
 
       <>
 
+    
         <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
 
           <Modal.Body>

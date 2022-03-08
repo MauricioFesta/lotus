@@ -7,7 +7,7 @@ import { Store } from './store';
 import "./css/shards-dashboards.1.1.0.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/extras.1.1.0.min.css";
-require("./css/style.scss")
+import "./css/style.scss"
 
 ReactDOM.render(
 <Provider store={Store}>
