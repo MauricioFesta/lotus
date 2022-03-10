@@ -21,26 +21,37 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import { isMobile } from 'react-device-detect';
+import { Widget, addResponseMessage } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
+import logo from '../../others/imagens/logo-icon.png';
 
 require("./css/index.scss")
 
 const cookies = new Cookies();
 
 
-export  default class NavbarEmpresa extends React.Component {
+export default class NavbarEmpresa extends React.Component {
 
 
 
   constructor(props) {
     super(props);
 
-    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null, messages: "" }
+    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null,
+      channel_chat: null, messages: "", id_user: ""}
 
+    // setInterval(() => {
+
+    //   addResponseMessage('Oi enviei meu curriculo agora');
+
+    // }, 5000)
 
   }
 
   componentDidMount() {
     let channel = socket.channel("notify:open");
+    let channel_chat_open = socket.channel("chat:open");
+   
 
     channel.join()
       .receive("ok", resp => {
@@ -51,12 +62,34 @@ export  default class NavbarEmpresa extends React.Component {
         console.log("Error", resp)
       })
 
+      channel_chat_open.join()
+      .receive("ok", resp => {
+
+        console.log("Bem vindo ao Chat", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error Chat", resp)
+      })
+
+
 
     channel.on("notify_send:" + idMaster(), payload => {
       console.log("Chegouuu do usuario")
       alert(payload.body)
 
     })
+
+    channel_chat_open.on("chat_send:" +  idMaster(), payload => {
+
+      console.log(payload.id, "Id user chat")
+      this.setState({id_user: payload.id})
+      addResponseMessage(payload.body);
+
+      //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
+
+    })
+
+    this.setState({channel_chat: channel_chat_open})
   }
 
   handleRedirect(path) {
@@ -101,8 +134,10 @@ export  default class NavbarEmpresa extends React.Component {
     this.setState({ anchorElMobile: event.currentTarget })
   };
 
-
-
+  handleNewUserMessage = (msg) => {
+    console.log(msg)
+    this.state.channel_chat.push("chat_send:" + "1111111111", { body: msg, id: "ddd" })
+  }
 
 
   render() {
@@ -111,7 +146,14 @@ export  default class NavbarEmpresa extends React.Component {
 
       <>
 
-    
+        <Widget
+          profileAvatar={logo}
+          title="Chat Empresas"
+          subtitle="Esclarecimentos de dúvidas"
+          handleNewUserMessage={this.handleNewUserMessage}
+          emojis={true}
+          
+        />
         <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
 
           <Modal.Body>

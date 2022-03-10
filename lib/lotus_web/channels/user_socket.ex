@@ -3,6 +3,7 @@ defmodule LotusWeb.UserSocket do
 
   ## Channels
   channel "notify:*", LotusWeb.NotificacaoChannel
+  channel "chat:*", LotusWeb.ChatChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
