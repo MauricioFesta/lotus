@@ -5,6 +5,9 @@ copy lotus_dev.postagens from '/tmp/postagens.csv' with header=true
 
 CREATE KEYSPACE lotus_dev WITH replication = {'class': 'NetworkTopologyStrategy', 'datacenter1': '1'}  AND durable_writes = true;
 
+CREATE ROLE lotus_root with SUPERUSER = true AND LOGIN = true and PASSWORD = 'nuOTbtK$B8G%#0I$w7@';
+ALTER ROLE cassandra WITH SUPERUSER = false AND LOGIN = false;
+
 CREATE TABLE lotus_dev.user(
    id varchar,
    nome varchar,
