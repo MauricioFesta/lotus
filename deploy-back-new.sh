@@ -9,4 +9,4 @@ tar xvf lotus.tar.gz
 
 rm -R lotus.tar.gz
 
-rsync -avh -e "ssh -i ~/.ssh/oracle.key" /local_deploy/ -r ubuntu@150.230.80.52:/usr/local/bin/lotus_back
+rsync -avh -e "ssh -i ~/.ssh/oracle.key" /local_deploy/ -r ubuntu@168.138.135.59:/usr/local/bin/lotus_back
