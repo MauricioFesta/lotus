@@ -11,7 +11,7 @@ defmodule Lotus.Mongo do
 	def username, do: "lotus"
 	
 	def host do
-	        "10.0.11.21:27017"
+	        "10.0.11.148:27017"
 		#"localhost:27017"  
 	end
 
