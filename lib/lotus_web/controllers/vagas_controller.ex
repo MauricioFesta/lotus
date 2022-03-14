@@ -9,9 +9,11 @@ defmodule LotusWeb.VagasController do
 
         file_next = "/tmp/#{Mongo.object_id |> BSON.ObjectId.encode!}.png"
 
+        file_text |> IO.inspect
+
         file64 = if params["file"] !=  "undefined" do
 
-            {"ok", _} = resize_image(params["file"].path, file_next)
+            {"ok", _} = resize_image(params["file"].path, file_next) |> IO.inspect
 
             encode = File.read!(file_next) |> Base.encode64()
 
