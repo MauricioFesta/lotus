@@ -9,7 +9,7 @@ defmodule LotusWeb.VagasController do
 
         file_next = "/tmp/#{Mongo.object_id |> BSON.ObjectId.encode!}.png"
 
-        file_text |> IO.inspect
+        file_next |> IO.inspect
 
         file64 = if params["file"] !=  "undefined" do
 
