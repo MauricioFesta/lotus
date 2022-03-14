@@ -272,8 +272,8 @@ export default class Curriculo extends React.Component {
                           {/* {post.titulo} */}
                         </a>
                       </h5>
-                      {/* <p className="card-text d-inline-block mb-3">
-                        {el.descricao.slice(0, 180) + "..."}</p><br/> */}
+                      <p className="card-text d-inline-block mb-3">
+                        {el.descricao && el.descricao.slice(0, 180) + "..."}</p><br/>
                       {downloadFormatter(el.id)}
                       {excluirFormatter(el.id)}
                       {el.principal ?
