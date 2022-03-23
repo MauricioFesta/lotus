@@ -17,8 +17,18 @@ defmodule LotusWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(params, socket, _connect_info) do
+
+    params["x-nz-token"] |> IO.inspect(label: "Parametros")
+
+     case LotusWeb.Plugs.AuthSocket.call(params["x-nz-token"]) do
+
+      true ->  {:ok, socket}
+
+        _ ->   :error
+
+     end
+  
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
