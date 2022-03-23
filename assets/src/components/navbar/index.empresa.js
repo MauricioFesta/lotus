@@ -74,14 +74,13 @@ export default class NavbarEmpresa extends React.Component {
 
 
     channel.on("notify_send:" + idMaster(), payload => {
-      console.log("Chegouuu do usuario")
+   
       alert(payload.body)
 
     })
 
     channel_chat_open.on("chat_send:" +  idMaster(), payload => {
 
-      console.log(payload.id, "Id user chat")
       this.setState({id_user: payload.id})
       addResponseMessage(payload.body);
 
@@ -136,7 +135,7 @@ export default class NavbarEmpresa extends React.Component {
 
   handleNewUserMessage = (msg) => {
     console.log(msg)
-    this.state.channel_chat.push("chat_send:" + "1111111111", { body: msg, id: "ddd" })
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: msg, id: "ddd" })
   }
 
 
