@@ -24,6 +24,7 @@ import { isMobile } from 'react-device-detect';
 import { Widget, addResponseMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
 import logo from '../../others/imagens/logo-icon.png';
+import { v4 as uuidv4 } from 'uuid';
 
 require("./css/index.scss")
 
@@ -135,7 +136,7 @@ export default class NavbarEmpresa extends React.Component {
 
   handleNewUserMessage = (msg) => {
     console.log(msg)
-    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: msg, id: "ddd" })
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: msg, id: uuidv4() })
   }
 
 
