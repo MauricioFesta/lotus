@@ -14,8 +14,8 @@ defmodule LotusWeb.ChatChannel do
 
 
 
-    def handle_in("chat_send:"<> _id, %{"body" => body, "id" => id}, socket) do
-      broadcast!(socket, "chat_send:"<> _id, %{body: body, id: id})
+    def handle_in("chat_send:"<> _id, %{"body" => body, "id" => id, "avatar" => avatar}, socket) do
+      broadcast!(socket, "chat_send:"<> _id, %{body: body, id: id, avatar: avatar})
       {:noreply, socket}
     end
 

@@ -25,6 +25,9 @@ import { Widget, addResponseMessage } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
 import logo from '../../others/imagens/logo-icon.png';
 import { v4 as uuidv4 } from 'uuid';
+import { insert_message } from '../../stores/nav/api'
+import { getPerfil } from '../../stores/perfil/api'
+
 
 require("./css/index.scss")
 
@@ -38,8 +41,10 @@ export default class NavbarEmpresa extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null,
-      channel_chat: null, messages: "", id_user: ""}
+    this.state = {
+      open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null,
+      channel_chat: null, messages: "", id_user: "", foto_base64: "",
+    }
 
     // setInterval(() => {
 
@@ -49,10 +54,17 @@ export default class NavbarEmpresa extends React.Component {
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+
+    let resp = await getPerfil()
+
+    this.setState({ foto_base64: resp.data[0].foto_base64 })
+
+
     let channel = socket.channel("notify:open");
     let channel_chat_open = socket.channel("chat:open");
-   
+
 
     channel.join()
       .receive("ok", resp => {
@@ -63,7 +75,7 @@ export default class NavbarEmpresa extends React.Component {
         console.log("Error", resp)
       })
 
-      channel_chat_open.join()
+    channel_chat_open.join()
       .receive("ok", resp => {
 
         console.log("Bem vindo ao Chat", resp)
@@ -75,21 +87,23 @@ export default class NavbarEmpresa extends React.Component {
 
 
     channel.on("notify_send:" + idMaster(), payload => {
-   
+
       alert(payload.body)
 
     })
 
-    channel_chat_open.on("chat_send:" +  idMaster(), payload => {
+    channel_chat_open.on("chat_send:" + idMaster(), payload => {
 
-      this.setState({id_user: payload.id})
+      console.log(payload.id)
+
+      this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
       addResponseMessage(payload.body);
 
       //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
 
     })
 
-    this.setState({channel_chat: channel_chat_open})
+    this.setState({ channel_chat: channel_chat_open })
   }
 
   handleRedirect(path) {
@@ -134,9 +148,47 @@ export default class NavbarEmpresa extends React.Component {
     this.setState({ anchorElMobile: event.currentTarget })
   };
 
-  handleNewUserMessage = (msg) => {
-    console.log(msg)
-    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: msg, id: uuidv4() })
+  handleNewUserMessage = async (msg) => {
+
+    const message =
+    {
+
+      "message": {
+        "_id": uuidv4(), "createdAt": new Date(), "text": msg,
+        "user": { "_id": 2 },
+
+      },
+      "user_id": this.state.id_user
+    }
+
+    let message_send = {
+      _id: uuidv4(),
+      text: msg,
+      createdAt: new Date(),
+      user: {
+        _id: uuidv4(),
+        name: 'Teste',
+        avatar: "data:image/png;base64," + this.state.foto_base64
+      }
+    }
+
+    insert_message(message).then(res => {
+
+
+
+
+    }).catch((err => {
+
+      console.log(err)
+
+    }))
+
+
+    console.log(this.state.id_user, "sender")
+
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id:  this.state.id_user, avatar: ""})
+
+
   }
 
 
@@ -147,13 +199,15 @@ export default class NavbarEmpresa extends React.Component {
       <>
 
         <Widget
-          profileAvatar={logo}
+          profileAvatar={this.state.logo}
           title="Chat Empresas"
           subtitle="Esclarecimentos de dúvidas"
           handleNewUserMessage={this.handleNewUserMessage}
           emojis={true}
-          
+
         />
+
+
         <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
 
           <Modal.Body>
