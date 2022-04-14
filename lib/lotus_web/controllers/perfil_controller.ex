@@ -47,13 +47,28 @@ defmodule LotusWeb.PerfilController do
     end
 
     def lista_notificacoes(conn,params) do
+
         id_user =  get_session(conn, "id")["id"]
 
-        cql = "SELECT notificacoes FROM lotus_dev.user WHERE id = '#{id_user}'"
-        
-        {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = []) 
+        query = Mongo.find(:mongo, "notifications", %{"empresa_id" => id_user, "viewed" => false }) |> Enum.to_list
 
-        json(conn, Enum.to_list(page))
+        |> Enum.map(fn x -> 
+
+
+            cql = "SELECT nome FROM lotus_dev.user WHERE id = '#{x["user_id"]}'"
+        
+            {:ok, %Xandra.Page{} = page } = Xandra.execute(CassPID, cql, _params = [])
+
+            name = page |> Enum.to_list |> hd |> Map.get("nome")
+
+            x |> Map.put_new("nome", name)
+        
+        
+        
+        end)
+
+    
+        json(conn, query)
     end
 
     def get_perfil(conn, _params) do

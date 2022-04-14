@@ -19,8 +19,27 @@ defmodule LotusWeb.ChatController do
         
        case Mongo.insert_one(:mongo,"chat", new_params) do  
 
-        {:ok, _} -> json(conn, "ok")
+        {:ok, _} -> 
 
+            data = %{
+                "updated_at" => DateTime.utc_now |> DateTime.add(-10800),  
+                "to_empresa" => true, 
+                "empresa_id" => new_params["empresa_id"],
+                "user_id" => new_params["user_id"],
+                "viewed" => false,
+                "type" => "chat"
+            }
+            
+            case Mongo.update_one(:mongo, "notifications",%{"user_id" => new_params["user_id"]}, %{"$set" => data}, [upsert: true]) do
+
+                {:ok, _} ->  json(conn, "ok")
+
+                {:erro, reason} -> json(conn, reason)
+
+
+            end 
+            
+           
         {:erro, err} -> json(conn, err)
 
        end
@@ -92,6 +111,41 @@ defmodule LotusWeb.ChatController do
         end)
 
         json(conn, new_ret)
+
+    end
+
+
+    def get_message_by_id(conn, %{"id" => id}) when id != nil do
+
+        sql = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{id}'"
+
+        {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, sql, _params = [])  
+
+        avatar = page |> Enum.to_list |> hd |> Map.get("foto_base64")
+
+        ret = Mongo.find(:mongo, "chat", %{"user_id" => id}) |> Enum.to_list
+        
+        json(conn, %{"msg" => ret, "avatar" => avatar})
+
+    end
+
+    def viewed_message(conn, %{"id" => id}) when not is_nil(id) and id != "undefined" do
+
+
+        case Mongo.update_one(:mongo, "notifications",%{"_id" => id |> BSON.ObjectId.decode!}, %{"$set" => %{"viewed" => true}}) do
+
+            {:ok, _} -> json(conn, "ok")
+
+            {:error, reason} -> json(conn, reason) 
+
+        end
+
+
+    end
+
+    def viewed_message(conn, _params) do   
+        
+        json(conn, "ID Invalido")
 
     end
 

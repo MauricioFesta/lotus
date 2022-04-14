@@ -21,13 +21,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import { isMobile } from 'react-device-detect';
-import { Widget, addResponseMessage } from 'react-chat-widget';
+import { Widget, addResponseMessage, addUserMessage, setBadgeCount, deleteMessages } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
 import logo from '../../others/imagens/logo-icon.png';
 import { v4 as uuidv4 } from 'uuid';
 import { insert_message } from '../../stores/nav/api'
 import { getPerfil } from '../../stores/perfil/api'
-
+import { tokenMain } from '../login/auth'
 
 require("./css/index.scss")
 
@@ -43,7 +43,8 @@ export default class NavbarEmpresa extends React.Component {
 
     this.state = {
       open_modal: false, auth: true, anchorEl: null, anchorElPost: null, anchorElMobile: null,
-      channel_chat: null, messages: "", id_user: "", foto_base64: "",
+      channel_chat: null, messages: "", id_user: "", foto_base64: "", qtd_notify: 0, open_chat: false,
+      messages: [], allread: true, id_chat_atual: ""
     }
 
     // setInterval(() => {
@@ -56,11 +57,18 @@ export default class NavbarEmpresa extends React.Component {
 
   async componentDidMount() {
 
-
     let resp = await getPerfil()
 
-    this.setState({ foto_base64: resp.data[0].foto_base64 })
+    let token = tokenMain()
 
+
+    NotificacoesStore.handleGetNotificacoes(token).then(vl => {
+
+
+      this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
+    });
+
+    this.setState({ foto_base64: resp.data[0].foto_base64 })
 
     let channel = socket.channel("notify:open");
     let channel_chat_open = socket.channel("chat:open");
@@ -96,8 +104,32 @@ export default class NavbarEmpresa extends React.Component {
 
       console.log(payload.id)
 
-      this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
-      addResponseMessage(payload.body);
+      let tmp = false;
+
+
+      for (let i = 0; i < NotificacoesStore.obs.notificacoes.length; i++) {
+
+        if (NotificacoesStore.obs.notificacoes[i].user_id == payload.id) {
+          tmp = true
+          break;
+        }
+
+      }
+
+      if (!tmp) {
+
+        NotificacoesStore.obs.notificacoes.push({ nome: payload.nome, updated_at: new Date(), user_id: payload.id })
+        this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
+      }
+
+
+      if (this.state.id_user == payload.id) {
+
+        this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
+        addResponseMessage(payload.body);
+
+      }
+
 
       //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
 
@@ -148,6 +180,64 @@ export default class NavbarEmpresa extends React.Component {
     this.setState({ anchorElMobile: event.currentTarget })
   };
 
+  handleOpenChat = (id, id_notify) => {
+
+    NotificacoesStore.handlePutViewedNotify(id_notify).then(res => {
+
+      let token = tokenMain()
+
+      if (NotificacoesStore.obs.status200) {
+
+        NotificacoesStore.handleGetNotificacoes(token).then(vl => {
+
+
+          this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
+
+        });
+
+      }
+
+
+
+    }).catch(err => {
+      console.log(err)
+    })
+
+    this.setState({ open_modal: false })
+    this.setState({ open_chat: true })
+
+    deleteMessages()
+
+    NotificacoesStore.handleGetMessageById(id).then(res => {
+
+      this.setState({ id_user: id, logo: "data:image/png;base64," + NotificacoesStore.obs.avatar })
+
+      NotificacoesStore.obs.messagens_by_id.map(el => {
+
+        if (el.message.user._id == 2) {
+
+          addUserMessage(el.message.text);
+
+        } else {
+
+          addResponseMessage(el.message.text);
+
+        }
+
+
+      })
+
+      setBadgeCount(0)
+
+
+    }).catch(err => {
+
+      addResponseMessage(err)
+
+    })
+
+  }
+
   handleNewUserMessage = async (msg) => {
 
     const message =
@@ -186,7 +276,7 @@ export default class NavbarEmpresa extends React.Component {
 
     console.log(this.state.id_user, "sender")
 
-    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id:  this.state.id_user, avatar: ""})
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: ""})
 
 
   }
@@ -198,21 +288,32 @@ export default class NavbarEmpresa extends React.Component {
 
       <>
 
-        <Widget
-          profileAvatar={this.state.logo}
-          title="Chat Empresas"
-          subtitle="Esclarecimentos de dúvidas"
-          handleNewUserMessage={this.handleNewUserMessage}
-          emojis={true}
 
-        />
+
+        {this.state.open_chat &&
+
+
+          <Widget
+            profileAvatar={this.state.logo}
+            title="Chat Empresas"
+            subtitle="Esclarecimentos de dúvidas"
+            handleNewUserMessage={this.handleNewUserMessage}
+            emojis={true}
+            id={1}
+
+
+          />
+
+        }
+
+
 
 
         <Modal show={this.state.open_modal} onHide={() => this.setState({ open_modal: false })}>
 
           <Modal.Body>
 
-            <Notificacoes />
+            <Notificacoes openChat={this.handleOpenChat.bind(this)} />
 
           </Modal.Body>
 
@@ -360,13 +461,29 @@ export default class NavbarEmpresa extends React.Component {
               </div>
 
 
-              <Tooltip title="Ver Notificações" aria-label="Ver Notificações">
-                <IconButton onClick={() => this.setState({ open_modal: true })} aria-label="show 11 new notifications" color="inherit">
-                  <Badge badgeContent={NotificacoesStore.obs.notificacoes.length} color="secondary">
-                    <span className="name-navs-itens">Notificaçoes<NotificationsIcon style={{ color: "#F4F4F4" }} /></span>
-                  </Badge>
-                </IconButton>
-              </Tooltip>
+              {this.state.qtd_notify ?
+
+                <Tooltip title="Ver Notificações" aria-label="Ver Notificações">
+                  <IconButton onClick={() => this.setState({ open_modal: true })} aria-label="show 11 new notifications" color="inherit">
+                    <Badge badgeContent={NotificacoesStore.obs.notificacoes.length} color="secondary">
+                      <span className="name-navs-itens">Notificaçoes<NotificationsIcon style={{ color: "#F4F4F4" }} /></span>
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+
+                :
+
+                <Tooltip title="Ver Notificações" aria-label="Ver Notificações">
+                  <IconButton onClick={() => this.setState({ open_modal: true })} aria-label="show 11 new notifications" color="inherit">
+                    <Badge badgeContent={0} color="secondary">
+                      <span className="name-navs-itens">Notificaçoes<NotificationsIcon style={{ color: "#F4F4F4" }} /></span>
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
+
+
+              }
+
 
               <Tooltip title="Meu Perfil" aria-label="Meu Perfil">
                 <IconButton onClick={() => this.handleRedirect("/perfil")}

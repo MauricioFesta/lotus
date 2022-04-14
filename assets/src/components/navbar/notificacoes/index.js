@@ -13,14 +13,14 @@ import { tokenMain } from '../../login/auth'
 import { NotificacoesStore } from '../../../stores/notificacoes'
 
 
-
 class Notificacoes extends React.Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            visible: false
+            visible: false,
+            openChat: props.openChat
         };
 
         this.toggleNotifications = this.toggleNotifications.bind(this);
@@ -40,10 +40,11 @@ class Notificacoes extends React.Component {
     }
 
     async componentDidMount() {
+        
 
-        let token = tokenMain()
+        //let token = tokenMain()
 
-        await NotificacoesStore.handleGetNotificacoes(token);
+        //await NotificacoesStore.handleGetNotificacoes(token);
 
         this.obs.open_spinner = true
 
@@ -102,8 +103,7 @@ class Notificacoes extends React.Component {
 
                         NotificacoesStore.obs.notificacoes.map((el, index) => {
 
-
-                            let date = moment(new Date(el.date * 1000)).add(3, 'hours').format()
+                            let date = moment(new Date(el.updated_at)).format()
 
                             var end = moment(date);
                             var duration = moment.duration(moment(new Date()).diff(end));
@@ -113,17 +113,17 @@ class Notificacoes extends React.Component {
 
                                 <>
 
-                                    <DropdownItem>
+                                    <DropdownItem onClick={() => this.state.openChat(el.user_id, el._id)}>
                                         <div className="notification__icon-wrapper">
                                             <div className="notification__icon">
                                                 {/* <i className="material-icons">&#xE6E1;</i> */}
                                             </div>
                                         </div>
                                         <div className="notification__content">
-                                            <span className="notification__category">{el.empresa}</span>
+                                            <span className="notification__category">{el.nome}</span>
                                             <p>
                                                 {el.notify}<br />
-                                                <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min ago" : Math.floor(duration.asHours()) + " hours ago" : Math.floor(days) + " day ago"}´</span>
+                                                <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min atrás" : Math.floor(duration.asHours()) + " hora atrás" : Math.floor(days) + " dia atrás"}´</span>
 
                                             </p>
                                         </div>
