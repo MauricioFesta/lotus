@@ -123,7 +123,17 @@ defmodule LotusWeb.ChatController do
 
         avatar = page |> Enum.to_list |> hd |> Map.get("foto_base64")
 
-        ret = Mongo.find(:mongo, "chat", %{"user_id" => id}) |> Enum.to_list
+        ret = Mongo.aggregate(:mongo, "chat", [
+
+            %{"$match" => %{"$expr" => 
+
+                    %{"$eq" => ["$user_id", id]}
+
+            }},
+
+            %{"$limit" => 10}
+
+        ]) |> Enum.to_list
         
         json(conn, %{"msg" => ret, "avatar" => avatar})
 
