@@ -403,7 +403,7 @@ defmodule LotusWeb.VagasController do
             case Mongo.update_one(:mongo, "vagas", %{"_id" => params["id"] |> BSON.ObjectId.decode!}, %{"$set" => doc}) do
                 {:ok, _} ->
     
-                    LotusRust.Back.building_cache()
+                    #LotusRust.Back.building_cache()
     
                     case Vagas.notificacao_user(ret["empresa_id"],params["id"], "#{nome} enviou uma candidatura para uma vaga", false, email) do
     
