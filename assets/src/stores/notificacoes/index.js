@@ -67,16 +67,12 @@ export class _NotificacoesStore {
 
             //let json = JSON.parse(el)
 
-            let date = moment(new Date(el.updated_at)).format()
-
-
-            console.log("Data", date);
+            let date = el.updated_at
 
             var end = moment(date);
             var duration = moment.duration(moment(new Date()).diff(end));
             var days = duration.asDays();
 
-            console.log(Math.floor(days), "Dias here")
             if (Math.floor(days) <= 6) {
 
 
@@ -84,10 +80,6 @@ export class _NotificacoesStore {
                 
 
             }
-
-
-
-
 
         })
             

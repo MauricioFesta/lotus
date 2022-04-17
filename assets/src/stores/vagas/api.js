@@ -70,7 +70,6 @@ export const candidatoDesaprovar = async (id, data) => {
     return result
 }
 
-
 // export const listNotificacoes = async () => {
 //     let result = await api.get("/api/lista-notificacoes")
 //     return result

@@ -1,6 +1,7 @@
 import init, { get_vagas } from "../../wasm/pkg/wasm";
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import api from "../../others/api_default"
 
 
 class _VagasStore {
@@ -10,7 +11,8 @@ class _VagasStore {
 
         this.obs = observable({
             vagas: [],
-            length_vagas:0
+            length_vagas:0,
+            chat_msg: []
 
         })
     }
@@ -23,6 +25,18 @@ class _VagasStore {
         this.obs.vagas= res
        
 
+    }
+
+    async handleGetChat(empresa_id, user_id){
+
+        const data = {
+            empresa_id,
+            user_id
+        }
+    
+        let result = await api.post(`/api/chat-get`,data)
+
+        this.obs.chat_msg = result.data
     }
 
    

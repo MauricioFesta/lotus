@@ -10,6 +10,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import * as Mui from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ChatIcon from '@material-ui/icons/Chat';
 import { idMaster, tokenMain } from "../login/auth"
 import socket from '../socket';
 import Alert from '@material-ui/lab/Alert';
@@ -22,10 +23,12 @@ import { Spinner } from "@blueprintjs/core";
 import { vagaView } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { v4 as uuidv4 } from 'uuid';
 import history from "../../others/redirect";
-import init, { get_curriculos, get_vagas, get_length_vagas } from "../../wasm/pkg/wasm";
+import init, { get_curriculos, get_vagas, get_length_vagas, get_perfil } from "../../wasm/pkg/wasm";
 import { VagasStore } from '../../stores/vagas'
 import { NotificacoesStore } from '../../stores/notificacoes'
+import { insert_message } from '../../stores/nav/api'
 import {
     Container,
     Row,
@@ -38,6 +41,10 @@ import {
 } from "shards-react";
 // import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Pagination from '@material-ui/lab/Pagination';
+import { Widget, addResponseMessage, addUserMessage, setBadgeCount, deleteMessages } from 'react-chat-widget';
+import 'react-chat-widget/lib/styles.css';
+
+
 
 
 const id_master = idMaster()
@@ -60,7 +67,12 @@ class Vagas extends React.Component {
             open_spinner: false,
             principal_curriculo: false,
             vagas: [],
-            total_vagas: 0
+            total_vagas: 0,
+            open_chat: false,
+            logo: "",
+            channel_chat: null,
+            empresa_id: "",
+            perfil: { nome: "", foto_base64: "" }
 
         })
 
@@ -68,18 +80,44 @@ class Vagas extends React.Component {
 
     async componentDidMount() {
 
+
+        let channel_chat_open = socket.channel("chat:open");
+
+        channel_chat_open.join()
+            .receive("ok", resp => {
+
+                console.log("Bem vindo ao Chat", resp)
+            })
+            .receive("error", resp => {
+                console.log("Error Chat", resp)
+            })
+
+
+        channel_chat_open.on("chat_send:" + idMaster(), payload => {
+
+            addResponseMessage(payload.body.text);
+
+
+        })
+
+        this.obs.channel_chat = channel_chat_open
+
         let token = tokenMain()
 
         await init()
 
         let total = await get_length_vagas(token)
-        
+
         this.obs.total_vagas = Math.ceil(total.count / 10)
 
         this.getVagas()
         let res = await allEmpresas()
 
         this.obs.data_empresas = res.data
+
+        let resp = await get_perfil(token)
+
+        this.obs.perfil = resp[0]
 
 
     }
@@ -91,18 +129,54 @@ class Vagas extends React.Component {
 
     }
 
+    async handleChat(id) {
+
+        this.obs.empresa_id = id;
+
+        console.log(this.obs.empresa_id == "d508e1d5-c12d-4bb7-81f2-4ee3b97cacc3", "sssssss")
+
+        deleteMessages()
+        await VagasStore.handleGetChat(id, idMaster())
+
+        this.obs.open_chat = true
+
+        if (VagasStore.obs.chat_msg.length) {
+
+            this.obs.logo = VagasStore.obs.chat_msg[0].user.avatar
+            console.log(VagasStore.obs.chat_msg, "Mensagens")
+
+            VagasStore.obs.chat_msg.map(el => {
+
+                if (el.user._id == 1) {
+
+                    addUserMessage(el.text);
+
+                } else {
+
+                    addResponseMessage(el.text);
+
+                }
+
+            })
+
+            setBadgeCount(0)
+        }
+
+
+    }
+
     getVagas = async (new_data) => {
 
         this.obs.open_spinner = true
 
-    
+
         let token = tokenMain()
 
         // let res = await listVagas()
         await init()
         let res = await get_vagas(token, 10, 0)
 
-    
+
         //await VagasStore.handleGetVagas()
 
 
@@ -168,17 +242,13 @@ class Vagas extends React.Component {
 
         this.handleSetVagas(res)
 
-       
+
 
     }
 
-    handleSetVagas(res){
+    handleSetVagas(res) {
 
         let tmp = 0, array = [], array2 = [];
-
-        console.log(res, "resp")
-
-       
 
         if (Array.isArray(res)) {
 
@@ -197,11 +267,11 @@ class Vagas extends React.Component {
                 tmp++
             })
 
-            if(res.length < 5){
+            if (res.length < 5) {
                 array2.push(array)
             }
 
-            
+
             this.setState({ vagas: array2 })
 
         }
@@ -285,13 +355,54 @@ class Vagas extends React.Component {
         console.log(`active page is ${pageNumber}`);
         this.setState({ activePage: pageNumber });
     }
+    handleNewUserMessage = async (msg) => {
 
-    async handleChangePagination(page){
+        const message =
+        {
+
+            "message": {
+                "_id": uuidv4(), "createdAt": new Date(), "text": msg,
+                "user": { "_id": 1 },
+
+            },
+            "user_id": idMaster(),
+            "empresa_id": this.obs.empresa_id
+        }
+
+        let message_send = {
+            _id: uuidv4(),
+            text: msg,
+            createdAt: new Date(),
+            user: {
+                _id: uuidv4(),
+                name: 'Teste',
+                avatar: "data:image/png;base64," + this.state.foto_base64
+            }
+        }
+
+        insert_message(message).then(res => {
+
+
+        }).catch((err => {
+
+            console.log(err)
+
+        }))
+
+        console.log(this.obs.perfil.foto_base64)
+        console.log(this.obs.perfil.nome)
+
+        this.obs.channel_chat.push("chat_send:" + this.obs.empresa_id, { body: msg, id: idMaster(), avatar: this.obs.perfil.foto_base64, nome: this.obs.perfil.nome })
+
+
+    }
+
+    async handleChangePagination(page) {
 
         this.obs.open_spinner = true
 
         let token = tokenMain()
-      
+
         let res = await get_vagas(token, 10, page)
 
         this.handleSetVagas(res)
@@ -303,6 +414,22 @@ class Vagas extends React.Component {
         return (
 
             <>
+
+                {this.obs.open_chat &&
+
+                    <Widget
+                        profileAvatar={this.obs.logo}
+                        title="Chat Empresas"
+                        subtitle="Esclarecimentos de dúvidas"
+                        handleNewUserMessage={this.handleNewUserMessage}
+                        emojis={true}
+                        id={1}
+
+
+                    />
+
+                }
+
 
                 <Modal show={this.obs.open_spinner}>
 
@@ -428,6 +555,18 @@ class Vagas extends React.Component {
 
                                                     }
 
+
+                                                    &nbsp;
+                                                    <Mui.Button
+                                                        size="small"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        endIcon={<ChatIcon />}
+                                                        onClick={() => this.handleChat(post.empresa_id)}
+                                                    >
+                                                        Chat
+                                                    </Mui.Button>
+
                                                     &nbsp;
                                                     <Mui.IconButton size="small" onClick={() => this.handleRedirect("/vaga-details", post)} color="primary" aria-label="upload picture" component="span">
 
@@ -464,7 +603,7 @@ class Vagas extends React.Component {
 
                         <Form.Group>
 
-                            <Pagination count={this.obs.total_vagas} onChange={(event,value) => this.handleChangePagination(value - 1)} variant="outlined" color="primary" />
+                            <Pagination count={this.obs.total_vagas} onChange={(event, value) => this.handleChangePagination(value - 1)} variant="outlined" color="primary" />
                         </Form.Group>
 
                     </Form>

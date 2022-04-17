@@ -69,10 +69,11 @@ defmodule LotusWeb.ChatController do
                 }
             },
 
-            #%{"$limit" => 15},
-
+         
 
             %{"$sort" => %{"inserted_at" => -1}},
+
+            %{"$limit" => 10},
            
             %{"$project" => %{
 
@@ -85,10 +86,8 @@ defmodule LotusWeb.ChatController do
                 
             }
 
-          
 
-
-        ]) |> Enum.to_list
+        ]) |> Enum.to_list |> Enum.reverse
 
 
         id_user = ret |> hd |> Map.get("empresa_id")
@@ -131,9 +130,11 @@ defmodule LotusWeb.ChatController do
 
             }},
 
+            %{"$sort" => %{"inserted_at" => -1}},
+
             %{"$limit" => 10}
 
-        ]) |> Enum.to_list
+        ]) |> Enum.to_list |> Enum.reverse
         
         json(conn, %{"msg" => ret, "avatar" => avatar})
 

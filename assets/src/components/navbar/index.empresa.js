@@ -102,8 +102,6 @@ export default class NavbarEmpresa extends React.Component {
 
     channel_chat_open.on("chat_send:" + idMaster(), payload => {
 
-      console.log(payload.id)
-
       let tmp = false;
 
 
@@ -273,8 +271,6 @@ export default class NavbarEmpresa extends React.Component {
 
     }))
 
-
-    console.log(this.state.id_user, "sender")
 
     this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: ""})
 

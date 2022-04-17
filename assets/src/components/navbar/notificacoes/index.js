@@ -103,11 +103,16 @@ class Notificacoes extends React.Component {
 
                         NotificacoesStore.obs.notificacoes.map((el, index) => {
 
-                            let date = moment(new Date(el.updated_at)).format()
+                            let end = moment(new Date(el.updated_at)).add(3, 'hours').format()
+                            console.log("End", end)
+                            console.log("Now",moment(new Date()).add(3, 'hours'))
+                            console.log("fINAL:",  moment.duration(moment(new Date()).add(3, 'hours').diff(end)))
 
-                            var end = moment(date);
-                            var duration = moment.duration(moment(new Date()).diff(end));
+                          
+                            var duration = moment.duration(moment(new Date()).add(3, 'hours').diff(end));
                             var days = duration.asDays();
+                            var minutos = duration.asMinutes() / 10
+                           
 
                             return (
 
@@ -123,7 +128,7 @@ class Notificacoes extends React.Component {
                                             <span className="notification__category">{el.nome}</span>
                                             <p>
                                                 {el.notify}<br />
-                                                <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(duration.asMinutes()) < 60 ? Math.floor(duration.asMinutes()) + " min atrás" : Math.floor(duration.asHours()) + " hora atrás" : Math.floor(days) + " dia atrás"}´</span>
+                                                <span className="text-success text-semibold">`{Math.floor(days) === 0 ? Math.floor(minutos) < 60 ? Math.floor(minutos) + " min atrás" : Math.floor(duration.asHours() - 3) + " hora atrás" : Math.floor(days) + " dia atrás"}´</span>
 
                                             </p>
                                         </div>
