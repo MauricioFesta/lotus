@@ -107,6 +107,7 @@ defmodule LotusWeb.Router do
     post "/chat-get", ChatController, :get_message
     get "/get-messagens-by-id/:id", ChatController, :get_message_by_id
     put "/viewed-message/:id", ChatController, :viewed_message
+    post "/viewed-all", ChatController, :viewed_all_not_empresa
 
 
   end

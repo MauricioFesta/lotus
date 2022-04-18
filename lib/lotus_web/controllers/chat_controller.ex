@@ -9,6 +9,7 @@ defmodule LotusWeb.ChatController do
 
             params |> Map.put("empresa_id", id_user)
             |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800))
+            |> Map.put_new("viewed", false)
 
         else
 
@@ -28,6 +29,7 @@ defmodule LotusWeb.ChatController do
                 "user_id" => new_params["user_id"],
                 "viewed" => false,
                 "type" => "chat"
+               
             }
             
             case Mongo.update_one(:mongo, "notifications",%{"user_id" => new_params["user_id"]}, %{"$set" => data}, [upsert: true]) do
@@ -157,6 +159,18 @@ defmodule LotusWeb.ChatController do
     def viewed_message(conn, _params) do   
         
         json(conn, "ID Invalido")
+
+    end
+
+    def viewed_all_not_empresa(conn, %{"empresa_id" => empresa_id, "user_id" => user_id}) when not is_nil(empresa_id) and not is_nil(user_id) do
+        
+        case Mongo.update_many(:mongo, "chat", %{"empresa_id" => empresa_id, "user_id" => user_id, "message.user._id" => 2}, %{"$set" => %{"viewed" => true}}) do
+
+            {:ok, _} -> json(conn, "ok")
+
+            {:error, reason} -> json(conn, reason)
+
+        end
 
     end
 
