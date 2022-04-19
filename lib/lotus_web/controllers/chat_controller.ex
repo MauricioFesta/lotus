@@ -163,6 +163,7 @@ defmodule LotusWeb.ChatController do
     end
 
     def viewed_all_not_empresa(conn, %{"empresa_id" => empresa_id, "user_id" => user_id}) when not is_nil(empresa_id) and not is_nil(user_id) do
+
         
         case Mongo.update_many(:mongo, "chat", %{"empresa_id" => empresa_id, "user_id" => user_id, "message.user._id" => 2}, %{"$set" => %{"viewed" => true}}) do
 

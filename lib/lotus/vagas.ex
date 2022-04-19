@@ -238,8 +238,6 @@ defmodule Lotus.Vagas do
 
     def list_vagas(params) do  
         
-        params |> IO.inspect(label: "Parametros")
-
        new_params = cond do 
 
             is_binary(params["limit_pagged"]) -> 
@@ -255,12 +253,64 @@ defmodule Lotus.Vagas do
         pagged_limit = new_params["limit_pagged"]
     
         Mongo.aggregate(:mongo, "vagas", [
+            
             %{"$match" => %{"ativo" => true}},
             %{"$skip" => pagged_skip},
             %{"$limit" => pagged_limit},
-            %{"$sort" => %{"inserted_at" => -1}}
+            %{"$sort" => %{"inserted_at" => -1}},
+            %{"$lookup" => %{
+
+               "from" => "chat",
+               "localField" => "empresa_id",
+               "foreignField" => "empresa_id",
+               "let" => %{
+                   "user_id" => "$user_id",
+                   "empresa_id" => "$empresa_id"
+               },
+               "pipeline" => [
+
+                    %{"$match" => 
+                    
+                        %{"$expr" => 
+
+                            %{"$and" => [
+                                
+                                %{"$eq" => ["$viewed", false]},
+                                %{"$eq" => ["$message.user._id", 2]},
+                                %{"$eq" => ["$user_id", "ae5d1090-6ee9-410e-a68f-8641b8044cf1"]}
+                            ]}
+                    
+                        }
+                    },
+                    %{"$count" => "message"},
+                   
+               ],
+               "as" => "chat"
+
+            }},
+            %{"$project" => %{
+                "ativo" => 1,
+                "candidatos" => 1,
+                "cidade" => 1,
+                "descricao" => 1,
+                "disponibilidade_viajar" => 1,
+                "empresa_id" => 1,
+                "estado" => 1,
+                "imagem_base64" => 1,
+                "inserted_at" => 1,
+                "planejamento_futuro" => 1,
+                "ramo" => 1,
+                "titulo" => 1,
+                "updated_at" => 1,
+                "turno" => 1,
+                "valor" => 1,
+                "total" => %{"$arrayElemAt" => ["$chat", 0]}
         
-        ]) |> Enum.to_list 
+            }}
+        
+        ]) |> Enum.to_list |> IO.inspect
+
+
 
     end
 
