@@ -478,7 +478,7 @@ defmodule LotusWeb.VagasController do
 
             true ->
 
-                LotusRust.Back.building_cache()
+                #LotusRust.Back.building_cache()
 
                 {:ok, _pid} = Task.start(fn -> send_email_user_aprovado(email, "Parabéns!!!! Você foi aprovado em uma vaga, confira no app ;)") end)
                 {:ok, _pid} = Task.start(fn -> send_email_user_aprovado(email_empresa, "Você tem um novo candidato confira no app.") end)
@@ -536,7 +536,7 @@ defmodule LotusWeb.VagasController do
         case Vagas.notificacao_user(params["id"],params["id_vaga"], "#{nome} desaprovou seu currículo :(", false, email) do
             true ->
 
-                LotusRust.Back.building_cache()
+                #LotusRust.Back.building_cache()
 
                 case Xandra.execute(CassPID, cql, _params = []) do
                     {:ok, _} -> json(conn, %{Ok: true})

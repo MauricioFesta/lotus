@@ -251,13 +251,15 @@ defmodule Lotus.Vagas do
 
         pagged_skip = new_params["limit_pagged"] * new_params["pagged"]
         pagged_limit = new_params["limit_pagged"]
+
+        pagged_skip |> IO.inspect
     
-        Mongo.aggregate(:mongo, "vagas", [
+      Mongo.aggregate(:mongo, "vagas", [
             
             %{"$match" => %{"ativo" => true}},
+            %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
             %{"$limit" => pagged_limit},
-            %{"$sort" => %{"inserted_at" => -1}},
             %{"$lookup" => %{
 
                "from" => "chat",
@@ -288,6 +290,7 @@ defmodule Lotus.Vagas do
                "as" => "chat"
 
             }},
+           
             %{"$project" => %{
                 "ativo" => 1,
                 "candidatos" => 1,
@@ -308,9 +311,7 @@ defmodule Lotus.Vagas do
         
             }}
         
-        ]) |> Enum.to_list |> IO.inspect
-
-
+        ]) |> Enum.to_list 
 
     end
 

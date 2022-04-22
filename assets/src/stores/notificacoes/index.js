@@ -20,14 +20,12 @@ export class _NotificacoesStore {
     }
 
 
-    async handleGetMessageById(id) {
+    async handleGetMessageById(data) {
         this.obs.messagens_by_id = []
         
 
-        let resp = await api.get(`/api/get-messagens-by-id/${id}`)
+        let resp = await api.post(`/api/get-messagens-by-id/`, data)
         
-
-
         if(resp.data.msg.length){
 
             this.obs.messagens_by_id = [...resp.data.msg]

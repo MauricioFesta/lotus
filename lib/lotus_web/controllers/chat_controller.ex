@@ -98,7 +98,8 @@ defmodule LotusWeb.ChatController do
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])  
 
-        image = page |> Enum.to_list |> hd |> Map.get("foto_base64")
+        image = page |> Enum.to_list |> hd |> Map.get("foto_base64") || ""
+
 
        new_ret = ret |> Enum.map(fn x -> 
 
@@ -116,9 +117,9 @@ defmodule LotusWeb.ChatController do
     end
 
 
-    def get_message_by_id(conn, %{"id" => id}) when id != nil do
+    def get_message_by_id(conn, %{"empresa_id" => empresa_id, "user_id" => user_id}) when user_id != nil and empresa_id != nil  do
 
-        sql = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{id}'"
+        sql = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{user_id}'"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, sql, _params = [])  
 
@@ -128,7 +129,17 @@ defmodule LotusWeb.ChatController do
 
             %{"$match" => %{"$expr" => 
 
-                    %{"$eq" => ["$user_id", id]}
+                %{"$and" =>
+
+                    [
+
+                        %{"$eq" => ["$empresa_id", empresa_id]},
+                        %{"$eq" => ["$user_id", user_id]}
+                            
+                    ]
+                
+                }
+                   
 
             }},
 

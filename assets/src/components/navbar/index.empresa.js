@@ -178,7 +178,7 @@ export default class NavbarEmpresa extends React.Component {
     this.setState({ anchorElMobile: event.currentTarget })
   };
 
-  handleOpenChat = (id, id_notify) => {
+  handleOpenChat = (id, id_notify, id_empresa) => {
 
     NotificacoesStore.handlePutViewedNotify(id_notify).then(res => {
 
@@ -206,9 +206,19 @@ export default class NavbarEmpresa extends React.Component {
 
     deleteMessages()
 
-    NotificacoesStore.handleGetMessageById(id).then(res => {
+
+    let data = {
+      empresa_id: id_empresa,
+      user_id: id
+      
+    }
+
+
+    NotificacoesStore.handleGetMessageById(data).then(res => {
 
       this.setState({ id_user: id, logo: "data:image/png;base64," + NotificacoesStore.obs.avatar })
+
+      console.log("Total",  NotificacoesStore.obs.messagens_by_id.length)
 
       NotificacoesStore.obs.messagens_by_id.map(el => {
 
@@ -272,7 +282,7 @@ export default class NavbarEmpresa extends React.Component {
     }))
 
 
-    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: ""})
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: "", empresa_id: idMaster()})
 
 
   }

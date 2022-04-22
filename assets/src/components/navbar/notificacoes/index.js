@@ -8,7 +8,7 @@ import { Spinner } from "@blueprintjs/core";
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 import { NavItem, NavLink, Badge, Collapse, DropdownItem } from "shards-react";
-import { tokenMain } from '../../login/auth'
+import { idMaster, tokenMain } from '../../login/auth'
 // import init, { get_notificacoes } from "../../../wasm/pkg/wasm";
 import { NotificacoesStore } from '../../../stores/notificacoes'
 
@@ -118,7 +118,7 @@ class Notificacoes extends React.Component {
 
                                 <>
 
-                                    <DropdownItem onClick={() => this.state.openChat(el.user_id, el._id)}>
+                                    <DropdownItem onClick={() => this.state.openChat(el.user_id, el._id, idMaster())}>
                                         <div className="notification__icon-wrapper">
                                             <div className="notification__icon">
                                                 {/* <i className="material-icons">&#xE6E1;</i> */}
