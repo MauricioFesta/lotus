@@ -14,3 +14,10 @@
   2º db.auth("lotus", "[t46$uw4Kb^vF'u>Ms,65nB/;>`t}@5m")
 
 
+  #Indexes
+  
+  db.vagas.createIndex( { inserted_at:1 } )
+
+ 
+
+

@@ -254,20 +254,20 @@ defmodule Lotus.Vagas do
 
         pagged_skip |> IO.inspect
     
-      Mongo.aggregate(:mongo, "vagas", [
+    Mongo.aggregate(:mongo, "vagas", [
             
             %{"$match" => %{"ativo" => true}},
             %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
             %{"$limit" => pagged_limit},
+            
             %{"$lookup" => %{
-
                "from" => "chat",
                "localField" => "empresa_id",
                "foreignField" => "empresa_id",
                "let" => %{
                    "user_id" => "$user_id",
-                   "empresa_id" => "$empresa_id"
+                   #"empresa_id" => "$empresa_id"
                },
                "pipeline" => [
 
@@ -279,7 +279,7 @@ defmodule Lotus.Vagas do
                                 
                                 %{"$eq" => ["$viewed", false]},
                                 %{"$eq" => ["$message.user._id", 2]},
-                                %{"$eq" => ["$user_id", "ae5d1090-6ee9-410e-a68f-8641b8044cf1"]}
+                                %{"$eq" => ["$user_id", "$user_id"]}
                             ]}
                     
                         }
