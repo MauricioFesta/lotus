@@ -1,57 +1,21 @@
-UPDATE system.local SET cluster_name = 'lotus_' where key='local';
-
-CREATE ROLE lotus_root with SUPERUSER = true AND LOGIN = true and PASSWORD = 'nuOTbtK$B8G%#0I$w7@';
-
-
-"cd /cassandra/apache-cassandra-4.0.0/bin && ./cqlsh 137.184.9.0 -u lotus_root -p 'nuOTbtK$B8G%#0I$w7@'"
-
-
-
-
-db.createUser(
-  {
-    user: "lotus",
-    pwd: "nuOTbtK$B8G%#0I$w7@",
-    roles: [
-      { role: "userAdminAnyDatabase", db: "admin" },
-      { role: "readWriteAnyDatabase", db: "admin" }
-    ]
-  }
-)
-
-pineb28164@wolfpat.com
-
-Mongo.aggregate(:mongo, "vagas", [
-
-  %{"$match" => 
-                
-     %{"_id" => %{"$in" => [#BSON.ObjectId<61b31906b75d3a42eb883c8c>,#BSON.ObjectId<61bc3f0fb75d3a0d1d938a5c>]}}
-              
+%{
+  "casado" => "Não",
+  "cidade" => "Garibaldi",
+  "descricao" => "dddddddddddddddddd",
+  "ensinomedio" => "Não",
+  "experiencias" => "[{\"empresa\":\"ddddddd\",\"ano\":\"2222\"}]",
+  "fax" => "+33-333-33333333",
+  "filhos" => "Não",
+  "formacoes" => "[{\"curso\":\"ddddddddddddddd\",\"data\":\"4444\"}]",
+  "foto_curriculo" => %Plug.Upload{
+    content_type: "image/png",
+    filename: "download.png",
+    path: "/tmp/plug-1650/multipart-1650805587-276802984531496-4"
   },
-
-  %{"$skip" => pagged_skip},
-  %{"$limit" => pagged_limit},
-  %{"$sort" => %{"inserted_at" => -1}}
-        
-            
-]) |> Enum.to_list
-
-
-* 1st argument: not a nonempty list
-
-        :erlang.hd([])
-        (lotus 0.1.0) lib/lotus/vagas.ex:92: Lotus.Vagas.valor_maximo_vaga/0
-        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:607: LotusWeb.VagasController.valor_maximo_vaga/2
-        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:1: LotusWeb.VagasController.action/2
-        (lotus 0.1.0) lib/lotus_web/controllers/vagas_controller.ex:1: LotusWeb.VagasController.phoenix_controller_pipeline/2
-        (phoenix 1.5.9) lib/phoenix/router.ex:352: Phoenix.Router.__call__/2
-        (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.plug_builder_call/2
-        (lotus 0.1.0) lib/lotus_web/endpoint.ex:1: LotusWeb.Endpoint.call/2
-
-
-export: -e'SELECT * FROM lotus_dev.user' > /tmp/user.txt
-export: -e'SELECT * FROM lotus_dev.curriculos' > /tmp/curriculos.txt
-export: -e'SELECT * FROM lotus_dev.postagens' > /tmp/postagens.txt
-
-  export TOKEN_PASSWORD_LOTUS='nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H'
-  export TOKEN_LOGIN_LOTUS='v%5EMEfENbFpT8g!1m$jdPk7D8lj!KZjTg%is3ku$mus7&l%40tmOOPm*%lQCdJ6&tnd9QWV1gW3bWYfvJyIknO$75zUuM6RrKMm%L@hc0/#yNrF1AadqW6HgPiTAd6a1U9F#hLkVLB^dL9QlF4cTUxM24F'
+  "id" => "6f174f47-4e18-4c02-a0dd-3da7b301e52b",
+  "idade" => "33",
+  "nome" => "Mauricio Festa",
+  "rua" => "ddddddddddd",
+  "telefone" => "33333333333",
+  "telefone_fixo" => "33333333333"
+}

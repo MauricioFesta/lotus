@@ -118,9 +118,15 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "id")["id"]
 
-        params
+        params |> IO.inspect
 
         bol = valida_principal_curriculo(conn)
+
+        query = "SELECT email FROM lotus_dev.user WHERE id = '#{id_user}'"
+
+        {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, query, _params = [])
+
+        email = page |> Enum.to_list |> hd |> Map.get("email")
         
         base64_foto =  case is_binary(params["foto_curriculo"]) do   
 
@@ -130,7 +136,7 @@ defmodule LotusWeb.CurriculoController do
 
         end
 
-        path_pdf = Curriculo.generate_pdf(params)
+        path_pdf = Curriculo.generate_pdf(params, base64_foto, email)
 
         file64 =  File.read!(path_pdf ) |> Base.encode64();
 
