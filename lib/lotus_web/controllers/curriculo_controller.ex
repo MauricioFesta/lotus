@@ -114,7 +114,11 @@ defmodule LotusWeb.CurriculoController do
 
     end 
 
-    def cadastro_curriculo_form(conn, params) do   
+    def cadastro_curriculo_form(conn, params) do  
+        
+        new_p =  params |> Map.drop(["fmr_curso", "fmr_ano", "fmr_instituicao",
+        "exp_cargo","exp_ano","exp_empresa"
+        ])
 
         id_user =  get_session(conn, "id")["id"]
 
