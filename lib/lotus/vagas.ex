@@ -121,7 +121,7 @@ defmodule Lotus.Vagas do
                 ]}}
    
             },
-            
+            %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
             %{"$limit" =>pagged_limit}
         
@@ -179,6 +179,7 @@ defmodule Lotus.Vagas do
                 ]}}
 
             },
+            %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
             %{"$limit" =>pagged_limit}
         
@@ -194,15 +195,23 @@ defmodule Lotus.Vagas do
         
             cql = "SELECT vagas_aprovadas FROM lotus_dev.user WHERE id = '#{id_user["id"]}'"
 
+            cql |> IO.inspect
+
             {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, cql, _params = [])
 
             page = page |> Enum.to_list 
 
-            vagas_aprovadas = page |> hd |> Map.get("vagas_aprovadas")
+            vagas_aprovadas = page |> hd |> Map.get("vagas_aprovadas")  
 
             new_vagas = vagas_aprovadas |> Enum.map(fn x ->
             
-                x |> BSON.ObjectId.decode!
+                cond do 
+                    
+                    x != "" -> x |> BSON.ObjectId.decode!
+
+                    true -> :noop
+
+                end
             
             end)
             
@@ -218,10 +227,10 @@ defmodule Lotus.Vagas do
                     
 
                 },
-
+                %{"$sort" => %{"inserted_at" => -1}},
                 %{"$skip" => pagged_skip},
-                %{"$limit" => pagged_limit},
-                %{"$sort" => %{"inserted_at" => -1}}
+                %{"$limit" => pagged_limit}
+              
             
                 
             ]) |> Enum.to_list |> IO.inspect
