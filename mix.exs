@@ -59,12 +59,10 @@ defmodule Lotus.MixProject do
       {:bamboo_smtp, "~> 3.1.3"},
       {:bcrypt_elixir, "~> 2.3"},
       {:mongodb_driver, "~> 0.8.0"},
-      {:decimal, "~> 1.0", override: true}
+      {:decimal, "~> 1.0", override: true},
+      {:poison, "~> 5.0"}
   
-      
-
-
-    
+  
     ]
   end
 
