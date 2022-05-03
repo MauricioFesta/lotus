@@ -66,7 +66,7 @@ class CadastroLogin extends React.Component {
     else {
 
       this.obs.open_spinner = false
-      AppToaster.show({ message: "Erro ao validar o Login, tente novamente em uns instantes", intent: "warning" });
+      AppToaster.show({ message: "Código inválido, verifique novamente.", intent: "warning" });
 
     }
 

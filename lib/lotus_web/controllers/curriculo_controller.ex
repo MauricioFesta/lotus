@@ -25,7 +25,7 @@ defmodule LotusWeb.CurriculoController do
     end
  
     def cadastro_curriculo(conn, params) do 
-        conn |> IO.inspect
+        params["file"] |> IO.inspect
 
         id_user =  get_session(conn, "id")["id"] 
 
@@ -34,12 +34,24 @@ defmodule LotusWeb.CurriculoController do
         if upload = params["file"] do
 
             file64 =  File.read!(upload.path) |> Base.encode64();
+            
+           file___ = if params["file"].filename |> String.split(".") |> tl |> hd == "pdf" do
 
-            {:ok, file_name} = ExCrypto.generate_aes_key(:aes_128, :base64)
+                {:ok, file_name} = ExCrypto.generate_aes_key(:aes_128, :base64)
 
-            ret___ = Lotus.Py.get_image_pdf(upload.path,file_name)
-     
-            {:ok, file___} = ret___ |> hd |> File.read
+                ret___ = Lotus.Py.get_image_pdf(upload.path,file_name)
+         
+                {:ok, file___} = ret___ |> hd |> File.read
+
+                file___
+
+
+            else
+
+                ""
+            end
+
+        
 
         
             new_params = %{} |> Map.put(:file_base64,file64) 

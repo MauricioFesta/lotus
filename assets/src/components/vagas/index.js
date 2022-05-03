@@ -185,7 +185,11 @@ class Vagas extends React.Component {
 
         listVagasAprovadas().then(result => {
 
-            this.obs.candidato_vagas = [...result.data[0].vagas_aprovadas]
+            if(Array.isArray(result.data)){
+
+                this.obs.candidato_vagas = [...result.data[0].vagas_aprovadas]
+
+            }
 
         })
 

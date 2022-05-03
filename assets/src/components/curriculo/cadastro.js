@@ -110,7 +110,7 @@ class Cadastro extends React.Component {
               onClick={() => { $('#file').trigger('click') }}
 
             >
-              Currículo PDF
+              Currículo (ex: pdf, doc, docx)
             </Mui.Button>
           </Form.Group>
 
