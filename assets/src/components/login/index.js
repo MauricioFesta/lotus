@@ -19,6 +19,7 @@ import $ from "jquery";
 import { getUser } from "../../stores/login/api"
 import Cookies from 'universal-cookie';
 import { AppToaster } from "../../others/toaster"
+import history from "../../others/redirect";
 
 const cookies = new Cookies();
 var jwt = require('jsonwebtoken');
@@ -194,9 +195,11 @@ export default class Login extends React.Component {
       cookies.set('_A-T-T_L', token);
 
       if (!res.data.is_empresa) {
-        window.location.href = "/vagas"
+        history.push("/vagas")
+        //window.location.href = "/vagas"
       } else {
-        window.location.href = "/vagas/cadastradas"
+        history.push("/vagas/cadastradas")
+       // window.location.href = "/vagas/cadastradas"
       }
 
 
