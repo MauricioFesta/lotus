@@ -114,13 +114,14 @@ defmodule LotusWeb.CurriculoController do
 
        end
 
-    
+        {:ok, file_} = file___ 
+
         new_params = %{} |> Map.put(:file_base64,params["base64"]) 
         |> Map.put(:descricao,params["descricao"]) 
         |> Map.put(:id,params["id"]) 
         |> Map.put(:id_usuario, id_user)
         |> Map.put(:principal, bol)
-        |> Map.put(:image_base64, file___ |> Base.encode64)
+        |> Map.put(:image_base64, file_ |> Base.encode64)
     
 
         {:ok, data} = JSON.encode(new_params) 
