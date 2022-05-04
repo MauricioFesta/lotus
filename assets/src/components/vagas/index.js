@@ -101,13 +101,12 @@ class Vagas extends React.Component {
     
             })
 
+            this.obs.channel_chat = channel_chat_open
+
 
         }
 
 
-    
-
-        this.obs.channel_chat = channel_chat_open
 
         let token = tokenMain()
 
