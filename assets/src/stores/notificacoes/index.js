@@ -58,8 +58,7 @@ export class _NotificacoesStore {
         // let res = await get_notificacoes(token.toString())
         let resp = await api.get("/api/lista-notificacoes")
 
-        if (resp.data.length > 0) {
-
+        if (Array.isArray(resp)) {
 
             resp.data.map((el, index) => {
 
