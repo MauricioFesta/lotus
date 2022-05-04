@@ -19,13 +19,16 @@ defmodule LotusWeb.UserSocket do
   @impl true
   def connect(params, socket, _connect_info) do
 
-     case LotusWeb.Plugs.AuthSocket.call(params["x-nz-token"]) do
+    #  case LotusWeb.Plugs.AuthSocket.call(params["x-nz-token"]) do
 
-      true ->  {:ok, socket}
+    #   true ->  {:ok, socket}
 
-        _ ->   :error
+    #     _ ->   :error
 
-     end
+    #  end
+
+
+     {:ok, socket}
   
   end
 

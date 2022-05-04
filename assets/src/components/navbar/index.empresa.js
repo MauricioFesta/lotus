@@ -70,78 +70,75 @@ export default class NavbarEmpresa extends React.Component {
 
     this.setState({ foto_base64: resp.data[0].foto_base64 })
 
-    if (tokenMain()) {
-
-      let channel = socket.channel("notify:open");
-      let channel_chat_open = socket.channel("chat:open");
 
 
-      channel.join()
-        .receive("ok", resp => {
-
-          console.log("Bem vindo", resp)
-        })
-        .receive("error", resp => {
-          console.log("Error", resp)
-        })
-
-      channel_chat_open.join()
-        .receive("ok", resp => {
-
-          console.log("Bem vindo ao Chat", resp)
-        })
-        .receive("error", resp => {
-          console.log("Error Chat", resp)
-        })
+    let channel = socket.channel("notify:open");
+    let channel_chat_open = socket.channel("chat:open");
 
 
+    channel.join()
+      .receive("ok", resp => {
 
-      channel.on("notify_send:" + idMaster(), payload => {
-
-        alert(payload.body)
-
+        console.log("Bem vindo", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error", resp)
       })
 
-      channel_chat_open.on("chat_send:" + idMaster(), payload => {
+    channel_chat_open.join()
+      .receive("ok", resp => {
 
-        let tmp = false;
-
-
-        for (let i = 0; i < NotificacoesStore.obs.notificacoes.length; i++) {
-
-          if (NotificacoesStore.obs.notificacoes[i].user_id == payload.id) {
-            tmp = true
-            break;
-          }
-
-        }
-
-        if (!tmp) {
-
-          NotificacoesStore.obs.notificacoes.push({ nome: payload.nome, updated_at: new Date(), user_id: payload.id })
-          this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
-        }
-
-
-        if (this.state.id_user == payload.id) {
-
-          this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
-          addResponseMessage(payload.body);
-
-        }
-
-
-        //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
-
+        console.log("Bem vindo ao Chat", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error Chat", resp)
       })
 
-      this.setState({ channel_chat: channel_chat_open })
-
-    }
 
 
+    channel.on("notify_send:" + idMaster(), payload => {
+
+      alert(payload.body)
+
+    })
+
+    channel_chat_open.on("chat_send:" + idMaster(), payload => {
+
+      let tmp = false;
 
 
+      for (let i = 0; i < NotificacoesStore.obs.notificacoes.length; i++) {
+
+        if (NotificacoesStore.obs.notificacoes[i].user_id == payload.id) {
+          tmp = true
+          break;
+        }
+
+      }
+
+      if (!tmp) {
+
+        NotificacoesStore.obs.notificacoes.push({ nome: payload.nome, updated_at: new Date(), user_id: payload.id })
+        this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
+      }
+
+
+      if (this.state.id_user == payload.id) {
+
+        this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
+        addResponseMessage(payload.body);
+
+      }
+
+
+      //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
+
+    })
+
+    this.setState({ channel_chat: channel_chat_open })
+
+
+    
   }
 
   handleRedirect(path) {

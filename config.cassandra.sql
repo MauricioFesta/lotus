@@ -34,8 +34,9 @@ CREATE TABLE lotus_dev.curriculo(
    file_base64 text,
    image_base64 text,
    id_usuario varchar,
-   principal boolean,
+   principal boolean,q
    descricao text,
+   extencao text,
    inserted_at bigint,
    updated_at bigint,
 

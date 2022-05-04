@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import { isMobile } from 'react-device-detect';
-import {  tokenMain } from "../login/auth"
+import { tokenMain } from "../login/auth"
 
 
 
@@ -43,28 +43,26 @@ export default class Navbar extends React.Component {
 
   async componentDidMount() {
 
-    if(tokenMain()){
+    let channel = socket.channel("notify:open");
 
-      let channel = socket.channel("notify:open");
+    channel.join()
+      .receive("ok", resp => {
 
-      channel.join()
-        .receive("ok", resp => {
-  
-          console.log("Bem vindo", resp)
-        })
-        .receive("error", resp => {
-          console.log("Error", resp)
-        })
-  
-      channel.on("notify_send:" + idMaster(), payload => {
-        console.log("Chegouuu das empresa")
-        alert(payload.body)
-  
+        console.log("Bem vindo", resp)
+      })
+      .receive("error", resp => {
+        console.log("Error", resp)
       })
 
-    }
+    channel.on("notify_send:" + idMaster(), payload => {
+      console.log("Chegouuu das empresa")
+      alert(payload.body)
 
-  
+    })
+
+
+
+
   }
 
   handleRedirect(path) {
