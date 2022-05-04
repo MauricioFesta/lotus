@@ -85,21 +85,28 @@ defmodule LotusWeb.CurriculoController do
 
         {:ok, file_name} = ExCrypto.generate_aes_key(:aes_128, :base64)
 
-        new_file_name = file_name <> ".pdf"
+        #new_file_name = file_name
 
-        params["base64"] |> Base.decode64
-
-        File.write("/tmp/" <> new_file_name,params["base64"] |> Base.decode64)
+        # File.write("/tmp/" <> new_file_name,params["base64"] |> Base.decode64)
 
         file___  = case params["base64"] |> Base.decode64 do
 
-            {:ok, decoded} -> if File.write!("/tmp/" <> new_file_name, decoded) == :ok do
+            {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
 
-                ret___ = Lotus.Py.get_image_pdf("/tmp/" <> new_file_name, new_file_name)
+                ret___ = Lotus.Py.get_image_pdf("/tmp/" <> file_name, file_name)
 
-                {:ok, file___} = ret___ |> hd |> File.read
+                ret___ |> IO.inspect
+                
 
-                file___
+                cond do
+
+                    ret___ |> hd == "" -> ""
+
+                    true ->  {:ok, file___} = ret___ |> hd |> File.read
+
+
+                end
+
 
             end
             _->  ""
@@ -209,7 +216,7 @@ defmodule LotusWeb.CurriculoController do
      
         if page |> Enum.at(0) != nil do
 
-            file_name = UUID.uuid4() <> ".pdf"
+            file_name = UUID.uuid4()
 
            case Base.decode64(base) do
 
@@ -239,7 +246,7 @@ defmodule LotusWeb.CurriculoController do
      
         if page |> Enum.at(0) != nil do
 
-            file_name = UUID.uuid4() <> ".pdf"
+            file_name = UUID.uuid4()
 
            case Base.decode64(base) do
 

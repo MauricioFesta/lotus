@@ -80,25 +80,32 @@ class Vagas extends React.Component {
 
     async componentDidMount() {
 
+        if(tokenMain()){
 
-        let channel_chat_open = socket.channel("chat:open");
+            let channel_chat_open = socket.channel("chat:open");
 
-        channel_chat_open.join()
-            .receive("ok", resp => {
-
-                console.log("Bem vindo ao Chat", resp)
+            channel_chat_open.join()
+                .receive("ok", resp => {
+    
+                    console.log("Bem vindo ao Chat", resp)
+                })
+                .receive("error", resp => {
+                    console.log("Error Chat", resp)
+                })
+    
+    
+            channel_chat_open.on("chat_send:" + idMaster(), payload => {
+    
+                addResponseMessage(payload.body.text);
+    
+    
             })
-            .receive("error", resp => {
-                console.log("Error Chat", resp)
-            })
 
 
-        channel_chat_open.on("chat_send:" + idMaster(), payload => {
-
-            addResponseMessage(payload.body.text);
+        }
 
 
-        })
+    
 
         this.obs.channel_chat = channel_chat_open
 

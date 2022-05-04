@@ -70,70 +70,78 @@ export default class NavbarEmpresa extends React.Component {
 
     this.setState({ foto_base64: resp.data[0].foto_base64 })
 
-    let channel = socket.channel("notify:open");
-    let channel_chat_open = socket.channel("chat:open");
+    if (tokenMain()) {
+
+      let channel = socket.channel("notify:open");
+      let channel_chat_open = socket.channel("chat:open");
 
 
-    channel.join()
-      .receive("ok", resp => {
+      channel.join()
+        .receive("ok", resp => {
 
-        console.log("Bem vindo", resp)
+          console.log("Bem vindo", resp)
+        })
+        .receive("error", resp => {
+          console.log("Error", resp)
+        })
+
+      channel_chat_open.join()
+        .receive("ok", resp => {
+
+          console.log("Bem vindo ao Chat", resp)
+        })
+        .receive("error", resp => {
+          console.log("Error Chat", resp)
+        })
+
+
+
+      channel.on("notify_send:" + idMaster(), payload => {
+
+        alert(payload.body)
+
       })
-      .receive("error", resp => {
-        console.log("Error", resp)
-      })
 
-    channel_chat_open.join()
-      .receive("ok", resp => {
+      channel_chat_open.on("chat_send:" + idMaster(), payload => {
 
-        console.log("Bem vindo ao Chat", resp)
-      })
-      .receive("error", resp => {
-        console.log("Error Chat", resp)
-      })
+        let tmp = false;
 
 
+        for (let i = 0; i < NotificacoesStore.obs.notificacoes.length; i++) {
 
-    channel.on("notify_send:" + idMaster(), payload => {
+          if (NotificacoesStore.obs.notificacoes[i].user_id == payload.id) {
+            tmp = true
+            break;
+          }
 
-      alert(payload.body)
-
-    })
-
-    channel_chat_open.on("chat_send:" + idMaster(), payload => {
-
-      let tmp = false;
-
-
-      for (let i = 0; i < NotificacoesStore.obs.notificacoes.length; i++) {
-
-        if (NotificacoesStore.obs.notificacoes[i].user_id == payload.id) {
-          tmp = true
-          break;
         }
 
-      }
+        if (!tmp) {
 
-      if (!tmp) {
-
-        NotificacoesStore.obs.notificacoes.push({ nome: payload.nome, updated_at: new Date(), user_id: payload.id })
-        this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
-      }
+          NotificacoesStore.obs.notificacoes.push({ nome: payload.nome, updated_at: new Date(), user_id: payload.id })
+          this.setState({ qtd_notify: NotificacoesStore.obs.notificacoes.length })
+        }
 
 
-      if (this.state.id_user == payload.id) {
+        if (this.state.id_user == payload.id) {
 
-        this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
-        addResponseMessage(payload.body);
+          this.setState({ id_user: payload.id, logo: "data:image/png;base64," + payload.avatar })
+          addResponseMessage(payload.body);
 
-      }
+        }
 
 
-      //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
+        //channel_chat_open.push("chat_send:" + "1111111111", { body: "verdade", id: "ddd" })
 
-    })
+      })
 
-    this.setState({ channel_chat: channel_chat_open })
+      this.setState({ channel_chat: channel_chat_open })
+
+    }
+
+
+
+
   }
 
   handleRedirect(path) {
@@ -210,7 +218,7 @@ export default class NavbarEmpresa extends React.Component {
     let data = {
       empresa_id: id_empresa,
       user_id: id
-      
+
     }
 
 
@@ -218,7 +226,7 @@ export default class NavbarEmpresa extends React.Component {
 
       this.setState({ id_user: id, logo: "data:image/png;base64," + NotificacoesStore.obs.avatar })
 
-      console.log("Total",  NotificacoesStore.obs.messagens_by_id.length)
+      console.log("Total", NotificacoesStore.obs.messagens_by_id.length)
 
       NotificacoesStore.obs.messagens_by_id.map(el => {
 
@@ -282,7 +290,7 @@ export default class NavbarEmpresa extends React.Component {
     }))
 
 
-    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: "", empresa_id: idMaster()})
+    this.state.channel_chat.push("chat_send:" + this.state.id_user, { body: message_send, id: this.state.id_user, avatar: "", nome: "", empresa_id: idMaster() })
 
 
   }

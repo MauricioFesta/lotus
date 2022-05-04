@@ -42,22 +42,28 @@ export default class Navbar extends React.Component {
 
   async componentDidMount() {
 
-    let channel = socket.channel("notify:open");
+    if(tokenMain()){
 
-    channel.join()
-      .receive("ok", resp => {
+      let channel = socket.channel("notify:open");
 
-        console.log("Bem vindo", resp)
+      channel.join()
+        .receive("ok", resp => {
+  
+          console.log("Bem vindo", resp)
+        })
+        .receive("error", resp => {
+          console.log("Error", resp)
+        })
+  
+      channel.on("notify_send:" + idMaster(), payload => {
+        console.log("Chegouuu das empresa")
+        alert(payload.body)
+  
       })
-      .receive("error", resp => {
-        console.log("Error", resp)
-      })
 
-    channel.on("notify_send:" + idMaster(), payload => {
-      console.log("Chegouuu das empresa")
-      alert(payload.body)
+    }
 
-    })
+  
   }
 
   handleRedirect(path) {

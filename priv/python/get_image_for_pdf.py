@@ -4,28 +4,38 @@ import sys
 
 path_pdf = sys.argv[1]
 filename = sys.argv[2]
+img = "false"
 
-pdf_file = fitz.open(path_pdf)
 
-number_of_pages = len(pdf_file)
-image__ = ""
+try:
+     
+   if path_pdf.find(".pdf") != -1:
 
-for current_page_index in range(number_of_pages):
+    pdf_file = fitz.open(path_pdf)
 
-  for img_index,img in enumerate(pdf_file.getPageImageList(current_page_index)):
-        xref = img[0]
-        image = fitz.Pixmap(pdf_file, xref)
-      
-        if image.n < 5:        
-            image.writePNG("{}.png".format(filename))
-            image__ = "{}.png".format(filename)
-      
-        else:                
-            new_image = fitz.Pixmap(fitz.csRGB, image)
-            new_image.writePNG("{}.png".foramt(filename))
-            image__ = "{}.png".format(filename)
+    number_of_pages = len(pdf_file)
+    image__ = ""
 
-print(image__)
+    for current_page_index in range(number_of_pages):
 
-    
+        for img_index,img in enumerate(pdf_file.getPageImageList(current_page_index)):
+                xref = img[0]
+                image = fitz.Pixmap(pdf_file, xref)
+            
+                if image.n < 5:        
+                    image.writePNG("{}.png".format(filename))
+                    image__ = "{}.png".format(filename)
+            
+                else:                
+                    new_image = fitz.Pixmap(fitz.csRGB, image)
+                    new_image.writePNG("{}.png".foramt(filename))
+                    image__ = "{}.png".format(filename)
+
+        print(image__)
+    else:
+        print(img) 
+
+except:
+  print(img) 
+
   
