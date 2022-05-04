@@ -58,8 +58,6 @@ export default class Curriculo extends React.Component {
 
     let res = await get_curriculos(token)
 
-    console.log(res," Resposta")
-
     if (res.length > 0) {
       this.setState({ showItems: true, dataCurriculo: res })
     }

@@ -30,6 +30,8 @@ defmodule LotusWeb.CurriculoController do
         id_user =  get_session(conn, "id")["id"] 
 
         bol = valida_principal_curriculo(conn)
+
+        ext = params["file"].filename |> String.split(".") |> tl |> hd
         
         if upload = params["file"] do
 
@@ -51,14 +53,13 @@ defmodule LotusWeb.CurriculoController do
                 ""
             end
 
-        
-
-        
+    
             new_params = %{} |> Map.put(:file_base64,file64) 
             |> Map.put(:descricao,params["descricao"]) 
             |> Map.put(:id,params["id"]) 
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
+            |> Map.put(:extencao, ext)
             |> Map.put(:image_base64, file___ |> Base.encode64)
             |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
             |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
@@ -209,10 +210,13 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "id")["id"]
 
-        statement = "SELECT file_base64 FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
+        statement = "SELECT file_base64, extencao FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
+        {:ok, ext} = page |> Enum.at(0) |> Map.fetch("extencao")
+
+        ext |> IO.inspect
      
         if page |> Enum.at(0) != nil do
 
@@ -220,12 +224,12 @@ defmodule LotusWeb.CurriculoController do
 
            case Base.decode64(base) do
 
-                {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
-    
+                {:ok, decoded} -> if File.write!("/tmp/#{file_name}.#{ext}", decoded) == :ok do
+                    
                     conn 
                         |> put_resp_content_type("application/*")
-                        |> put_resp_header("content-disposition", "attachment; filename=\"#{file_name}\"")
-                        |> send_resp(200, File.read!("/tmp/#{file_name}"))
+                        |> put_resp_header("content-disposition", "attachment; filename=\"#{file_name}.#{ext}\"")
+                        |> send_resp(200,File.read!("/tmp/#{file_name}.#{ext}"))
                    
                 end
                 _-> json(conn, "Error")

@@ -22,17 +22,17 @@ export class _NotificacoesStore {
 
     async handleGetMessageById(data) {
         this.obs.messagens_by_id = []
-        
+
 
         let resp = await api.post(`/api/get-messagens-by-id/`, data)
-        
-        if(resp.data.msg.length){
+
+        if (resp.data.msg.length) {
 
             this.obs.messagens_by_id = [...resp.data.msg]
             this.obs.avatar = resp.data.avatar
 
         }
-    
+
 
     }
 
@@ -42,7 +42,7 @@ export class _NotificacoesStore {
 
         let resp = await api.put(`/api/viewed-message/${id}`)
 
-        if(resp.data == "ok"){
+        if (resp.data == "ok") {
 
             this.obs.status200 = true
 
@@ -58,29 +58,34 @@ export class _NotificacoesStore {
         // let res = await get_notificacoes(token.toString())
         let resp = await api.get("/api/lista-notificacoes")
 
-        console.log(resp.data, "Resposta")
-
-        resp.data.map((el, index) => {
+        if (resp.data.length > 0) {
 
 
-            //let json = JSON.parse(el)
-
-            let date = el.updated_at
-
-            var end = moment(date);
-            var duration = moment.duration(moment(new Date()).diff(end));
-            var days = duration.asDays();
-
-            if (Math.floor(days) <= 6) {
+            resp.data.map((el, index) => {
 
 
-                this.obs.notificacoes.push(el)
-                
+                //let json = JSON.parse(el)
 
-            }
+                let date = el.updated_at
 
-        })
-            
+                var end = moment(date);
+                var duration = moment.duration(moment(new Date()).diff(end));
+                var days = duration.asDays();
+
+                if (Math.floor(days) <= 6) {
+
+
+                    this.obs.notificacoes.push(el)
+
+
+                }
+
+            })
+
+
+        }
+
+
 
         // console.log(this.obs.notificacoes.length, "hereeee")
 
