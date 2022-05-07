@@ -91,7 +91,6 @@ defmodule LotusWeb.ChatController do
 
         ]) |> Enum.to_list |> Enum.reverse
 
-
         id_user = ret |> hd |> Map.get("empresa_id")
 
         query = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}'"

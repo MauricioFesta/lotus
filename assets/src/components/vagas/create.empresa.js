@@ -9,6 +9,7 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import { postCadastroVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { v4 as uuidv4 } from 'uuid';
+import socket from '../socket';
 
 const currencyConfig = {
     locale: "pt-BR",
@@ -83,6 +84,21 @@ export default class CreateEmpresa extends React.Component {
 
         if (res.data.Ok) {
             AppToaster.show({ message: "Vaga cadastrada com sucesso!", intent: "success" });
+
+            let channel = socket.channel("vagas:open");
+
+            channel.join()
+                .receive("ok", resp => {
+    
+                    console.log("Bem vindo", resp)
+                })
+                .receive("error", resp => {
+                    console.log("Error", resp)
+                })
+    
+    
+            channel.push("vagas_send:", {})
+    
 
         } else {
             AppToaster.show({ message: "Não foi possível cadastrar a vaga", intent: "danger" });

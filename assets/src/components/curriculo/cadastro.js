@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { AppToaster } from "../../others/toaster"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "../navbar/index"
-import { postCurriculo,postCurriculoForm } from "../../stores/curriculo/api"
+import { postCurriculo, postCurriculoForm } from "../../stores/curriculo/api"
 import $ from "jquery";
 import { v4 as uuidv4 } from 'uuid';
 import * as Mui from '@material-ui/core';
@@ -11,6 +11,9 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CadastroNotPDF from './cadastro_not_pdf'
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
+import { idMaster } from '../login/auth';
+import socket from '../socket';
+import init, { get_curriculos } from "../../wasm/pkg/wasm";
 
 
 
@@ -22,12 +25,12 @@ class Cadastro extends React.Component {
 
     this.obs = observable({
 
-      isLoading: {bol: false}
+      isLoading: { bol: false }
 
-  })
+    })
 
-  this.cadastrar = this.cadastrar.bind(this);
-  
+    this.cadastrar = this.cadastrar.bind(this);
+
   }
 
   cadastrar = async (form) => {
@@ -38,7 +41,7 @@ class Cadastro extends React.Component {
 
     let file = document.querySelector('#file');
 
-  
+
 
     if (file.files.length > 0) {
 
@@ -58,18 +61,43 @@ class Cadastro extends React.Component {
         config
       }
 
-      
+
 
       res = await postCurriculo(json)
 
-    }else{
-    
+    } else {
+
       res = await postCurriculoForm(form)
     }
 
     if (res.status === 200) {
 
       AppToaster.show({ message: "Currículo cadastrada com sucesso!", intent: "success" });
+
+      let channel = socket.channel("curriculo:open");
+
+      channel.join()
+        .receive("ok", resp => {
+
+          console.log("Socket curriculo", resp)
+        })
+        .receive("error", resp => {
+          console.log("Error Socket curriculo", resp)
+        })
+        
+
+
+      channel.push("curriculo_send:" + idMaster(), {})
+
+
+      channel.on("curriculo_send:" + idMaster(), payload => {
+
+        console.log(idMaster(),"id master")
+        console.log("Curriculo socket")
+
+
+
+      })
 
     } else {
       AppToaster.show({ message: "Não foi possível cadastrar o currículo", intent: "danger" });
@@ -78,7 +106,7 @@ class Cadastro extends React.Component {
     this.obs.isLoading.bol = false
   }
 
-  
+
   getMin() {
 
     let date = new Date();
