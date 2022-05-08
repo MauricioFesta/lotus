@@ -399,10 +399,8 @@ class Vagas extends React.Component {
 
         }))
 
-        console.log(this.obs.perfil.foto_base64)
-        console.log(this.obs.perfil.nome)
 
-        this.obs.channel_chat.push("chat_send:" + this.obs.empresa_id, { body: msg, id: idMaster(), avatar: this.obs.perfil.foto_base64, nome: this.obs.perfil.nome })
+        this.obs.channel_chat.push("chat_send:" + this.obs.empresa_id, { body: msg, id: idMaster(), avatar: this.obs.perfil.foto_base64, nome: this.obs.perfil.nome, empresa_id:  this.obs.empresa_id})
 
 
     }

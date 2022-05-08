@@ -58,7 +58,9 @@ export class _NotificacoesStore {
         // let res = await get_notificacoes(token.toString())
         let resp = await api.get("/api/lista-notificacoes")
 
-        if (Array.isArray(resp)) {
+        console.log(resp, "Resposta")
+
+        if (Array.isArray(resp.data)) {
 
             resp.data.map((el, index) => {
 
@@ -70,6 +72,8 @@ export class _NotificacoesStore {
                 var end = moment(date);
                 var duration = moment.duration(moment(new Date()).diff(end));
                 var days = duration.asDays();
+
+                console.log("Dias", days)
 
                 if (Math.floor(days) <= 6) {
 

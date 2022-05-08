@@ -95,7 +95,7 @@ export default class NavbarEmpresa extends React.Component {
       })
 
 
-
+      console.log(idMaster(), "ID empresa")
     channel.on("notify_send:" + idMaster(), payload => {
 
       alert(payload.body)
@@ -103,6 +103,8 @@ export default class NavbarEmpresa extends React.Component {
     })
 
     channel_chat_open.on("chat_send:" + idMaster(), payload => {
+
+      console.log("Entrou chat")
 
       let tmp = false;
 
