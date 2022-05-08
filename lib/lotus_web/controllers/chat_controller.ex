@@ -91,26 +91,34 @@ defmodule LotusWeb.ChatController do
 
         ]) |> Enum.to_list |> Enum.reverse
 
-        id_user = ret |> hd |> Map.get("empresa_id")
+        new_ret = cond do 
 
-        query = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}'"
+            ret |> length > 0 -> 
 
-        {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])  
+                id_user = ret |> hd |> Map.get("empresa_id")
 
-        image = page |> Enum.to_list |> hd |> Map.get("foto_base64") || ""
-
-
-       new_ret = ret |> Enum.map(fn x -> 
-
-  
-            user = x["message"]["user"] |> Map.put_new("avatar","data:image/png;base64,"<> image)
-
-            msg = x["message"] |> Map.put("user", user)
-            
-            msg
+                query = "SELECT foto_base64 FROM lotus_dev.user WHERE id = '#{id_user}'"
         
-        end)
+                {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, query, _params = [])  
+        
+                image = page |> Enum.to_list |> hd |> Map.get("foto_base64") || ""
+        
+        
+               ret |> Enum.map(fn x -> 
+        
+                    user = x["message"]["user"] |> Map.put_new("avatar","data:image/png;base64,"<> image)
+        
+                    msg = x["message"] |> Map.put("user", user)
+                    
+                    msg
+                
+                end)
+        
+            true -> []
 
+        end
+
+       
         json(conn, new_ret)
 
     end
