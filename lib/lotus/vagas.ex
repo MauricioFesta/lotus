@@ -433,10 +433,10 @@ defmodule Lotus.Vagas do
                 ]}
 
             }},
-
+            %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
-            %{"$limit" => pagged_limit},
-            %{"$sort" => %{"inserted_at" => -1}}
+            %{"$limit" => pagged_limit}
+            
         
         ]) |> Enum.to_list 
     
@@ -469,10 +469,10 @@ defmodule Lotus.Vagas do
                 ]}
 
             }},
-
+            %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
-            %{"$limit" => pagged_limit},
-            %{"$sort" => %{"inserted_at" => -1}}
+            %{"$limit" => pagged_limit}
+            
         
         ]) |> Enum.to_list 
     
