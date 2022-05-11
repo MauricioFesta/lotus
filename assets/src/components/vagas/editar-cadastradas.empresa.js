@@ -9,6 +9,7 @@ import history from "../../others/redirect";
 import { updateVaga } from "../../stores/vagas/api"
 import { AppToaster } from "../../others/toaster"
 import { makeAutoObservable, autorun } from "mobx"
+import {SocketStore} from '../../stores/socket'
 
 
 
@@ -122,6 +123,10 @@ class VagasEmpresaEditar extends React.Component {
         if (resp.data.ok) {
 
             AppToaster.show({ message: "Vaga alterada com sucesso!", intent: "success" });
+            if(!SocketStore.obs.is_load){
+                SocketStore.load()
+            }
+            SocketStore.obs.channel_vagas.push("vagas_send:", {})
 
         } else {
 

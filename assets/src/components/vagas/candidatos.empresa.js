@@ -8,8 +8,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { confirmAlert } from 'react-confirm-alert';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import { AppToaster } from "../../others/toaster"
-import socket from '../socket';
-import { tokenMain} from '../login/auth'
+import { tokenMain } from '../login/auth'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
@@ -25,6 +24,7 @@ import {
     Button
 } from "shards-react";
 import init, { list_candidatos_vagas } from "../../wasm/pkg/wasm";
+import {SocketStore} from '../../stores/socket'
 
 
 
@@ -33,6 +33,9 @@ const styleButomPrincipal = {
     color: '#32CD32',
 
 };
+
+
+
 
 
 class CandidatosEmpresa extends React.Component {
@@ -54,6 +57,11 @@ class CandidatosEmpresa extends React.Component {
     }
 
     async componentDidMount() {
+
+        if(!SocketStore.obs.is_load){
+
+            SocketStore.load()
+        }
 
         let url = window.location.pathname.split("/")
 
@@ -156,16 +164,6 @@ class CandidatosEmpresa extends React.Component {
 
         const desaProvar = async (id) => {
 
-            let channel = socket.channel("notify:open");
-
-            channel.join()
-                .receive("ok", resp => {
-
-                    console.log("Bem vindo", resp)
-                })
-                .receive("error", resp => {
-                    console.log("Error", resp)
-                })
 
             let data = {
 
@@ -176,8 +174,8 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Você foi desaprovado em uma vaga que estava apovada, :(, mas não fique triste melhores oportunidades virão!" })
-
+                SocketStore.obs.channel_notfy.push("notify_send:" + id, { body: "Você foi desaprovado em uma vaga que estava apovada, :(, mas não fique triste melhores oportunidades virão!" })
+                SocketStore.obs.channel_vagas.push("vagas_send:", {})
                 this.componentDidMount()
 
                 AppToaster.show({ message: "Candidato desaprovado com sucesso", intent: "success" });
@@ -193,18 +191,6 @@ class CandidatosEmpresa extends React.Component {
         const aprovar = async (id, bol) => {
 
 
-
-            let channel = socket.channel("notify:open");
-
-            channel.join()
-                .receive("ok", resp => {
-
-                    console.log("Bem vindo", resp)
-                })
-                .receive("error", resp => {
-                    console.log("Error", resp)
-                })
-
             let data = {
                 boolean: bol,
                 id_vaga: this.obs.id_vaga,
@@ -215,8 +201,8 @@ class CandidatosEmpresa extends React.Component {
 
             if (res.data.Ok) {
 
-                channel.push("notify_send:" + id, { body: "Parabéns você foi aprovado em uma vaga, verifique na aba VAGA e filtre por aprovadas." })
-
+                SocketStore.obs.channel_notfy.push("notify_send:" + id, { body: "Parabéns você foi aprovado em uma vaga, verifique na aba VAGA e filtre por aprovadas." })
+                SocketStore.obs.channel_vagas.push("vagas_send:", {})
                 this.componentDidMount()
 
                 AppToaster.show({ message: "Candidato aprovado com sucesso", intent: "success" });

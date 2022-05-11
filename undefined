@@ -1,21 +1,2 @@
-%{
-  "casado" => "Não",
-  "cidade" => "Garibaldi",
-  "descricao" => "dddddddddddddddddd",
-  "ensinomedio" => "Não",
-  "experiencias" => "[{\"empresa\":\"ddddddd\",\"ano\":\"2222\"}]",
-  "fax" => "+33-333-33333333",
-  "filhos" => "Não",
-  "formacoes" => "[{\"curso\":\"ddddddddddddddd\",\"data\":\"4444\"}]",
-  "foto_curriculo" => %Plug.Upload{
-    content_type: "image/png",
-    filename: "download.png",
-    path: "/tmp/plug-1650/multipart-1650805587-276802984531496-4"
-  },
-  "id" => "6f174f47-4e18-4c02-a0dd-3da7b301e52b",
-  "idade" => "33",
-  "nome" => "Mauricio Festa",
-  "rua" => "ddddddddddd",
-  "telefone" => "33333333333",
-  "telefone_fixo" => "33333333333"
-}
+1º ao cadastrar o curriculo não libera para se candidatar para vaga
+2º chamar atualizar vagas quando empresa aprova o ususario
