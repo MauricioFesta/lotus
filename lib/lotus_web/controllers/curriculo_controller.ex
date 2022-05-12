@@ -94,21 +94,29 @@ defmodule LotusWeb.CurriculoController do
 
             {:ok, decoded} -> if File.write!("/tmp/" <> file_name, decoded) == :ok do
 
-                ret___ = Lotus.Py.get_image_pdf("/tmp/" <> file_name, file_name)
+                cond do 
 
-                ret___ |> IO.inspect
-                
+                    params["extensao"] != "pdf" -> "/tmp/#{file_name}" |> File.read
 
-                cond do
+                    true ->
 
-                    ret___ |> hd == "" -> ""
+                        ret___ = Lotus.Py.get_image_pdf("/tmp/" <> file_name, file_name)
 
-                    true ->  {:ok, file___} = ret___ |> hd |> File.read
-
-
+                        ret___ |> IO.inspect
+                        
+        
+                        cond do
+        
+                            ret___ |> hd == "" -> ""
+        
+                            true ->  {:ok, file___} = ret___ |> hd |> File.read
+        
+        
+                        end
+        
                 end
 
-
+               
             end
             _->  ""
 
