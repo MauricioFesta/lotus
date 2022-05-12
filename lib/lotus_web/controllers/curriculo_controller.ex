@@ -121,6 +121,7 @@ defmodule LotusWeb.CurriculoController do
         |> Map.put(:id,params["id"]) 
         |> Map.put(:id_usuario, id_user)
         |> Map.put(:principal, bol)
+        |> Map.put(:extencao, params["extensao"])
         |> Map.put(:image_base64, file_ |> Base.encode64)
     
 
@@ -216,8 +217,6 @@ defmodule LotusWeb.CurriculoController do
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
         {:ok, ext} = page |> Enum.at(0) |> Map.fetch("extencao")
-
-        ext |> IO.inspect
      
         if page |> Enum.at(0) != nil do
 
