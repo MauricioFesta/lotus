@@ -5,7 +5,7 @@
             "Erlang Version": 24.0,
             "Cassandra Version": 4.0,
             "Python version": 3,
-            "Node Version": "10.19.0",
+            "Node Version": "15.8.0",
             "rustc": "1.55.0",
             "redis": "6.2.5",
             "npm": true,
