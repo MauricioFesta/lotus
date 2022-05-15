@@ -1,7 +1,7 @@
 import React from 'react';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
-import "./css/index.scss"
+import "./css/index.css"
 import history from "../../others/redirect";
 import socket from '../socket';
 import Cookies from 'universal-cookie';
@@ -29,7 +29,7 @@ import { insert_message } from '../../stores/nav/api'
 import { getPerfil } from '../../stores/perfil/api'
 import { tokenMain } from '../login/auth'
 
-require("./css/index.scss")
+require("./css/index.css")
 
 const cookies = new Cookies();
 

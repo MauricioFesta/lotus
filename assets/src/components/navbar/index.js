@@ -1,5 +1,5 @@
 import React from 'react';
-import "./css/index.scss"
+import "./css/index.css"
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import history from "../../others/redirect";
@@ -29,7 +29,7 @@ import { tokenMain } from "../login/auth"
 
 
 const cookies = new Cookies();
-require("./css/index.scss")
+require("./css/index.css")
 
 export default class Navbar extends React.Component {
 

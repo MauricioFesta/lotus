@@ -13,7 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@blueprintjs/core/lib/css/blueprint.css"
 import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 
-require("./css/index.scss")
+require("./css/index.css")
 
 class Postagens extends React.Component {
 

@@ -23,7 +23,7 @@ import VagasFechadoEmpresa from "./components/vagas/index-fechado.empresa"
 import PostagensEmpresa from "./components/postagens/index.empresa"
 import PostEditEmpresa from "./components/postagens/edit.empresa"
 import Politica from "./components/politica-privacidade"
-import "./css/style.scss"
+import "./css/style.css"
 
 
 

@@ -49,7 +49,7 @@ import 'react-chat-widget/lib/styles.css';
 
 const id_master = idMaster()
 
-require("./css/index.scss")
+require("./css/index.css")
 
 
 class Vagas extends React.Component {
