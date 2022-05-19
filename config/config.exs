@@ -7,8 +7,6 @@
 # General application configuration
 use Mix.Config
 
-config :lotus,
-  ecto_repos: [Lotus.Repo]
 
 # Tarefas agendadas
 config :lotus, Lotus.Scheduler,

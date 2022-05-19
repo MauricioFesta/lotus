@@ -16,26 +16,26 @@ defmodule Lotus.DataCase do
 
   use ExUnit.CaseTemplate
 
-  using do
-    quote do
-      alias Lotus.Repo
+  # using do
+  #   quote do
+  #     #alias Lotus.Repo
 
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query
-      import Lotus.DataCase
-    end
-  end
+  #     import Ecto
+  #     import Ecto.Changeset
+  #     import Ecto.Query
+  #     import Lotus.DataCase
+  #   end
+  # end
 
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lotus.Repo)
+  # setup tags do
+  #   :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lotus.Repo)
 
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Lotus.Repo, {:shared, self()})
-    end
+  #   unless tags[:async] do
+  #     Ecto.Adapters.SQL.Sandbox.mode(Lotus.Repo, {:shared, self()})
+  #   end
 
-    :ok
-  end
+  #   :ok
+  # end
 
   @doc """
   A helper that transforms changeset errors into a map of messages.

@@ -1,6 +1,5 @@
 defmodule Lotus.Cron do
-    use Ecto.Schema
-    import Ecto.Changeset
+    
     alias Lotus.Py
     alias LotusWeb.VagasController
 

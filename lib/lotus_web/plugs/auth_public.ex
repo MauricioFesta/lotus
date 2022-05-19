@@ -23,13 +23,17 @@ defmodule LotusWeb.Plugs.AuthPublic do
 
                 _ ->
 
-                  json(conn, "not-permission")
+                 conn
+                  |> render(LnfApiWeb.ErrorView, "401.json")
+                  |> halt()
 
             end
 
         nil ->
 
-            json(conn, "not-permission")
+           conn
+              |> render(LnfApiWeb.ErrorView, "401.json")
+              |> halt()
 
     
       end

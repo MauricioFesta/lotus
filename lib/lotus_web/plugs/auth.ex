@@ -11,7 +11,9 @@ defmodule LotusWeb.Plugs.Auth do
   
       case Map.get(headers, "x-nz-token") do
         nil ->
-          json(conn, "not-permission")
+          conn
+          |> render(LnfApiWeb.ErrorView, "401.json")
+          |> halt()
             
         token ->
           case Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", token) do
@@ -28,7 +30,9 @@ defmodule LotusWeb.Plugs.Auth do
               end
        
             {:error, _} ->
-              json(conn, "not-permission")
+              conn
+                |> render(LnfApiWeb.ErrorView, "401.json")
+                |> halt()
 
           end
       end
