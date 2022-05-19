@@ -126,6 +126,7 @@ function Login_view(props) {
               fullWidth
               variant="contained"
               color="primary"
+              id="btnLogin"
               className={classes.submit}
               onClick={props.validaLogin}
             >
@@ -161,6 +162,15 @@ export default class Login extends React.Component {
     this.state = { isOpen: false };
     this.validaLogin = this.validaLogin = this.validaLogin.bind(this);
 
+  }
+
+  componentDidMount(){
+    $(document.body).on('keypress', function (e) {
+			if (e.keyCode === 13) {
+				e.preventDefault();
+				$("#btnLogin").trigger("click");
+			}
+		});
   }
 
   async validaLogin() {

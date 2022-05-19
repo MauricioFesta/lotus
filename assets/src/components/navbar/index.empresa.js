@@ -28,6 +28,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { insert_message } from '../../stores/nav/api'
 import { getPerfil } from '../../stores/perfil/api'
 import { tokenMain } from '../login/auth'
+import $ from "jquery";
 
 require("./css/index.css")
 
@@ -187,6 +188,7 @@ export default class NavbarEmpresa extends React.Component {
 
   handleOpenChat = (id, id_notify, id_empresa) => {
 
+  
     NotificacoesStore.handlePutViewedNotify(id_notify).then(res => {
 
       let token = tokenMain()
@@ -242,6 +244,8 @@ export default class NavbarEmpresa extends React.Component {
 
       })
 
+    
+
       setBadgeCount(0)
 
 
@@ -250,6 +254,13 @@ export default class NavbarEmpresa extends React.Component {
       addResponseMessage(err)
 
     })
+
+    setTimeout(() => {
+
+      $(".rcw-launcher").trigger("click");
+ 
+    }, 200)
+
 
   }
 
@@ -312,7 +323,7 @@ export default class NavbarEmpresa extends React.Component {
             subtitle="Esclarecimentos de dúvidas"
             handleNewUserMessage={this.handleNewUserMessage}
             emojis={true}
-            id={1}
+            chatId="chatH"
 
 
           />
