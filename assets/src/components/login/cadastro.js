@@ -19,8 +19,7 @@ class CadastroLogin extends React.Component {
 
   constructor(props) {
     super(props);
-
-
+    
     this.obs = observable({
       is_empresa: false,
       is_cod: false,

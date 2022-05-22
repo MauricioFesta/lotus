@@ -11,11 +11,14 @@ defmodule LotusWeb.Plugs.Auth do
   
       case Map.get(headers, "x-nz-token") do
         nil ->
+    
           conn
-          |> render(LnfApiWeb.ErrorView, "401.json")
+          |> render(LotusWeb.ErrorView, "401.json")
           |> halt()
             
         token ->
+
+          Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", token)
           case Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", token) do
 
             {:ok, user_id_email}  ->
@@ -30,8 +33,9 @@ defmodule LotusWeb.Plugs.Auth do
               end
        
             {:error, _} ->
+        
               conn
-                |> render(LnfApiWeb.ErrorView, "401.json")
+                |> render(LotusWeb.ErrorView, "401.json")
                 |> halt()
 
           end

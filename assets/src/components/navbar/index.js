@@ -75,6 +75,9 @@ export default class Navbar extends React.Component {
 
     cookies.remove('_A-T');
     cookies.remove('_A-T-T_L');
+    cookies.remove('_lotus_key');
+    window.token_lotus = ""
+  
 
     this.handleRedirect("/")
 

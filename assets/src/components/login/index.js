@@ -205,11 +205,11 @@ export default class Login extends React.Component {
       cookies.set('_A-T-T_L', token);
 
       if (!res.data.is_empresa) {
-        history.push("/vagas")
-        //window.location.href = "/vagas"
+        //history.push("/vagas")
+        window.location.href = "/vagas"
       } else {
-        history.push("/vagas/cadastradas")
-       // window.location.href = "/vagas/cadastradas"
+        //history.push("/vagas/cadastradas")
+       window.location.href = "/vagas/cadastradas"
       }
 
 

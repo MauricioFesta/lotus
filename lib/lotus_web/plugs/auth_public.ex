@@ -24,7 +24,7 @@ defmodule LotusWeb.Plugs.AuthPublic do
                 _ ->
 
                  conn
-                  |> render(LnfApiWeb.ErrorView, "401.json")
+                  |> render(LotusWeb.ErrorView, "401.json")
                   |> halt()
 
             end
@@ -32,7 +32,7 @@ defmodule LotusWeb.Plugs.AuthPublic do
         nil ->
 
            conn
-              |> render(LnfApiWeb.ErrorView, "401.json")
+              |> render(LotusWeb.ErrorView, "401.json")
               |> halt()
 
     
