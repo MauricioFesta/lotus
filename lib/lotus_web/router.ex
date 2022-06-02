@@ -26,6 +26,7 @@ defmodule LotusWeb.Router do
      pipe_through :browser
 
      post "/login-login_valida", LoginController, :login_valida
+     post "/login-login_valida_mobile", LoginController, :login_valida_mobile
      post "/login-cadastro", LoginController, :cadastro_login
      post "/password-reset", LoginController, :password_reset
      post "/login-verificado-valida", LoginController, :confirm_login

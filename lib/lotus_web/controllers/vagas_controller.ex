@@ -44,9 +44,10 @@ defmodule LotusWeb.VagasController do
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("ativo", true)
 
+
        case Mongo.insert_one(:mongo, "vagas", new_params)  do
            {:ok, _} ->
-
+        
             json(conn, %{"Ok": true})
            _ -> json(conn, %{"Ok": false})
        end

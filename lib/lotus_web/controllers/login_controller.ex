@@ -16,8 +16,6 @@ defmodule LotusWeb.LoginController do
 
           senha_db = page_cql |> Enum.to_list |> hd
 
-          senha_db["senha"] |> IO.inspect 
-
           if Bcrypt.verify_pass(senha, senha_db["senha"]) do
 
             {:ok, id_} = page |> hd |> Map.fetch("id")
@@ -55,6 +53,57 @@ defmodule LotusWeb.LoginController do
           
     
     end
+    
+
+    def login_valida_mobile(conn, %{"email"=> email, "senha" => senha}) do
+
+      statement = "SELECT id, is_empresa,email,senha, verificado FROM lotus_dev.user WHERE email = '#{email}'"
+     
+      {:ok, %Xandra.Page{} = page_cql } = Xandra.execute(CassPID, statement, _params = [])
+
+      page = page_cql |> Enum.to_list 
+      
+      if page |> length != 0 do
+
+        senha_db = page_cql |> Enum.to_list |> hd
+
+        if Bcrypt.verify_pass(senha, senha_db["senha"]) do
+
+          {:ok, id_} = page |> hd |> Map.fetch("id")
+          {:ok, email} = page |> hd |> Map.fetch("email")
+
+          put_session(conn, :idUser, id_)
+          put_session(conn, :email, email)
+          
+          conn = assign(conn, :id, id_)
+        
+          {:ok, empresa} =  page |> hd |> Map.fetch("is_empresa")
+          {:ok, verificado} =  page |> hd |> Map.fetch("verificado")
+
+          token = Token.sign(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", %{"id" => id_, "email" => email}, max_age: :infinity)
+        
+          json(conn, %{Ok: true, is_empresa: empresa,verificado: verificado, token: token, id: id_})
+
+        else
+
+          json(conn, %{"Ok": false})
+
+        end 
+
+        # case page |> hd |> Map.fetch("email") do  
+        #   {:ok, id_} -> 
+          
+        #   _ -> json(conn, %{Ok: false})
+        # end
+        
+        else
+
+        json(conn, %{"Ok": false})
+
+      end 
+        
+  
+  end
 
     def cadastro_login(conn, params)do
       

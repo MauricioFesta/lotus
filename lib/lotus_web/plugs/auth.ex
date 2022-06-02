@@ -7,9 +7,11 @@ defmodule LotusWeb.Plugs.Auth do
     end
   
     def call(conn, _params) do
+      
+      conn_test = conn.private |> Map.get(:plug_session)
       headers = Enum.into(conn.req_headers, %{})
-  
-      case Map.get(headers, "x-nz-token") do
+
+      case Map.get(headers, "x-nz-token") || Map.get(conn_test, "x-nz-token") do
         nil ->
     
           conn
