@@ -57,6 +57,7 @@ defmodule Lotus.MixProject do
       {:pdf_generator, "~> 0.6.2"},
       {:bamboo, "~> 1.7.0"},
       {:bamboo_smtp, "~> 3.1.3"},
+      {:hut, "~> 1.3", manager: :rebar3, override: true},
       {:bcrypt_elixir, "~> 2.3"},
       {:mongodb_driver, "~> 0.8.0"},
       {:decimal, "~> 1.0", override: true},
