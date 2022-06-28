@@ -319,7 +319,21 @@ defmodule LotusWeb.LoginController do
 
       end
 
-    end 
+    end
 
+    def pt(conn, params) do
+
+      str = String.split(params,"-")
+
+      case Token.verify(System.get_env("TOKEN_LOGIN_LOTUS"), "user_auth", str[0]) do 
+
+        {:ok, _} -> 
+
+          str[1] |> IO.inspect
+          json(conn, "ok")
+        _ -> json(conn, "erro")
+      end
+
+    end
  
   end
