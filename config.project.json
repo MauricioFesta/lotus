@@ -1,89 +1,85 @@
 [
-    {
-        "Dependencias Projeto": {
-            "Elixir Version": "1.13.4",
-            "Erlang Version": 24.0,
-            "Cassandra Version": 4.0,
-            "Python version": 3,
-            "Node Version": "16.10.0",
-            "rustc": "1.55.0",
-            "redis": "6.2.5",
-            "npm": true,
-            "git": true,
-            "Dependencias Python": {
-                "fitz": true,
-                "PyMuPDF": true
-            },
-            "Linux Dependencias": {
-                "pdftk": true,
-                "wkhtmltopdf": true
-            }
-        }
-    },
-    {
-        "Dependencias Python": {
-            "Elixir Version": "1.12.0",
-            "Erlang Version": 24,
-            "Cassandra Version": 4.0
-        }
-    },
-    {
-        "CLI": {
-            "get erlang version": "erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell"
-        }
-    },
-    {
-        "utils": {
-            "prod elixir": "PORT=4000 ./bin/lotus start",
-            "install cassandra links": [
-                "https: //tecnstuff.net/how-to-install-apache-cassandra-on-debian-10/",
-                "https: //www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9"
-            ],
-            "Install especific version for Elixir in windows": "https: //chocolatey.org/install  https://www.erlang-solutions.com/downloads/",
-            "Install especific version for Elixir and Erlang in windows and Linux": "https: //www.erlang-solutions.com/downloads/",
-            "Windows error rust": [
-                "rustup toolchain install stable-x86_64-pc-windows-gnu",
-                "rustup default stable-x86_64-pc-windows-gnu"
-            ]
-        }
-    },
-    {
-        "cassandra prod": {
-            "usuario": "lotus_root",
-            "senha": "nuOTbtK$B8G%#0I$w7@"
-        }
-    },
-    {
-        "others": {
-            "email no replay": {
-                "email": "applotus.no.replay@gmail.com",
-                "senha": "xxakbpzdhevqynzcsjdgehuqrinyksihyzctuvrorhfhzmnxgw"
-            }
-        }
-    },
-    {
-        "linux varibales": [
-            {
-                "1": {
-                    "ex": "export TOKEN_PASSWORD_LOTUS='nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H'",
-                    "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
-                },
-                "2": {
-                    "ex": "export TOKEN_LOGIN_LOTUS='v%5EMEfENbFpT8g!1m$jdPk7D8lj!KZjTg%is3ku$mus7&l%40tmOOPm*%lQCdJ6&tnd9QWV1gW3bWYfvJyIknO$75zUuM6RrKMm%L@hc0/#yNrF1AadqW6HgPiTAd6a1U9F#hLkVLB^dL9QlF4cTUxM24F'",
-                    "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
-                }
-            },
-            {
-                "Secret Public Routers": {
-                    "key": "d%OHm0S5*$ykbX9nbf$LV6qmJz!V",
-                    "id": "lotus_++",
-                    "token_generated": "SFMyNTY.g2gDbQAAAAhsb3R1c18rK24GAJh8Dsl9AWIAAVGA.6S2qZ2ZXkAW55cz3uiU7Vbg8xVNLsj9XiGte3MKhxzc"
-                   
-                }
-               
-            }
-        
-        ]
+  {
+    "Dependencias Projeto": {
+      "Elixir Version": "1.13.4",
+      "Erlang Version": 24.0,
+      "Cassandra Version": 4.0,
+      "Python version": 3,
+      "Node Version": "16.10.0",
+      "rustc": "1.55.0",
+      "redis": "6.2.5",
+      "npm": true,
+      "git": true,
+      "Dependencias Python": {
+        "fitz": true,
+        "PyMuPDF": true
+      },
+      "Linux Dependencias": {
+        "pdftk": true,
+        "wkhtmltopdf": true
+      }
     }
+  },
+  {
+    "Dependencias Python": {
+      "Elixir Version": "1.12.0",
+      "Erlang Version": 24,
+      "Cassandra Version": 4.0
+    }
+  },
+  {
+    "CLI": {
+      "get erlang version": "erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell"
+    }
+  },
+  {
+    "utils": {
+      "prod elixir": "PORT=4000 ./bin/lotus start",
+      "install cassandra links": [
+        "https: //tecnstuff.net/how-to-install-apache-cassandra-on-debian-10/",
+        "https: //www.vultr.com/docs/how-to-install-apache-cassandra-3-11-x-on-debian-9"
+      ],
+      "Install especific version for Elixir in windows": "https: //chocolatey.org/install  https://www.erlang-solutions.com/downloads/",
+      "Install especific version for Elixir and Erlang in windows and Linux": "https: //www.erlang-solutions.com/downloads/",
+      "Windows error rust": [
+        "rustup toolchain install stable-x86_64-pc-windows-gnu",
+        "rustup default stable-x86_64-pc-windows-gnu"
+      ]
+    }
+  },
+  {
+    "cassandra prod": {
+      "usuario": "lotus_root",
+      "senha": "nuOTbtK$B8G%#0I$w7@"
+    }
+  },
+  {
+    "others": {
+      "email no replay": {
+        "email": "applotus.no.replay@gmail.com",
+        "senha": "xxakbpzdhevqynzcsjdgehuqrinyksihyzctuvrorhfhzmnxgw"
+      }
+    }
+  },
+  {
+    "linux varibales": [
+      {
+        "1": {
+          "ex": "export TOKEN_PASSWORD_LOTUS='nSU&RSwGk3Yq@hM2g%LeU@1lFvSc1fnyG$l1Keqf8&W&xZKl&H'",
+          "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
+        },
+        "2": {
+          "ex": "export TOKEN_LOGIN_LOTUS='v%5EMEfENbFpT8g!1m$jdPk7D8lj!KZjTg%is3ku$mus7&l%40tmOOPm*%lQCdJ6&tnd9QWV1gW3bWYfvJyIknO$75zUuM6RrKMm%L@hc0/#yNrF1AadqW6HgPiTAd6a1U9F#hLkVLB^dL9QlF4cTUxM24F'",
+          "oobs": "Add in etc/bash.bahsrc in sudo ~root/.bashrc"
+        }
+      },
+      {
+        "Secret Public Routers": {
+          "key": "d%OHm0S5*$ykbX9nbf$LV6qmJz!V",
+          "id": "lotus_++",
+          "token_generated": "SFMyNTY.g2gDbQAAAAhsb3R1c18rK24GAJh8Dsl9AWIAAVGA.6S2qZ2ZXkAW55cz3uiU7Vbg8xVNLsj9XiGte3MKhxzc"
+        }
+      }
+    ]
+  }
 ]
-

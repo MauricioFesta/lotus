@@ -1,12 +1,10 @@
-import api from "../../others/api_default"
+import api from "../../others/api_default";
 
 export const postCreatePostagem = (data) => {
+  let result = api.post("/api/postagens-cadastro", data);
 
-    let result = api.post("/api/postagens-cadastro", data)
-
-    return result
-
-}
+  return result;
+};
 
 // export const getPostagensAll = () => {
 

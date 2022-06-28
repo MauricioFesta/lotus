@@ -1,14 +1,13 @@
-import api from "../../others/api_default"
+import api from "../../others/api_default";
 
 export const putPerfil = async (data) => {
+  let result = await api.put("api/perfil-alterar", data);
 
-  let result = await api.put("api/perfil-alterar", data)
-
-  return result
-}
+  return result;
+};
 
 export const getPerfil = async () => {
-  let result = await api.get("/api/get-perfil")
+  let result = await api.get("/api/get-perfil");
 
-  return result
-}
+  return result;
+};
