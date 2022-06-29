@@ -33,7 +33,7 @@ defmodule LotusWeb.Router do
      post "/resend-cod-cadastro", LoginController, :resend_cod_cadastro
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
-     get "/pt:id", LoginController, :pt
+     get "/pt", LoginController, :pt
   
    end
 
