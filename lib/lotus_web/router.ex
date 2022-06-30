@@ -21,7 +21,13 @@ defmodule LotusWeb.Router do
     plug LotusWeb.Plugs.AuthPublic
   end
 
+   scope "/", LotusWeb do
+
+     get "/pt", LoginController, :pt
   
+   end
+
+
    scope "/public", LotusWeb do
      pipe_through :browser
 
