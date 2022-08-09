@@ -2,7 +2,7 @@ defmodule Lotus.Mongo do
 
 	def ip, do: :inet.getif |> elem(1)|> tl |> hd |> elem(0)
 	
-	#def url, do: "mongodb://#{host}/#{database}#{opts}",username: username, password: get_password, pool_size: 20
+    #def url, do: "mongodb://#{host}/#{database}#{opts}",username: username, password: get_password, pool_size: 20
 
 	def database do 
 		"lotus_prod"
@@ -18,12 +18,13 @@ defmodule Lotus.Mongo do
 
 		cond do 
 
-			ip == {172, 17, 0, 1} -> "localhost:27017"
+			ip == {172, 19, 0, 1} -> "192.168.0.108:27017"
 
 			true -> "10.0.11.148:27017"
 
 
-		end 
+        end 
+     
 	end
 
 	def password, do: "nuOTbtK$B8G%#0I$w7@" 
@@ -40,7 +41,7 @@ defmodule Lotus.Mongo do
 
 		cond do 
 
-			ip == {172, 17, 0, 1} -> password
+			ip == {172, 19, 0, 1} -> password
 
 			true -> password_prod
 
