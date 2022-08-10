@@ -12,19 +12,16 @@ defmodule Lotus.Mongo do
 	
 	def host do
 	        
-		{:ok, ips} = :inet.getif()
-
-		ip = ips |> Enum.at(0) |> elem(0)
-
+      {:ok, hostname} = :inet.gethostname
+  
 		cond do 
 
-			ip == {172, 19, 0, 1} -> "192.168.0.108:27017"
+			hostname == 'mauricio-aspirea51453' -> "192.168.0.108:27017"
 
 			true -> "10.0.11.148:27017"
 
 
-        end 
-     
+        end      
 	end
 
 	def password, do: "nuOTbtK$B8G%#0I$w7@" 
@@ -35,13 +32,11 @@ defmodule Lotus.Mongo do
 
 	def get_password do	
 
-		{:ok, ips} = :inet.getif()
-
-		ip = ips |> Enum.at(0) |> elem(0)
+	 {:ok, hostname} = :inet.gethostname
 
 		cond do 
 
-			ip == {172, 19, 0, 1} -> password
+			hostname == 'mauricio-aspirea51453' -> password
 
 			true -> password_prod
 
