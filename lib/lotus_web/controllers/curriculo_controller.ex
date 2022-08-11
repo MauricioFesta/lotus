@@ -181,6 +181,7 @@ defmodule LotusWeb.CurriculoController do
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
             |> Map.put(:image_base64, base64_foto)
+            |> Map.put(:extensao, "pdf")
 
         {:ok, data} = JSON.encode(new_params) 
      
@@ -192,7 +193,6 @@ defmodule LotusWeb.CurriculoController do
             {:error, _res} -> json(conn, "Error")
             _ -> json(conn, "OK")
         end
-
 
     end
 
