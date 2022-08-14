@@ -59,7 +59,7 @@ defmodule LotusWeb.CurriculoController do
             |> Map.put(:id,params["id"]) 
             |> Map.put(:id_usuario, id_user)
             |> Map.put(:principal, bol)
-            |> Map.put(:extencao, ext)
+            |> Map.put(:extensao, ext)
             |> Map.put(:image_base64, file___ |> Base.encode64)
             |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
             |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
@@ -129,7 +129,7 @@ defmodule LotusWeb.CurriculoController do
         |> Map.put(:id,params["id"]) 
         |> Map.put(:id_usuario, id_user)
         |> Map.put(:principal, bol)
-        |> Map.put(:extencao, params["extensao"])
+        |> Map.put(:extensao, params["extensao"])
         |> Map.put(:image_base64, file_ |> Base.encode64)
     
 
@@ -220,11 +220,11 @@ defmodule LotusWeb.CurriculoController do
 
         id_user =  get_session(conn, "id")["id"]
 
-        statement = "SELECT file_base64, extencao FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
+        statement = "SELECT file_base64, extensao FROM lotus_dev.curriculo WHERE id = '#{id_curriculo}' AND id_usuario = '#{id_user}'"
 
         {:ok, %Xandra.Page{} = page}  = Xandra.execute(CassPID, statement,  _params = [])
         {:ok, base} = page |> Enum.at(0) |> Map.fetch("file_base64") 
-        {:ok, ext} = page |> Enum.at(0) |> Map.fetch("extencao")
+        {:ok, ext} = page |> Enum.at(0) |> Map.fetch("extensao")
      
         if page |> Enum.at(0) != nil do
 
