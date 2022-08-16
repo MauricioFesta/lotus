@@ -326,15 +326,28 @@ defmodule Lotus.Vagas do
 
     def length_vagas do 
         
-        Mongo.aggregate(:mongo, "vagas", [
+       ret = Mongo.aggregate(:mongo, "vagas", [
 
             %{"$match" => 
                  
-                %{"ativo" => true}
+                %{"ativo" => %{"$eq" => true}}
 
             },
             %{"$count" => "count"} 
-        ]) |> Enum.to_list |> hd
+        ]) 
+
+        |> Enum.to_list
+
+      if Enum.empty?(ret) do 
+
+        0
+
+      else
+
+        ret |> hd
+
+      end 
+
 
     end
 
