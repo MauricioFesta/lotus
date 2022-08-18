@@ -16,7 +16,7 @@ defmodule Lotus.Mongo do
   
 		cond do 
 
-			hostname == 'mauricio-aspirea51453' -> "192.168.0.108:27017"
+			hostname == 'mauricio-aspirea51453' -> "192.168.0.107:27017"
 
 			true -> "10.0.11.148:27017"
 
