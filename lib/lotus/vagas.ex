@@ -85,7 +85,7 @@ defmodule Lotus.Vagas do
 
             %{"$match" => %{"$expr" => 
 
-                %{"$eq" => ["$ativo", true]}
+                %{"$eq" => ["$ativo", 1]}
             
             }},
 
@@ -116,7 +116,7 @@ defmodule Lotus.Vagas do
                 %{"$expr" => %{"$and" => [
 
                     %{"$eq" => ["$empresa_id",params["empresa"]]},
-                    %{"$eq" => ["$ativo", true]}
+                    %{"$eq" => ["$ativo", 1]}
 
                 ]}}
    
@@ -143,7 +143,7 @@ defmodule Lotus.Vagas do
                     %{"$and" => [
 
                         %{"$lte" => ["$valor",valor]},
-                        %{"$eq" => ["$ativo", true]}
+                        %{"$eq" => ["$ativo", 1]}
 
                     ]}
  
@@ -174,7 +174,7 @@ defmodule Lotus.Vagas do
                 %{"$expr" => %{"$and" => [
 
                     %{"$eq" => ["$cidade", params["cidade"]]},
-                    %{"$eq" => ["$ativo", true]}
+                    %{"$eq" => ["$ativo", 1]}
 
                 ]}}
 
@@ -265,7 +265,7 @@ defmodule Lotus.Vagas do
     
     Mongo.aggregate(:mongo, "vagas", [
             
-            %{"$match" => %{"ativo" => true}},
+            %{"$match" => %{"ativo" => 1}},
             %{"$sort" => %{"inserted_at" => -1}},
             %{"$skip" => pagged_skip},
             %{"$limit" => pagged_limit},
@@ -330,7 +330,7 @@ defmodule Lotus.Vagas do
 
             %{"$match" => 
                  
-                %{"ativo" => %{"$eq" => true}}
+                %{"ativo" => %{"$eq" => 1}}
 
             },
             %{"$count" => "count"} 
@@ -362,7 +362,7 @@ defmodule Lotus.Vagas do
                 %{"$and" => [
 
                     %{"$eq" => ["$empresa_id", id_empresa]},
-                    %{"$eq" => ["$ativo", true]}
+                    %{"$eq" => ["$ativo", 1]}
 
                 ]}
             
@@ -397,7 +397,7 @@ defmodule Lotus.Vagas do
                 %{"$and" => [
 
                     %{"$eq" => ["$empresa_id", id_empresa]},
-                    %{"$eq" => ["$ativo", false]}
+                    %{"$eq" => ["$ativo", 0]}
 
                 ]}
             
@@ -442,7 +442,7 @@ defmodule Lotus.Vagas do
 
                 %{"$and" => [
                     %{"$eq" => ["$empresa_id", id_empresa]},
-                    %{"$eq" => ["$ativo", true]}
+                    %{"$eq" => ["$ativo", 1]}
                 ]}
 
             }},
@@ -478,7 +478,7 @@ defmodule Lotus.Vagas do
 
                 %{"$and" => [
                     %{"$eq" => ["$empresa_id", id_empresa]},
-                    %{"$eq" => ["$ativo", false]}
+                    %{"$eq" => ["$ativo", 0]}
                 ]}
 
             }},

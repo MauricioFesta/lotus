@@ -115,8 +115,8 @@ class Vagas extends React.Component {
 
     let total = await get_length_vagas(token);
 
-    this.obs.total_vagas = Math.ceil(total.count / 10);
-
+    this.obs.total_vagas = Math.floor(total.count / 10);
+    
     this.getVagas();
     let res = await allEmpresas();
 

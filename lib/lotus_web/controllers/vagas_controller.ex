@@ -42,7 +42,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put("candidatos", [])
         |> Map.put("inserted_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
-        |> Map.put("ativo", true)
+        |> Map.put("ativo", 1)
 
 
        case Mongo.insert_one(:mongo, "vagas", new_params)  do
@@ -57,6 +57,10 @@ defmodule LotusWeb.VagasController do
     def convert!("true"), do: true
     def convert!("false"), do: false
 
+    def convert_to_number!("0"), do: 0
+    def convert_to_number!("1"), do: 1
+     def convert_to_number!("false"), do: 0
+    def convert_to_number!("true"), do: 1
 
     def list_vagas(conn, params) do
 
@@ -123,7 +127,7 @@ defmodule LotusWeb.VagasController do
     
         params["ativo"] |> IO.inspect(label: "Ativo here")
 
-        candidatos = if convert!(params["ativo"]) == false do 
+        candidatos = if convert_to_number!(params["ativo"]) == 0 do 
 
             delete_candidato(params["candidatos"] |> String.split(","), params["_id"])
 
@@ -157,7 +161,7 @@ defmodule LotusWeb.VagasController do
         |> Map.put("empresa_id", id_user)
         |> Map.put("disponibilidade_viajar", convert!(params["disponibilidade_viajar"]))
         |> Map.put("planejamento_futuro", convert!(params["planejamento_futuro"]))
-        |> Map.put("ativo", convert!(params["ativo"]))
+        |> Map.put("ativo", convert_to_number!(params["ativo"]))
         |> Map.put("inserted_at", params["inserted_at"] |> String.to_integer)
         |> Map.put("updated_at", DateTime.utc_now |> DateTime.add(-10800) |> DateTime.to_unix())
         |> Map.put("candidatos", candidatos)
@@ -428,7 +432,7 @@ defmodule LotusWeb.VagasController do
 
         %{"id" => id_} = params
 
-        ret = Mongo.find_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => true})
+        ret = Mongo.find_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => 1})
 
         # sql = "SELECT candidatos, ramo, empresa_id FROM lotus_dev.vagas WHERE id = '#{id_}'"
         # {:ok, %Xandra.Page{} = page} = Xandra.execute(CassPID, sql, _params = [] )
@@ -445,7 +449,7 @@ defmodule LotusWeb.VagasController do
 
     #    cql = "UPDATE lotus_dev.vagas SET candidatos = ['#{new_list}']  WHERE id = '#{id_}'"
 
-       case Mongo.update_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => true}, %{"$set" => doc}) do
+       case Mongo.update_one(:mongo, "vagas", %{"_id" => id_ |> BSON.ObjectId.decode!, "ativo" => 1}, %{"$set" => doc}) do
            {:ok, _} ->
 
             # LotusRust.Back.building_cache()
