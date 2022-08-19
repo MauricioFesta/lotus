@@ -46,7 +46,8 @@ config :pdf_generator,
     server: "smtp.gmail.com",
     port: 587,
     username: "applotus.no.replay@gmail.com",
-    password: "xxakbpzdhevqynzcsjdgehuqrinyksihyzctuvrorhfhzmnxgw",
+    password: "jkljnpwanavsdupi",
+    #password: "xxakbpzdhevqynzcsjdgehuqrinyksihyzctuvrorhfhzmnxgw",
     tls: :if_available, # can be `:always` or `:never`
     ssl: false, # can be `true`
     retries: 1
