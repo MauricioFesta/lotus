@@ -26,6 +26,7 @@ import PostCreateEmpresa from "./components/postagens/create.empresa";
 import PostEditEmpresa from "./components/postagens/edit.empresa";
 import Postagens from "./components/postagens/index";
 import PostagensEmpresa from "./components/postagens/index.empresa";
+import UrlSupport from "./components/url-support";
 import CandidatosEmpresa from "./components/vagas/candidatos.empresa";
 import CreateEmpresa from "./components/vagas/create.empresa";
 import Details from "./components/vagas/details";
@@ -101,6 +102,7 @@ function App() {
             <Route path="/cadastro" component={CadastroLogin} />
             <Route path="/redefinicao-senha" component={ResetPassword} />
             <Route path="/politica-privacidade" component={Politica} exact />
+            <Route path="/url-support" component={UrlSupport} exact />
             <PrivateRouteAny path="/home" component={Home} />
             <PrivateRouteUser path="/vagas" exact component={Vagas} />
             <PrivateRouteEmpresa

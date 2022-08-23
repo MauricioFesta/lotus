@@ -40,6 +40,7 @@ defmodule LotusWeb.Router do
      post "/new-password-confirm", LoginController, :confirm_token_reset_password
      post "/new-password", LoginController, :alterar_password
      get "/pt", LoginController, :pt
+     post "/send-email", SupportController, :send_email
   
    end
 
