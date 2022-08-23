@@ -94,6 +94,18 @@ defmodule LotusWeb.PerfilController do
     defp base64_image(vl) when is_binary(vl), do: vl
 
     defp base64_image(vl), do: File.read!(vl.path) |> Base.encode64();
-    
+       
+  
+    def deletar_perfil(conn, _) do 
+  
+      id_user =  get_session(conn, "id")["id"]
+  
+      sql = "DELETE FROM lotus_dev.user WHERE id = '#{id_user}'"
 
+      case Xandra.execute(CassPID, sql , _params = []) |> IO.inspect do
+            {:ok, _} -> json(conn, %{Ok: true})
+            _ -> json(conn, %{Ok: false})
+        
+      end
+    end 
 end
