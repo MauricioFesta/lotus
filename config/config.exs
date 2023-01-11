@@ -40,14 +40,12 @@ config :phoenix, :json_library, Jason
 config :pdf_generator,
   raise_on_missing_wkhtmltopdf_binary: false
 
-#    password: "ynMQeTA%vQgbBu11TgxgNlr%FQfQg*syQY4RTxrRbbpR!1HPc9",
  config :lotus, Lotus.Mailer,
     adapter: Bamboo.SMTPAdapter,
     server: "smtp.gmail.com",
     port: 587,
-    username: "applotus.no.replay@gmail.com",
-    password: "jkljnpwanavsdupi",
-    #password: "xxakbpzdhevqynzcsjdgehuqrinyksihyzctuvrorhfhzmnxgw",
+    username: "",
+    password: "",
     tls: :if_available, # can be `:always` or `:never`
     ssl: false, # can be `true`
     retries: 1
