@@ -42,3 +42,5 @@ assets/public/pdf_tmp/
 
 /priv/native/
 
+#Front end
+assets
